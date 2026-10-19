@@ -73,7 +73,8 @@ section:first-of-type{border-top:0}
 .pane .bio{display:grid;gap:10px;align-content:start;min-width:0}
 .pane .bio h3{font-size:1.35rem}
 .pane .bio p{font-size:.98rem}
-.pane .portrait{aspect-ratio:3/4;max-width:100%;border-radius:12px;border:2px dashed var(--ink);display:grid;place-items:center;text-align:center;font-size:.8rem;color:var(--muted);padding:10px;background:var(--surface);overflow:hidden}
+.pane .portrait{aspect-ratio:3/4;max-width:100%;border-radius:12px;border:2px solid var(--ink);display:grid;place-items:center;text-align:center;font-size:.8rem;color:var(--muted);padding:10px;background:var(--surface);overflow:hidden}
+.pane.ai .portrait{border-style:dashed}
 .pane .portrait img{width:100%;height:100%;object-fit:cover;display:block}
 .pane .portrait svg{width:70%;height:auto}
 .seam{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:0;pointer-events:none}
@@ -198,8 +199,7 @@ img{max-width:100%}[hidden]{display:none!important}
 
       <div class="pane real" aria-label="Real bio">
         <div class="portrait" id="real-portrait">
-          <!-- Swap this placeholder for <img src="blue.jpg" alt="Blue Brazelton"> -->
-          <span>Real photo goes here.<br>(Taken by a human. Probably.)</span>
+          <img src="blue-portrait.jpg" alt="Blue Brazelton in a flat cap and blazer in front of a painted library under a galaxy" width="600" height="800">
         </div>
         <div class="bio">
           <span class="tag">Real Me</span>
@@ -453,7 +453,7 @@ Technological Fluency and Leadership. GenAI for real. Bring questions.</pre>
           <li>Claude: page layout and code, the "AI Me" bio, drafting the hallucination</li>
           <li>Claude: jingle lyrics (human-edited)</li>
           <li>Suno: jingle music and vocals</li>
-          <li>Midjourney: the portrait on the left, if it ever shows up</li>
+          <li>Midjourney: the portrait on the left, if it ever shows up. The one on the right is a webcam and a tapestry.</li>
         </ul>
       </div>
     </div>
