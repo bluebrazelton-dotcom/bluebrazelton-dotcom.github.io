@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Meet Dr. Blue Brazelton, instructor for CCHE 590: Technological Fluency and Leadership at Northern Arizona University.">
+<title>Meet Dr. Blue</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column, 760px measure; the hero is a two-up "specimen card" split by a draggable seam. Stat grid below, then three game-show sections, then a plain disclosure footer. */
+:root{
+  --bg:#f2f4f8;        /* cool paper, blue bias */
+  --fg:#15202e;
+  --muted:#5a6678;
+  --surface:#ffffff;
+  --line:#d6dce6;
+  --real:#1d4ed8;      /* cobalt: the human column */
+  --real-soft:#dbe6ff;
+  --ai:#c026a3;        /* magenta: the machine column */
+  --ai-soft:#fbd9f1;
+  --ink:#15202e;
+  --redpen:#d4232a;
+  --display:"Bricolage Grotesque","Trebuchet MS",Arial,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1521;--fg:#e8ecf3;--muted:#9aa6b8;--surface:#171f2d;--line:#2a3447;
+    --real:#7aa2ff;--real-soft:#1b2a4a;--ai:#f06ad0;--ai-soft:#43183a;--ink:#e8ecf3;--redpen:#ff6b70;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1521;--fg:#e8ecf3;--muted:#9aa6b8;--surface:#171f2d;--line:#2a3447;
+  --real:#7aa2ff;--real-soft:#1b2a4a;--ai:#f06ad0;--ai-soft:#43183a;--ink:#e8ecf3;--redpen:#ff6b70;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.4rem,7vw,4.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+a{color:var(--real)}
+.wrap{max-width:860px;margin:0 auto}
+.measure{max-width:62ch}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:56px;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+.sec-head{display:grid;gap:10px;margin-bottom:28px}
+.sec-head p{color:var(--muted);max-width:62ch}
+:focus-visible{outline:3px solid var(--real);outline-offset:3px}
+
+/* course masthead */
+.mast{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;padding-block:22px 0}
+.mast .course{font-family:var(--display);font-weight:700;font-size:1rem}
+.mast .eyebrow{margin-left:auto}
+
+/* HERO */
+.hero{padding-block:36px 56px}
+.hero-top{display:grid;gap:14px;margin-bottom:26px}
+.hero-top p{color:var(--muted);max-width:60ch;font-size:1.05rem}
+.compare{position:relative;display:grid;border:2px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--surface);user-select:none}
+.compare>.pane{grid-area:1/1;display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:18px;padding:22px;min-width:0}
+.pane.ai{background:var(--ai-soft)}
+.pane.real{background:var(--real-soft);clip-path:inset(0 0 0 var(--cut,50%))}
+.pane .tag{font-family:var(--display);font-weight:800;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;display:inline-block;width:max-content}
+.pane.ai .tag{background:var(--ai);color:#fff}
+.pane.real .tag{background:var(--real);color:#fff}
+.pane .bio{display:grid;gap:10px;align-content:start;min-width:0}
+.pane .bio h3{font-size:1.35rem}
+.pane .bio p{font-size:.98rem}
+.pane .portrait{aspect-ratio:3/4;max-width:100%;border-radius:12px;border:2px dashed var(--ink);display:grid;place-items:center;text-align:center;font-size:.8rem;color:var(--muted);padding:10px;background:var(--surface);overflow:hidden}
+.pane .portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.pane .portrait svg{width:70%;height:auto}
+.seam{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:0;pointer-events:none}
+.seam::before{content:"";position:absolute;top:0;bottom:0;left:-2px;width:4px;background:var(--ink)}
+.seam .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-size:.9rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.slider{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.hero-foot{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:14px;color:var(--muted);font-size:.9rem}
+.hero-foot .legend{display:inline-flex;align-items:center;gap:6px}
+.hero-foot .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+@media (max-width:620px){
+  .compare>.pane{grid-template-columns:1fr}
+  .pane .portrait{max-width:160px}
+}
+
+/* STAT GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:0;min-width:0;display:grid;grid-template-rows:auto 1fr;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--real);transform:translateY(-2px)}
+.card.open{border-color:var(--real)}
+.card>button{all:unset;cursor:pointer;display:grid;gap:4px;padding:18px 18px 14px;width:100%;box-sizing:border-box}
+.card>button:focus-visible{outline:3px solid var(--real);outline-offset:-3px;border-radius:14px}
+.card .num{font-family:var(--display);font-weight:800;font-size:2.6rem;line-height:1;letter-spacing:-.03em;color:var(--real);font-variant-numeric:tabular-nums}
+.card .num small{font-size:1.1rem;font-weight:700;letter-spacing:0;margin-left:4px;color:var(--fg)}
+.card .label{font-weight:700;font-size:1.02rem}
+.card .teaser{color:var(--muted);font-size:.9rem}
+.card .more{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--real);margin-top:6px}
+.card .body{padding:0 18px 18px;font-size:.95rem;display:grid;gap:8px;border-top:1px dashed var(--line);padding-top:12px;margin:0 0 0 0}
+.card .body a{word-break:break-word}
+
+/* GAME: two truths */
+.truths{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.truth{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:18px;font-size:1rem;transition:border-color .15s,transform .15s}
+.truth:hover{border-color:var(--ai);transform:translateY(-2px)}
+.truth:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+.truth .letter{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--ai)}
+.truth[data-state="true"]{border-color:var(--real);background:var(--real-soft)}
+.truth[data-state="fake"]{border-color:var(--ai);background:var(--ai-soft)}
+.truth .verdict{font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.truth[data-state="true"] .verdict{color:var(--real)}
+.truth[data-state="fake"] .verdict{color:var(--ai)}
+.reveal{background:var(--surface);border-left:4px solid var(--ai);padding:16px 18px;border-radius:0 12px 12px 0;display:grid;gap:8px;font-size:.98rem}
+.reveal strong{font-family:var(--display)}
+.pick-note{color:var(--muted);font-size:.92rem;margin-bottom:14px}
+
+/* PROMPT */
+.prompt-stack{display:grid;gap:16px}
+.block{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.block header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.block pre{margin:0;padding:16px;font-family:var(--mono);font-size:.88rem;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.block .out{padding:16px 18px;font-size:1rem;line-height:1.65}
+.redbtn{all:unset;cursor:pointer;font-family:var(--display);font-weight:700;font-size:.9rem;padding:6px 14px;border-radius:999px;background:var(--redpen);color:#fff}
+.redbtn:focus-visible{outline:3px solid var(--redpen);outline-offset:3px}
+.redbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+mark{background:transparent;color:inherit;border-radius:3px;padding:0 2px;position:relative}
+.inked mark{background:color-mix(in srgb,var(--redpen) 18%,transparent);text-decoration:underline wavy var(--redpen) 1.5px;text-underline-offset:3px}
+.notes{display:none;padding:0 18px 18px;gap:10px;font-size:.92rem}
+.inked .notes{display:grid}
+.notes li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.notes ul{margin:0;padding:0;display:grid;gap:8px}
+.notes .n{font-family:var(--mono);font-weight:600;color:var(--redpen);font-size:.8rem;padding-top:2px}
+.notes .n::before{content:"✎ "}
+.closing{font-family:var(--display);font-weight:700;font-size:1.3rem;margin-top:8px}
+
+/* JINGLE */
+.jingle{background:var(--surface);border:2px solid var(--ink);border-radius:18px;padding:22px;display:grid;gap:14px}
+.jingle audio{width:100%;max-width:100%}
+.jingle .station{font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lyrics summary{cursor:pointer;font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--real)}
+.lyrics pre{margin:12px 0 0;font-family:var(--body);font-size:.95rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.lyrics .part{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ai)}
+.slot{border:2px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem;color:var(--muted)}
+
+/* DISCLOSURE */
+.disc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.disc .col{display:grid;gap:6px;font-size:.95rem}
+.disc h3{font-size:1rem}
+.disc ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.disc .col.h{border-left:4px solid var(--real);padding-left:14px}
+.disc .col.m{border-left:4px solid var(--ai);padding-left:14px}
+footer{padding-block:28px 0;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+img{max-width:100%}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="mast">
+    <span class="course">CCHE 590 · Technological Fluency and Leadership</span>
+    <span class="eyebrow">Northern Arizona University</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-top">
+      <span class="eyebrow">Your instructor, two ways</span>
+      <h1>One of these bios was written by a robot.</h1>
+      <p>Both were edited by one. Drag the seam to compare. This is the whole course in one picture: the machine gets you most of the way, and the part it gets wrong is the part that matters.</p>
+    </div>
+
+    <div class="compare" id="compare" style="--cut:50%">
+      <div class="pane ai" aria-label="AI-generated bio">
+        <div class="portrait" aria-hidden="true">
+          <svg viewBox="0 0 120 160" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+            <rect x="22" y="18" width="76" height="86" rx="20"/>
+            <circle cx="45" cy="55" r="6" fill="currentColor" stroke="none"/>
+            <circle cx="75" cy="55" r="6" fill="currentColor" stroke="none"/>
+            <path d="M42 80 q18 14 36 0"/>
+            <path d="M60 18 v-10 M52 8 h16"/>
+            <path d="M22 60 h-8 M98 60 h8"/>
+            <path d="M30 118 h60 l10 42 h-80 z"/>
+            <text x="60" y="150" font-size="11" fill="currentColor" stroke="none" text-anchor="middle" font-family="monospace">portrait.png?</text>
+          </svg>
+        </div>
+        <div class="bio">
+          <span class="tag">AI Me</span>
+          <h3>Dr. Blue Brazelton</h3>
+          <p>Dr. Blue Brazelton is a passionate educator and thought leader at Northern Arizona University, where he serves as a Professor of Higher Education. With over 15 years of experience, he is dedicated to fostering student success and driving innovation in the classroom. He earned his Ph.D. in Educational Technology from Arizona State University and has published widely on online learning. In his free time, he enjoys hiking the beautiful trails of Flagstaff with his dog.</p>
+        </div>
+      </div>
+
+      <div class="pane real" aria-label="Real bio">
+        <div class="portrait" id="real-portrait">
+          <!-- Swap this placeholder for <img src="blue.jpg" alt="Blue Brazelton"> -->
+          <span>Real photo goes here.<br>(Taken by a human. Probably.)</span>
+        </div>
+        <div class="bio">
+          <span class="tag">Real Me</span>
+          <h3>G. Blue Brazelton, Ph.D.</h3>
+          <p>Associate Professor of Educational Leadership, Provost Leadership Fellow, and AI Fellow at Northern Arizona University. Twenty-plus years in higher education across five institutions. B.A. in English Literature and Philosophy (Texas Tech), M.S.Ed. (SIU Carbondale), Ph.D. in Higher, Adult, and Lifelong Education (Michigan State). Grew up on a farm outside Sweetwater, Texas, home of the world's largest rattlesnake round-up. Moved seven times between undergrad and a tenure-track job. Proud member of the MySpace generation. Lives in Flagstaff and runs his research life through a small team of AI personas led by a mechanical owl.</p>
+        </div>
+      </div>
+
+      <div class="seam" aria-hidden="true"><div class="knob">⇔</div></div>
+      <input class="slider" id="cut" type="range" min="0" max="100" value="50" aria-label="Drag to compare the AI bio with the real bio">
+    </div>
+    <div class="hero-foot">
+      <span class="legend"><span class="dot" style="background:var(--ai)"></span>Generated from one sentence of prompt</span>
+      <span class="legend"><span class="dot" style="background:var(--real)"></span>Written by the guy it's about</span>
+    </div>
+  </section>
+
+  <!-- STAT GRID -->
+  <section id="stats">
+    <div class="sec-head">
+      <span class="eyebrow">The numbers</span>
+      <h2>Me, by the numbers (click any card)</h2>
+      <p>Each one is true. Each one is also a story, which is the part the number leaves out.</p>
+    </div>
+    <div class="grid" id="grid">
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">400<small>→ 596</small></span>
+          <span class="label">colleges and universities, studied</span>
+          <span class="teaser">The Adaptive Institution Project</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>My research program asks how colleges organize, govern, and adapt to AI. I coded the public AI governance posture of 400 institutions across 11 dimensions, then expanded it to a 596-institution panel that gets tracked every quarter.</p>
+          <p>Three findings in plain English: the fanciest governance lives at research universities while the schools serving the most learners have the least of it; cross-functional teams beat silos; and the sector has mostly walked away from AI detection tools in favor of guidance. That last one is why this course asks you to use AI out loud instead of hiding it.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">17<small>+ 15</small></span>
+          <span class="label">dissertations chaired, plus 15 as a member</span>
+          <span class="teaser">Mentoring is the job I like most</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>My philosophy: your expertise shapes the work. You are not labor serving my research agenda.</p>
+          <p>Proof it works: Dr. Cristina Baciu was my doctoral advisee. She is now my co-author on <em>Beyond the Campus</em>, a book about e-mentoring. We wrote an entire book about mentoring at a distance and have been in the same room exactly once.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">2<small>→ 5</small></span>
+          <span class="label">faculty in the program I built</span>
+          <span class="teaser">Lead Faculty, CCHE, 2020 to 2025</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>Grew the Community College and Higher Education program from two faculty to five, rewrote both the master's and doctoral curricula, and ran a full seven-year program review. Also served as Vice President of the Faculty Senate, which is a sentence that sounds more glamorous than the meetings were.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">45</span>
+          <span class="label">episodes of an AI radio drama</span>
+          <span class="teaser">The Dimming, 108.1 FM, total budget about $130</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>A fake radio station broadcasting into a slow apocalypse. Forty-five two-hour episodes, one a day, with a DJ named Cass whose van dies in a marsh town in Michigan's Upper Peninsula. Music by Suno, voice by ElevenLabs, art by Midjourney, stitched together with ffmpeg and a lot of stubbornness.</p>
+          <p>Why it's on this page: it is the single best AI-literacy exercise I have ever done, and nobody assigned it. <a href="https://bluebrazelton.com/dimming.html" target="_blank" rel="noopener">Listen if you dare.</a></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">$5,000</span>
+          <span class="label">to study how students <em>feel</em> about AI</span>
+          <span class="teaser">The TRAIL Award, 2024. You are the research population. Hi.</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>Three sections of this exact course used AI on every assignment and wrote about what it felt like. Turns out the big emotions (dread, delight, both at once) matter more than the button-clicking. So this class is built around low-anxiety entry points. If you are nervous, you are the target audience.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">13</span>
+          <span class="label">cohorts of Army officers taught how to teach</span>
+          <span class="teaser">Master Educator Course, University of Louisville</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>From 2017 to 2024 I was an Instructional Fellow for the Master Educator Course, preparing Army ROTC officers to become faculty. A train-the-trainer model, run on a residential schedule, with a student population that is very, very punctual.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">1</span>
+          <span class="label">mechanical owl running my work life</span>
+          <span class="teaser">A self-built multi-agent AI system called Aegis</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p>The hub persona is named Bubo, after the owl in <em>Clash of the Titans</em> (1981). He routes to a strategist, a writer, an editor, a researcher, a project manager, and a health coach. I did not know what a multi-agent system was when I built one. I was just trying to edit fourteen book chapters without losing my mind.</p>
+          <p>Expect to hear about it. This is what "technological fluency" looks like when it compounds.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <button aria-expanded="false">
+          <span class="num">3</span>
+          <span class="label">things I build and give away</span>
+          <span class="teaser">A planner, a screen recorder, and a blog</span>
+          <span class="more">Open ↓</span>
+        </button>
+        <div class="body" hidden>
+          <p><a href="https://bluebrazelton.com/hourglass.html" target="_blank" rel="noopener">The Hourglass</a>: a weekly time-blocking app you plan with any AI, then drag around. <strong>DidaRec</strong>: a free, open-source screen recorder for faculty. And the <a href="https://bluebrazelton.com/writing.html" target="_blank" rel="noopener">blog</a>, every other Tuesday, about AI in higher ed, with jokes.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TWO TRUTHS -->
+  <section id="truths">
+    <div class="sec-head">
+      <span class="eyebrow">Game one</span>
+      <h2>Two truths and a hallucination</h2>
+      <p>Two of these are real. One was made up by a language model that had read my bio and was told to extrapolate. Pick the fake.</p>
+    </div>
+    <div class="truths" id="truths">
+      <button class="truth" data-answer="true" data-state="">
+        <span class="letter">A</span>
+        <span>Co-founded a nonprofit in Marquette, Michigan, that runs an annual beer festival for local charities.</span>
+        <span class="verdict"></span>
+      </button>
+      <button class="truth" data-answer="true" data-state="">
+        <span class="letter">B</span>
+        <span>Spent seven years teaching Army ROTC officers how to be college professors.</span>
+        <span class="verdict"></span>
+      </button>
+      <button class="truth" data-answer="fake" data-state="">
+        <span class="letter">C</span>
+        <span>Wrote a dissertation arguing that MySpace was the first true learning management system.</span>
+        <span class="verdict"></span>
+      </button>
+    </div>
+    <p class="pick-note" id="pick-note">No wrong answers, just one wrong fact.</p>
+    <div class="reveal" id="reveal" hidden>
+      <strong>C is the hallucination.</strong>
+      <p>Notice why it works. The model knew I am a proud MySpace-generation person and that I co-wrote a book about mentoring online. It fused two true things into one false thing with a confident sentence structure. That is not a bug in the model. That is how the model works, every time. The real dissertation is on ProQuest. It is not about MySpace.</p>
+      <p>Your job this semester is to catch sentence C in the wild.</p>
+    </div>
+  </section>
+
+  <!-- THE PROMPT THAT MADE ME -->
+  <section id="prompt">
+    <div class="sec-head">
+      <span class="eyebrow">Game two</span>
+      <h2>The prompt that made me</h2>
+      <p>Here is the exact prompt behind the "AI Me" bio at the top, the raw output, and my red pen. Toggle the pen to see what a one-sentence prompt gets wrong when it has nothing to go on but a name.</p>
+    </div>
+    <div class="prompt-stack" id="prompt-stack">
+      <div class="block">
+        <header><span>Prompt · one sentence, no context</span></header>
+        <pre>Write a short professional bio for Blue Brazelton, a professor at Northern Arizona University.</pre>
+      </div>
+      <div class="block">
+        <header>
+          <span>Output · unedited</span>
+          <button class="redbtn" id="redpen" aria-pressed="false">Show the red pen</button>
+        </header>
+        <div class="out">
+          Dr. Blue Brazelton is a passionate educator and thought leader at Northern Arizona University, where he serves as a <mark>Professor of Higher Education</mark>. With <mark>over 15 years of experience</mark>, he is dedicated to <mark>fostering student success and driving innovation in the classroom</mark>. He earned his <mark>Ph.D. in Educational Technology from Arizona State University</mark> and has published widely on online learning. In his free time, he enjoys <mark>hiking the beautiful trails of Flagstaff with his dog</mark>.
+        </div>
+        <div class="notes">
+          <ul>
+            <li><span class="n">1</span><span>Associate Professor of Educational Leadership. Rank and department both wrong, both plausible. This is the most common kind of hallucination: a near-miss.</span></li>
+            <li><span class="n">2</span><span>Over 20 years, since 2005. The model picked a round number that sounded senior-ish.</span></li>
+            <li><span class="n">3</span><span>Says nothing. Could describe any professor alive. If a sentence survives swapping in a different name, delete it.</span></li>
+            <li><span class="n">4</span><span>Michigan State, Higher, Adult, and Lifelong Education. ASU is the nearest big university to a Flagstaff address. The model guessed geographically.</span></li>
+            <li><span class="n">5</span><span>I do have a dog. The model had no way of knowing that. It needed a warm closing line, saw Flagstaff, and guessed hiking plus pet. A correct guess is still a guess, and you cannot tell the two apart from the output alone. That is the whole problem.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="closing">This is the assignment. All semester.</p>
+  </section>
+
+  <!-- JINGLE -->
+  <section id="jingle">
+    <div class="sec-head">
+      <span class="eyebrow">Bonus track</span>
+      <h2>The jingle</h2>
+      <p>Sixty seconds, fully AI-generated, objectively ridiculous. Lyrics by Claude, music by Suno, approved by a human with regrets.</p>
+    </div>
+    <div class="jingle">
+      <span class="station">Now playing · CCHE 590 · one spin only</span>
+      <!-- Replace src with your jingle file (mp3 or m4a) -->
+      <audio id="jingle-audio" controls preload="none" src="blue-jingle.mp3"></audio>
+      <div class="slot" id="jingle-note">Jingle file not loaded yet. Drop <code>blue-jingle.mp3</code> next to this page, or change the <code>src</code> above.</div>
+      <details class="lyrics">
+        <summary>Lyrics (also the transcript)</summary>
+        <pre><span class="part">Verse</span>
+From a farm outside Sweetwater, where the rattlesnakes roam,
+Through seven different zip codes till Flagstaff felt like home,
+He's got a mechanical owl and a radio show,
+He's Dr. Blue, and he wants you to know:
+
+<span class="part">Chorus</span>
+Use the robot! (Use the robot!)
+But check its work! (Check its work!)
+It'll write you a bio with a dog and a quirk,
+Half of it's true and the other half's smoke,
+CCHE 590, that's the course, that's the most!
+
+<span class="part">Tag</span>
+Technological Fluency and Leadership. GenAI for real. Bring questions.</pre>
+      </details>
+      <p style="font-size:.92rem;color:var(--muted)">How it was made: lyrics drafted by Claude from my bio and lightly edited by me, melody and performance generated in Suno, three takes, kept the dumbest one.</p>
+    </div>
+  </section>
+
+  <!-- DISCLOSURE -->
+  <section id="disclosure">
+    <div class="sec-head">
+      <span class="eyebrow">Disclosure</span>
+      <h2>Who did what</h2>
+      <p>This is the course norm. Every assignment you turn in gets one of these.</p>
+    </div>
+    <div class="disc">
+      <div class="col h">
+        <h3>Human</h3>
+        <ul>
+          <li>Every fact on this page, checked against my CV</li>
+          <li>Every joke, for better or worse</li>
+          <li>The red pen notes</li>
+          <li>Choosing which hallucination to keep</li>
+          <li>Deciding the jingle was a good idea</li>
+        </ul>
+      </div>
+      <div class="col m">
+        <h3>Machine</h3>
+        <ul>
+          <li>Claude: page layout and code, the "AI Me" bio, drafting the hallucination</li>
+          <li>Claude: jingle lyrics (human-edited)</li>
+          <li>Suno: jingle music and vocals</li>
+          <li>Midjourney: the portrait on the left, if it ever shows up</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Blue Brazelton · <a href="https://bluebrazelton.com" target="_blank" rel="noopener">bluebrazelton.com</a> · Built for CCHE 590. No rattlesnakes were consulted.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // Hero seam
+  var cmp=document.getElementById('compare'),cut=document.getElementById('cut');
+  function setCut(v){cmp.style.setProperty('--cut',v+'%');}
+  cut.addEventListener('input',function(){setCut(cut.value);});
+  setCut(cut.value);
+
+  // Stat cards
+  document.querySelectorAll('#grid .card').forEach(function(card){
+    var btn=card.querySelector('button'),body=card.querySelector('.body'),more=card.querySelector('.more');
+    btn.addEventListener('click',function(){
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',String(!open));
+      body.hidden=open;
+      card.classList.toggle('open',!open);
+      more.textContent=open?'Open ↓':'Close ↑';
+    });
+  });
+
+  // Two truths
+  var truths=document.querySelectorAll('#truths .truth'),reveal=document.getElementById('reveal'),note=document.getElementById('pick-note'),played=false;
+  truths.forEach(function(t){
+    t.addEventListener('click',function(){
+      if(played)return;played=true;
+      var pickedFake=t.dataset.answer==='fake';
+      truths.forEach(function(x){
+        x.dataset.state=x.dataset.answer;
+        x.querySelector('.verdict').textContent=x.dataset.answer==='fake'?'Hallucination':'True';
+        x.disabled=true;
+      });
+      note.textContent=pickedFake?'You caught it. Keep that instinct; you will need it by week three.':'You picked a true one. Totally reasonable. The fake one was built to be believable, which is the lesson.';
+      reveal.hidden=false;
+    });
+  });
+
+  // Red pen
+  var pen=document.getElementById('redpen'),stack=document.getElementById('prompt-stack');
+  pen.addEventListener('click',function(){
+    var on=pen.getAttribute('aria-pressed')==='true';
+    pen.setAttribute('aria-pressed',String(!on));
+    stack.classList.toggle('inked',!on);
+    pen.textContent=on?'Show the red pen':'Hide the red pen';
+  });
+
+  // Jingle: hide the placeholder note once a real file loads
+  var au=document.getElementById('jingle-audio'),jn=document.getElementById('jingle-note');
+  au.addEventListener('loadedmetadata',function(){jn.hidden=true;});
+  au.addEventListener('error',function(){jn.hidden=false;});
+})();
+</script>
+
+</body>
+</html>
