@@ -11,13 +11,9 @@
 <style>
   /* MAPS persona diagram --------------------------------------------- */
   .forge {
-    --c-strategy: oklch(0.65 0.13 60);
-    --c-research: oklch(0.55 0.12 245);
-    --c-writing:  oklch(0.55 0.11 155);
-    --c-editing:  oklch(0.52 0.13 295);
-    --c-health:   oklch(0.55 0.15 25);
-    --c-projects: oklch(0.58 0.08 200);
-    --c-hub:      oklch(0.32 0.04 250);
+    /* Brand: every persona in Slate; names and roles identify them. */
+    --c-hub: var(--slate);
+    --card-color: var(--slate);
     border: 1px solid var(--rule);
     background: var(--bg-soft);
     padding: 2.25rem 1.5rem 1.75rem;
@@ -66,7 +62,7 @@
     position: relative;
     height: 2.5rem;
     margin: 0 auto;
-    max-width: 92%;
+    max-width: 100%;
   }
   .forge__rail::before {
     content: "";
@@ -78,7 +74,7 @@
   .forge__rail::after {
     content: "";
     position: absolute;
-    top: 1.25rem; left: 8%; right: 8%;
+    top: 1.25rem; left: 12.2%; right: 12.2%;
     height: 1px;
     background: var(--rule);
   }
@@ -89,18 +85,20 @@
     background: var(--rule);
   }
   /* Personas grid */
+  /* Seven personas: four on the first row, three centred below. */
   .forge__personas {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
   }
+  .forge__personas > .forge__card { flex: 0 0 calc((100% - 2.25rem) / 4); min-width: 0; }
   @media (max-width: 900px) {
-    .forge__personas { grid-template-columns: repeat(3, 1fr); }
-    .forge__rail::after { left: 16%; right: 16%; }
+    .forge__personas > .forge__card { flex-basis: calc((100% - 1.5rem) / 3); }
+    .forge__rail { display: none; }
   }
   @media (max-width: 560px) {
-    .forge__personas { grid-template-columns: repeat(2, 1fr); }
-    .forge__rail { display: none; }
+    .forge__personas > .forge__card { flex-basis: calc((100% - 0.75rem) / 2); }
   }
   .forge__card {
     background: var(--bg);
@@ -117,12 +115,6 @@
     height: 3px;
     background: var(--card-color, var(--accent));
   }
-  .forge__card--strategy { --card-color: var(--c-strategy); }
-  .forge__card--research { --card-color: var(--c-research); }
-  .forge__card--writing  { --card-color: var(--c-writing);  }
-  .forge__card--editing  { --card-color: var(--c-editing);  }
-  .forge__card--health   { --card-color: var(--c-health);   }
-  .forge__card--projects { --card-color: var(--c-projects); }
   .forge__name {
     font-family: var(--serif);
     font-size: 1.05rem;
@@ -143,9 +135,9 @@
   .forge__handle {
     font-family: var(--mono);
     font-size: 0.66rem;
-    color: var(--card-color, var(--ink-muted));
-    background: color-mix(in oklch, var(--card-color) 12%, var(--bg));
-    border: 1px solid color-mix(in oklch, var(--card-color) 35%, var(--rule));
+    color: var(--slate);
+    background: var(--parchment);
+    border: 1px solid var(--rule);
     padding: 0.12rem 0.45rem;
     margin-top: 0.6rem;
     align-self: flex-start;
@@ -207,29 +199,8 @@
     font-weight: 500;
     color: var(--ink);
   }
-  /* Legend */
-  .forge__legend {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem 1.1rem;
-    font-family: var(--sans);
-    font-size: 0.7rem;
-    color: var(--ink-muted);
-    letter-spacing: 0.02em;
-  }
-  .forge__legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .forge__legend span::before {
-    content: "";
-    width: 0.55rem; height: 0.55rem;
-    border-radius: 50%;
-    background: var(--card-color);
-  }
+  /* Brand: names in Roboto Slab SemiBold, Slate */
+  .forge__hub-name, .forge__name, .forge__support-name { font-weight: 600; color: var(--slate); line-height: 1.25; }
 </style>
 </head>
 <body data-theme="warm" data-accent="warmblue" data-type="editorial">
@@ -287,46 +258,49 @@
             <div class="forge__hub">
               <p class="forge__hub-name">Bubo</p>
               <p class="forge__hub-role">Hub &middot; routing &middot; memory &middot; check-ins</p>
-              <span class="forge__handle" style="--card-color: var(--c-hub);">@bubo</span>
+              <span class="forge__handle">@bubo</span>
             </div>
           </div>
 
           <div class="forge__rail" aria-hidden="true">
-            <span class="forge__rail-tick" style="left: 8%;"></span>
-            <span class="forge__rail-tick" style="left: 24.8%;"></span>
-            <span class="forge__rail-tick" style="left: 41.6%;"></span>
-            <span class="forge__rail-tick" style="left: 58.4%;"></span>
-            <span class="forge__rail-tick" style="left: 75.2%;"></span>
-            <span class="forge__rail-tick" style="left: 92%;"></span>
+            <span class="forge__rail-tick" style="left: 12.2%;"></span>
+            <span class="forge__rail-tick" style="left: 37.4%;"></span>
+            <span class="forge__rail-tick" style="left: 62.6%;"></span>
+            <span class="forge__rail-tick" style="left: 87.8%;"></span>
           </div>
 
           <div class="forge__personas">
-            <div class="forge__card forge__card--strategy">
+            <div class="forge__card">
               <p class="forge__name">Oracle</p>
               <p class="forge__role">Strategy &middot; planning &middot; decisions</p>
               <span class="forge__handle">@oracle</span>
             </div>
-            <div class="forge__card forge__card--research">
+            <div class="forge__card">
               <p class="forge__name">Pharos</p>
               <p class="forge__role">Research &middot; synthesis &middot; evidence</p>
               <span class="forge__handle">@pharos</span>
             </div>
-            <div class="forge__card forge__card--writing">
+            <div class="forge__card">
               <p class="forge__name">Cadmus</p>
               <p class="forge__role">Body doubler &middot;<br />writing coach &middot;<br />voice</p>
               <span class="forge__handle">@cadmus</span>
             </div>
-            <div class="forge__card forge__card--editing">
+            <div class="forge__card">
               <p class="forge__name">Gram</p>
               <p class="forge__role">Editing &middot; revision &middot; polish</p>
               <span class="forge__handle">@gram</span>
             </div>
-            <div class="forge__card forge__card--health">
+            <div class="forge__card">
+              <p class="forge__name">Calliope</p>
+              <p class="forge__role">Storyteller &middot; presentations &middot; delivery</p>
+              <span class="forge__handle">@calliope</span>
+            </div>
+            <div class="forge__card">
               <p class="forge__name">Chiron</p>
               <p class="forge__role">Health &middot; nutrition &middot; energy</p>
               <span class="forge__handle">@chiron</span>
             </div>
-            <div class="forge__card forge__card--projects">
+            <div class="forge__card">
               <p class="forge__name">Argo</p>
               <p class="forge__role">Projects &middot; priorities &middot; capacity</p>
               <span class="forge__handle">@argo</span>
@@ -362,15 +336,6 @@
                 <li>Journal editing + qual coding</li>
               </ul>
             </div>
-          </div>
-
-          <div class="forge__legend">
-            <span style="--card-color: var(--c-strategy);">Strategy</span>
-            <span style="--card-color: var(--c-research);">Research</span>
-            <span style="--card-color: var(--c-writing);">Writing</span>
-            <span style="--card-color: var(--c-editing);">Editing</span>
-            <span style="--card-color: var(--c-health);">Health</span>
-            <span style="--card-color: var(--c-projects);">Projects</span>
           </div>
         </figure>
       </div>
