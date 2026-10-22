@@ -32,6 +32,8 @@
   .shell { max-width:46rem; margin:0 auto; padding:0 1rem; }
   .site-header__inner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem 1.2rem; padding:.9rem 1rem; max-width:62rem; }
   .brand { font-family:'Roboto Slab',Georgia,serif; font-weight:600; font-size:1.2rem; color:var(--parchment); text-decoration:none; }
+  .brand { display:inline-flex; align-items:center; gap:0.55rem; }
+  .brand__owl { display:block; width:34px; height:34px; flex:none; }
   .brand__dot { color:var(--sky); }
   .nav { display:flex; flex-wrap:wrap; gap:.2rem 1rem; }
   .nav a { color:var(--parchment); text-decoration:none; font-size:.95rem; }
@@ -102,12 +104,15 @@
     body { background:#fff; }
   }
 </style>
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="shell site-header__inner">
-    <a class="brand" href="/index.html">Blue Brazelton<span class="brand__dot">.</span></a>
+    <a class="brand" href="/index.html"><img class="brand__owl" src="/favicon.svg" alt="" width="34" height="34" />Blue Brazelton</a>
     <nav class="nav" aria-label="Primary">
       <a href="/index.html">Home</a>
       <a href="/about.html">About</a>

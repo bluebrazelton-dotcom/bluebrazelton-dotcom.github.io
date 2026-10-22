@@ -12,5 +12,7 @@ Source for Blue Brazelton's personal site. Served by **GitHub Pages** from `main
 - **Short QR addresses** (e.g. `/beyond-compliance`): a forwarding page named `beyond-compliance.html` at the top level, pointing into `talks/`.
 
 ## Conventions
+- Favicon and header logo: `favicon.ico`, `favicon.svg`, `apple-touch-icon.png` at the root, copied from Brand Standards\logo\ (the favicon cut; under 48 px always use it). Branded pages carry the three `<link rel="icon">` tags and the owl in the `.brand` header link. Deliberately unbranded pages (Tech Summit, hourglass app, prompt, peer-scan, meet-blue-590) are left alone.
+- Bump `styles.css?v=N` on every page when styles.css changes.
 - Internal links are root-absolute (`/about.html`), so pages work from any folder.
 - Footer reads "Last updated Month YYYY". Update it sitewide.
