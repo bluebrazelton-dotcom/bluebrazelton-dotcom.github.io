@@ -37,5 +37,5 @@ Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` 
 - Only the body, title, date, slug, description, and refs change between posts.
   Head/nav/footer are identical everywhere — don't edit them per-post.
 - Keep `aria-current="page"` on the Writing nav link in post pages.
-- The `?v=6` on styles.css is a cache-buster; bump it sitewide only if you
+- The `?v=7` on styles.css is a cache-buster; bump it sitewide only if you
   change styles.css.

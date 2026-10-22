@@ -730,3 +730,79 @@ p {
   align-self: flex-start;
   margin-top: 0.25rem;
 }
+
+/* ================================================================
+   BRAND LAYER: Brand Standards v0.4 (web), applied Oct 2026.
+   Slate + Sky + Parchment/Ink; one accent (Sky, on Slate only).
+   Headings Roboto Slab 600, body Roboto 400/700.
+   Sits last so it overrides the theme/accent/type presets above.
+   Ink-soft and ink-muted are tints of Ink (8.3:1 and 6.4:1 on paper).
+   ================================================================ */
+body, [data-theme], [data-accent], [data-type] {
+  --slate: #3A4F6E;
+  --sky: #9CCDEE;
+  --parchment: #EFE6D3;
+  --bg: #F7F2E7;
+  --bg-soft: #EFE6D3;
+  --ink: #2B2A27;
+  --ink-soft: #4A4740;
+  --ink-muted: #5C574E;
+  --rule: #D6CBB4;
+  --rule-soft: #E4DBC8;
+  --accent: #3A4F6E;
+  --accent-soft: rgba(58, 79, 110, 0.12);
+  --accent-deep: #3A4F6E;
+  --accent-tint: #EFE6D3;
+  --accent-tint-soft: #F3ECDD;
+  --serif: "Roboto Slab", Rockwell, Georgia, serif;
+  --sans: "Roboto", "Segoe UI", Arial, sans-serif;
+}
+
+html, body {
+  font-family: var(--sans);
+  font-variant-numeric: normal;
+}
+
+/* Side rails: Slate + Sky instead of the old teal */
+body {
+  background:
+    linear-gradient(to right, var(--slate) 0, var(--slate) 6px, transparent 6px) left top / 100% 100% no-repeat,
+    linear-gradient(to right, var(--sky) 8px, var(--sky) 9px, transparent 9px) left top / 100% 100% no-repeat,
+    linear-gradient(to left, var(--slate) 0, var(--slate) 6px, transparent 6px) right top / 100% 100% no-repeat,
+    linear-gradient(to left, var(--sky) 8px, var(--sky) 9px, transparent 9px) right top / 100% 100% no-repeat,
+    var(--bg);
+}
+@media (max-width: 720px) { body { background: var(--bg); } }
+
+main::before, main::after {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, rgba(58, 79, 110, 0.12) 14px 15px),
+    var(--accent-tint-soft);
+  border-left-color: var(--rule);
+  border-right-color: var(--rule);
+}
+
+/* Header: Slate band, Parchment text, Sky as the single accent */
+.site-header { background: var(--slate); border-bottom-color: var(--slate); color: var(--parchment); }
+.brand { color: var(--parchment); }
+.brand .brand__dot { color: var(--sky); }
+.nav a { color: var(--parchment); }
+.nav a:hover { color: #fff; }
+.nav a[aria-current="page"] { color: #fff; border-bottom-color: var(--sky); }
+.nav a:focus-visible, .brand:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+/* Headings: Roboto Slab SemiBold */
+h1, h2, h3, h4, .brand, .entry-list .entry-body__title, .feature__title { font-weight: 600; color: var(--slate); }
+h1 { font-weight: 600; letter-spacing: -0.01em; }
+.site-header .brand { color: var(--parchment); }
+
+/* Links: Slate, underlined (never color alone) */
+a { text-decoration-color: rgba(58, 79, 110, 0.45); }
+a:hover { color: var(--slate); text-decoration-color: var(--slate); text-decoration-thickness: 2px; }
+a:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
+::selection { background: var(--slate); color: var(--parchment); }
+
+/* Small sans text was sized for Inter; Roboto reads smaller at 11-13px */
+.eyebrow { font-size: 0.75rem; font-weight: 700; }
+.nav { font-size: 0.875rem; }
+.site-footer { font-size: 0.875rem; }
