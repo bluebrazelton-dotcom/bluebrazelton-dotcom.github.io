@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beyond Compliance: Six-Indicator Self-Assessment | Blue Brazelton</title>
+<meta name="description" content="A one-page self-assessment for reading your institution's AI governance framework against six digital-maturity indicators. From the AAC&U Conference on AI and Higher Education, October 29, 2026.">
+<link rel="canonical" href="https://www.bluebrazelton.com/talks/2026-aacu/beyond-compliance.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  /* Brand Standards v0.4, web: Slate + Sky + Parchment/Ink, one accent (Sky, on Slate only). */
+  :root { --slate:#3A4F6E; --sky:#9CCDEE; --parchment:#EFE6D3; --ink:#2B2A27; --paper:#F7F2E7; --rule:#D6CBB4; --card:#FBF8F1; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:'Roboto','Segoe UI',Arial,sans-serif; font-size:1.0625rem; line-height:1.6; }
+  h1, h2, h3, legend.ind { font-family:'Roboto Slab',Rockwell,Georgia,serif; font-weight:600; color:var(--slate); line-height:1.2; }
+  a { color:var(--slate); text-underline-offset:2px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline:3px solid var(--slate); outline-offset:2px; }
+  strong { font-weight:700; }
+  .skip { position:absolute; left:-999px; } .skip:focus { left:1rem; top:1rem; background:var(--parchment); padding:.5rem .8rem; z-index:10; }
+
+  .site-header { background:var(--slate); }
+  .shell { max-width:46rem; margin:0 auto; padding:0 1rem; }
+  .site-header__inner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem 1.2rem; padding:.9rem 1rem; max-width:62rem; }
+  .brand { font-family:'Roboto Slab',Georgia,serif; font-weight:600; font-size:1.2rem; color:var(--parchment); text-decoration:none; }
+  .brand__dot { color:var(--sky); }
+  .nav { display:flex; flex-wrap:wrap; gap:.2rem 1rem; }
+  .nav a { color:var(--parchment); text-decoration:none; font-size:.95rem; }
+  .nav a:hover, .nav a:focus-visible { text-decoration:underline; outline-color:var(--sky); }
+
+  .page-head { background:var(--slate); color:var(--parchment); padding:2rem 0 2.2rem; border-top:1px solid rgba(239,230,211,.18); }
+  .kicker { color:var(--sky); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem; margin:0 0 .5rem; }
+  .page-head h1 { color:var(--parchment); font-size:clamp(1.8rem,5vw,2.5rem); margin:0 0 .7rem; }
+  .page-head p { margin:0; font-size:1.08rem; max-width:40rem; }
+
+  main { padding:1.6rem 0 3rem; }
+  h2 { font-size:1.4rem; margin:2.2rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--slate); }
+  .downloads { display:flex; flex-wrap:wrap; gap:.6rem; margin:0 0 .4rem; }
+  .btn { display:inline-block; font:inherit; font-weight:700; font-size:.98rem; padding:.55rem 1rem; border-radius:.4rem; border:2px solid var(--slate); background:var(--slate); color:var(--parchment); text-decoration:none; cursor:pointer; }
+  .btn.secondary { background:transparent; color:var(--slate); }
+  .btn:hover { filter:brightness(1.08); }
+  .note { font-size:.93rem; margin:.4rem 0 0; }
+  ol li { margin:.35rem 0; }
+
+  fieldset { border:0; padding:0; margin:0; min-width:0; }
+  .indicator { background:var(--card); border:1px solid var(--rule); border-left:.35rem solid var(--slate); border-radius:.5rem; padding:1rem 1.15rem 1.1rem; margin:1rem 0; }
+  legend.ind { font-size:1.2rem; padding:0; margin:0 0 .5rem; float:left; width:100%; }
+  legend.ind + * { clear:both; }
+  .signs { display:grid; grid-template-columns:1fr 1fr; gap:.6rem 1rem; margin:0 0 .8rem; }
+  .signs div { margin:0; }
+  .signs .lab { display:block; font-weight:700; font-size:.85rem; letter-spacing:.04em; text-transform:uppercase; color:var(--slate); }
+  @media (max-width:36rem) { .signs { grid-template-columns:1fr; } }
+  .rate { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; }
+  .rate .q { font-weight:700; margin-right:.3rem; }
+  .rate label { display:inline-flex; align-items:center; gap:.35rem; border:1.5px solid var(--slate); border-radius:2rem; padding:.3rem .8rem .3rem .55rem; cursor:pointer; background:#fff; }
+  .rate input { accent-color:var(--slate); width:1.05rem; height:1.05rem; margin:0; }
+  .rate label:has(input:checked) { background:var(--slate); color:var(--parchment); }
+
+  .mine { background:var(--parchment); border-radius:.5rem; padding:1.1rem 1.2rem; margin:1rem 0; }
+  .field { margin:0 0 1rem; }
+  .field label { display:block; font-weight:700; margin:0 0 .3rem; }
+  select, textarea, input[type=text] { font:inherit; width:100%; padding:.5rem .6rem; border:1.5px solid var(--slate); border-radius:.35rem; background:#fff; color:var(--ink); }
+  textarea { min-height:4.2rem; resize:vertical; }
+
+  .keep { margin:1rem 0; padding-left:1.2rem; }
+  .keep li { margin:.6rem 0; }
+  .sources { font-size:.92rem; border-top:1px solid var(--rule); margin-top:2rem; padding-top:1rem; }
+  .sources p { margin:.4rem 0; }
+
+  .site-footer { background:var(--parchment); border-top:3px solid var(--slate); }
+  .site-footer__inner { padding:1.3rem 1rem 1.6rem; font-size:.95rem; }
+  .site-footer p { margin:.3rem 0; }
+
+  @media print {
+    .site-header, .skip, .downloads, .note.screen, .site-footer { display:none; }
+    body { background:#fff; font-size:10.5pt; }
+    .page-head { background:#fff; color:var(--ink); padding:0 0 .5rem; border-bottom:2px solid var(--slate); }
+    .page-head h1 { color:var(--slate); font-size:18pt; } .kicker { color:var(--slate); }
+    main { padding-top:.6rem; } h2 { margin-top:1rem; font-size:13pt; }
+    .indicator { break-inside:avoid; padding:.5rem .8rem; margin:.5rem 0; background:#fff; }
+    .rate label { border-color:#999; } .rate label:has(input:checked) { background:#fff; color:var(--ink); border:2px solid var(--ink); font-weight:700; }
+    .mine { background:#fff; border:1px solid var(--rule); }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html">Blue Brazelton<span class="brand__dot">.</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="shell">
+    <p class="kicker">AAC&amp;U Conference on AI and Higher Education &middot; October 29, 2026</p>
+    <h1>Beyond Compliance: Six-Indicator Self-Assessment</h1>
+    <p>Your AI governance framework already tells faculty, students, and peers whether your institution is reacting to this moment or building the capacity to adapt. Use this page to read it the way they do.</p>
+  </div>
+</div>
+
+<main id="content">
+  <div class="shell">
+    <div class="downloads">
+      <a class="btn" href="/talks/2026-aacu/beyond-compliance-self-assessment.pdf">Download the one-page PDF</a>
+      <a class="btn secondary" href="/talks/2026-aacu/beyond-compliance-self-assessment.docx">Editable Word version</a>
+      <button class="btn secondary" type="button" onclick="window.print()">Print or save this page</button>
+    </div>
+    <p class="note screen">You can also fill it in right here. Nothing you select or type leaves your browser, and it is not saved when you close the page, so print or save it as a PDF to keep a copy.</p>
+
+    <h2 id="how">How to use it</h2>
+    <ol>
+      <li>Open your institution's public AI framework (policy, guidelines, and any linked standards).</li>
+      <li>For each indicator, compare what you find with the early and maturing signs, then mark where it sits: Early, Developing, or Maturing.</li>
+      <li>Pick one indicator to change in your next revision, and name who needs to be in the room to change it.</li>
+    </ol>
+
+    <h2 id="indicators">The six indicators</h2>
+    <form id="assessment" onsubmit="return false">
+
+      <fieldset class="indicator">
+        <legend class="ind">Default</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>Says &ldquo;no unless approved&rdquo;</div>
+          <div><span class="lab">Maturing sign</span>&ldquo;Yes, with conditions,&rdquo; or the instructor decides</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Default">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="default" value="E">Early</label>
+          <label><input type="radio" name="default" value="D">Developing</label>
+          <label><input type="radio" name="default" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="indicator">
+        <legend class="ind">Reach</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>Stops at academic integrity</div>
+          <div><span class="lab">Maturing sign</span>Also covers equity and access, ethics, data privacy, and who governs</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Reach">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="reach" value="E">Early</label>
+          <label><input type="radio" name="reach" value="D">Developing</label>
+          <label><input type="radio" name="reach" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="indicator">
+        <legend class="ind">Owner</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>No named owner, or a one-time task force</div>
+          <div><span class="lab">Maturing sign</span>A named, standing group is responsible</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Owner">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="owner" value="E">Early</label>
+          <label><input type="radio" name="owner" value="D">Developing</label>
+          <label><input type="radio" name="owner" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="indicator">
+        <legend class="ind">Currency</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>Undated, or never revisited</div>
+          <div><span class="lab">Maturing sign</span>Dated, with a visible revision or a plan to revisit</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Currency">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="currency" value="E">Early</label>
+          <label><input type="radio" name="currency" value="D">Developing</label>
+          <label><input type="radio" name="currency" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="indicator">
+        <legend class="ind">Support</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>Rules only</div>
+          <div><span class="lab">Maturing sign</span>Training, AI literacy programming, or tools</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Support">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="support" value="E">Early</label>
+          <label><input type="radio" name="support" value="D">Developing</label>
+          <label><input type="radio" name="support" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="indicator">
+        <legend class="ind">Audiences</legend>
+        <div class="signs">
+          <div><span class="lab">Early sign</span>One message for everyone</div>
+          <div><span class="lab">Maturing sign</span>Separate guidance for students, faculty, staff, and researchers</div>
+        </div>
+        <div class="rate" role="radiogroup" aria-label="Where my framework sits on Audiences">
+          <span class="q" aria-hidden="true">Where mine sits:</span>
+          <label><input type="radio" name="audiences" value="E">Early</label>
+          <label><input type="radio" name="audiences" value="D">Developing</label>
+          <label><input type="radio" name="audiences" value="M">Maturing</label>
+        </div>
+      </fieldset>
+
+      <h2 id="mine">My one indicator</h2>
+      <div class="mine">
+        <div class="field">
+          <label for="pick">The indicator I could change in our next revision</label>
+          <select id="pick" name="pick">
+            <option value="">Choose one</option>
+            <option>Default</option><option>Reach</option><option>Owner</option>
+            <option>Currency</option><option>Support</option><option>Audiences</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="who">Who needs to be in the room to change it</label>
+          <textarea id="who" name="who"></textarea>
+        </div>
+        <div class="field">
+          <label for="step">My first step, and by when</label>
+          <textarea id="step" name="step"></textarea>
+        </div>
+      </div>
+    </form>
+
+    <h2 id="keep">Two things to keep in mind</h2>
+    <ul class="keep">
+      <li><strong>Relabeling a default without building behind it changes the signal, not the substance.</strong> Prohibition is not the problem; what separates frameworks is what gets built behind the default.</li>
+      <li><strong>Maturing is never complete.</strong> Kane and colleagues use &ldquo;maturing,&rdquo; not &ldquo;mature,&rdquo; because &ldquo;the process is never complete&rdquo; (Kane et al., 2019, p. 46). A gap is a starting point, not a grade.</li>
+    </ul>
+
+    <div class="sources">
+      <p><strong>Sources</strong></p>
+      <p>Brazelton, G. B. (under review). Beyond compliance: AI governance frameworks as signals of institutional digital maturity [400-institution document analysis].</p>
+      <p>Kane, G. C., Phillips, A. N., Copulsky, J. R., &amp; Andrus, G. R. (2019). <cite>The technology fallacy: How people are the real key to digital transformation</cite>. MIT Press.</p>
+      <p>From the session <cite>Beyond Compliance: Reading AI Governance as a Signal of Institutional Digital Maturity</cite>, AAC&amp;U Conference on AI and Higher Education, October 29, 2026. How this talk was built with AI: <a href="/ai-disclosure/#aacu-2026-beyond-compliance">AI disclosure</a>.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <p>Blue Brazelton &middot; Northern Arizona University</p>
+    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="/ai-disclosure/">AI disclosure</a> &middot; Last updated October 2026</p>
+  </div>
+</footer>
+</body>
+</html>
