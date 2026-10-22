@@ -26,7 +26,7 @@ Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` 
      </div>
    </li>
 ```
-4. Commit + push. Cloudflare Pages auto-builds.
+4. Commit + push (or merge the PR) to `main`. GitHub Pages publishes in about a minute.
 5. ~1–2 weeks later: cross-post the full piece to Substack with the
    canonical URL set to the bluebrazelton.com page. Then a short LinkedIn
    post linking to the site.
