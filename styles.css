@@ -806,3 +806,13 @@ a:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
 .eyebrow { font-size: 0.75rem; font-weight: 700; }
 .nav { font-size: 0.875rem; }
 .site-footer { font-size: 0.875rem; }
+
+/* Home hero: text and a landscape photo share the row evenly and centre
+   vertically, so the photo no longer leaves a gap below it (Oct 2026). */
+.home-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .home-hero { grid-template-columns: 1fr; }
+}
