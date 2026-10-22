@@ -1,16 +1,15 @@
-## Hi there 👋
+# bluebrazelton.com
 
-<!--
-**bluebrazelton-dotcom/bluebrazelton-dotcom** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Source for Blue Brazelton's personal site. Served by Cloudflare Pages (auto-builds on push to `main`); `CNAME` is kept for GitHub Pages.
 
-Here are some ideas to get you started:
+## Layout
+- Top level: main pages (home, about, research, writing, aegis, workshop, cv, contact) and essays. Essay steps live in `PUBLISHING.md`.
+- `ai-disclosure/`: the standing AI disclosure (`index.html`) plus talk-specific disclosures.
+- `talks/<year>-<event>/`: companion pages, handouts and PDFs for each talk.
+- `dcc/`, `dimming/`, `hourglass/`: Workshop projects.
+- `peer-scan/`: unlisted page.
+- `_redirects`: old and short addresses. QR codes point at some of them, so don't delete rules.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Conventions
+- Internal links are root-absolute (`/about.html`), so pages work from any folder.
+- Footer reads "Last updated Month YYYY". Update it sitewide.

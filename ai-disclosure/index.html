@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I build talks with AI | Blue Brazelton</title>
+<meta name="description" content="Blue Brazelton's standing AI disclosure for talks: a 100-word summary, the process every talk follows, what he always checks, what is always his, data limits, tools, and a log of individual talks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  /* Brand Standards v0.4, web: Slate + Sky + Parchment/Ink, one accent (Sky, on Slate only). */
+  :root {
+    --slate:#3A4F6E; --sky:#9CCDEE; --parchment:#EFE6D3; --ink:#2B2A27;
+    --paper:#F7F2E7;            /* parchment lightened for long reading; Ink and Slate both pass AA on it */
+    --rule:#D6CBB4;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font-family:'Roboto','Segoe UI',Arial,sans-serif; font-weight:400; font-size:1.0625rem; line-height:1.6; }
+  h1, h2, h3 { font-family:'Roboto Slab',Rockwell,Georgia,serif; font-weight:600; color:var(--slate); line-height:1.2; }
+  a { color:var(--slate); text-decoration-thickness:1px; text-underline-offset:2px; }
+  a:hover { text-decoration-thickness:2px; }
+  a:focus-visible { outline:3px solid var(--slate); outline-offset:2px; }
+  strong { font-weight:700; }
+  .skip { position:absolute; left:-999px; }
+  .skip:focus { left:1rem; top:1rem; background:var(--parchment); padding:.5rem .8rem; z-index:10; }
+
+  /* Site header (same structure as the rest of bluebrazelton.com) */
+  .site-header { background:var(--slate); }
+  .shell { max-width:46rem; margin:0 auto; padding:0 1rem; }
+  .site-header__inner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem 1.2rem; padding:.9rem 1rem; max-width:62rem; }
+  .brand { font-family:'Roboto Slab',Georgia,serif; font-weight:600; font-size:1.2rem; color:var(--parchment); text-decoration:none; }
+  .brand__dot { color:var(--sky); }
+  .nav { display:flex; flex-wrap:wrap; gap:.2rem 1rem; }
+  .nav a { color:var(--parchment); text-decoration:none; font-size:.95rem; }
+  .nav a:hover, .nav a:focus-visible { text-decoration:underline; outline-color:var(--sky); }
+
+  /* Page title band */
+  .page-head { background:var(--slate); color:var(--parchment); padding:2.2rem 0 2.4rem; border-top:1px solid rgba(239,230,211,.18); }
+  .kicker { color:var(--sky); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem; margin:0 0 .5rem; }
+  .page-head h1 { color:var(--parchment); font-size:clamp(1.9rem, 5vw, 2.6rem); margin:0 0 .6rem; }
+  .page-head p.sub { margin:0; font-size:1.05rem; max-width:38rem; }
+
+  main { padding:1.8rem 0 3rem; }
+  h2 { font-size:1.45rem; margin:2.6rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--slate); }
+  h3 { font-size:1.15rem; margin:1.6rem 0 .4rem; }
+  p { margin:.6rem 0; }
+  ul { padding-left:1.25rem; margin:.5rem 0; }
+  li { margin:.35rem 0; }
+
+  .toc { font-size:.95rem; margin:0 0 1rem; }
+  .toc a { margin-right:.9rem; white-space:nowrap; }
+
+  .short { background:var(--parchment); border-left:.4rem solid var(--slate); border-radius:.5rem; padding:1.1rem 1.3rem; margin:1rem 0 0; }
+  .short p { margin:0; font-size:1.1rem; }
+  .short .count { margin-top:.6rem; font-size:.9rem; }
+
+  .feature { display:block; background:var(--slate); color:var(--parchment); border-radius:.6rem; padding:1.2rem 1.3rem; margin:2rem 0 0; text-decoration:none; }
+  .feature .label { color:var(--sky); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.8rem; margin:0 0 .3rem; }
+  .feature .title { font-family:'Roboto Slab',Georgia,serif; font-weight:600; font-size:1.3rem; margin:0 0 .4rem; color:var(--parchment); }
+  .feature p { margin:.3rem 0; }
+  .feature .go { display:inline-block; margin-top:.5rem; font-weight:700; color:var(--parchment); text-decoration:underline; text-underline-offset:3px; }
+  .feature:hover .go, .feature:focus-visible .go { text-decoration-thickness:2px; }
+  .feature:focus-visible { outline:3px solid var(--slate); outline-offset:3px; }
+
+  .table-wrap { overflow-x:auto; margin:.8rem 0 1rem; }
+  table { border-collapse:collapse; width:100%; font-size:.97rem; }
+  caption { text-align:left; font-weight:700; padding:0 0 .4rem; }
+  th, td { text-align:left; vertical-align:top; padding:.55rem .6rem; border-bottom:1px solid var(--rule); }
+  thead th { background:var(--parchment); color:var(--slate); border-bottom:2px solid var(--slate); }
+  tbody th { font-weight:700; white-space:nowrap; }
+
+  .split { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+  .split > div { background:var(--parchment); border-radius:.5rem; padding:1rem 1.15rem; }
+  .split h3 { margin-top:0; }
+  @media (max-width:40rem) { .split { grid-template-columns:1fr; } }
+
+  .entry { border:1px solid var(--rule); border-top:.35rem solid var(--slate); border-radius:.5rem; background:#FBF8F1; padding:1.1rem 1.25rem; margin:1.2rem 0; scroll-margin-top:1rem; }
+  .entry h3 { margin:0 0 .3rem; }
+  .entry .meta { margin:0 0 .8rem; font-size:.95rem; }
+  .entry dl { margin:0; }
+  .entry dt { font-weight:700; color:var(--slate); margin-top:.75rem; }
+  .entry dd { margin:.15rem 0 0; }
+  .entry .permalink { font-size:.9rem; margin-top:.9rem; }
+  .status { display:inline-block; font-size:.8rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border:1.5px solid var(--slate); color:var(--slate); border-radius:.3rem; padding:.05rem .45rem; margin-left:.3rem; vertical-align:middle; }
+
+  .site-footer { background:var(--parchment); border-top:3px solid var(--slate); }
+  .site-footer__inner { padding:1.3rem 1rem 1.6rem; font-size:.95rem; }
+  .site-footer p { margin:.3rem 0; }
+
+  @media print {
+    .site-header, .nav, .toc, .skip { display:none; }
+    .page-head { background:#fff; color:var(--ink); border-bottom:2px solid var(--slate); padding:1rem 0; }
+    .page-head h1 { color:var(--slate); }
+    .kicker { color:var(--slate); }
+    .feature { background:#fff; color:var(--ink); border:2px solid var(--slate); }
+    .feature .title, .feature .go { color:var(--slate); }
+    .feature .label { color:var(--slate); }
+    .entry { break-inside:avoid; }
+    body { background:#fff; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html">Blue Brazelton<span class="brand__dot">.</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="shell">
+    <p class="kicker">AI disclosure</p>
+    <h1>How I build talks with AI</h1>
+    <p class="sub">The standing account of how an AI agent helps me plan and build presentations, what I check, and what stays mine. Individual talks are listed in the <a href="#talk-log" style="color:var(--parchment)">talk log</a> at the bottom.</p>
+  </div>
+</div>
+
+<main id="content">
+  <div class="shell">
+
+    <nav class="toc" aria-label="On this page">
+      <a href="#short-version">In 100 words</a>
+      <a href="#process">Process</a>
+      <a href="#checks">What I check</a>
+      <a href="#mine">What is mine</a>
+      <a href="#data">Data limits</a>
+      <a href="#tools">Tools</a>
+      <a href="#talk-log">Talk log</a>
+    </nav>
+
+    <h2 id="short-version">In 100 words</h2>
+    <div class="short">
+      <p>I build my talks with an AI presentation agent I designed. I give it a written design standard and the accepted proposal. It interviews me, then drafts the message, the storyboard, the slides, the speaker notes, and the take-home pages, often in scheduled sessions while I am not there. It cannot create or change a file without my explicit yes. Every number on a slide is traced to its source before the deck is final. The argument, the research, the examples, the humor, every cut, and everything I say in the room are mine. The agent runs on Claude (Anthropic).</p>
+    </div>
+
+    <a class="feature" href="/ai-disclosure/tech-summit-2026">
+      <p class="label">The full worked example</p>
+      <p class="title">NAU Tech Summit 2026: How these talks were built</p>
+      <p>For my two Tech Summit sessions (October 20, 2026), I wrote out the whole process in detail, organized by the eight moves those talks teach, with a dated record of what the agent did, when, and whether I was there.</p>
+      <span class="go">Read the Tech Summit disclosure</span>
+    </a>
+
+    <h2 id="process">The process every talk follows</h2>
+    <p>Each talk moves through the same eight stages, and each stage has a written definition of done. The agent works from a playbook I wrote that sets what a good talk looks like: one clear message, a full-sentence headline on every slide, interaction that asks people to think rather than fill time, humor placed on purpose and never at anyone's expense, and accessibility built in from the start. Prep dates become scheduled sessions, so much of the drafting happens while I am teaching or away from my desk.</p>
+
+    <div class="table-wrap">
+      <table>
+        <caption>Who does what at each stage</caption>
+        <thead>
+          <tr><th scope="col">Stage</th><th scope="col">What the agent does</th><th scope="col">What I do</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">1. Intake</th><td>Pre-fills what it can from the proposal and my files, then interviews me one question at a time</td><td>Name the audience, the one thing they should do Monday morning, and what I am leaving out</td></tr>
+          <tr><th scope="row">2. Message and arc</th><td>Drafts the one-sentence message, the section claims, the opening, and the close, as options with a recommendation</td><td>Choose, rewrite, approve</td></tr>
+          <tr><th scope="row">3. Storyboard</th><td>One row per slide: a sentence headline, the evidence it uses, and my one spoken line</td><td>Cut, reorder, approve</td></tr>
+          <tr><th scope="row">4. Interaction</th><td>Proposes each activity with the thinking it asks for, its cost in minutes, and a fallback if the technology fails</td><td>Decide what stays</td></tr>
+          <tr><th scope="row">5. Humor</th><td>Marks where humor can go, and keeps it out of core explanations</td><td>Write every joke</td></tr>
+          <tr><th scope="row">6. Build</th><td>Builds the deck from the approved storyboard on the organizer's template or mine, with speaker notes and alt text, and lists every place it departed from the storyboard</td><td>Review, change, approve, save</td></tr>
+          <tr><th scope="row">7. Review</th><td>Runs a written checklist item by item and reports pass or fail</td><td>Decide on every fail</td></tr>
+          <tr><th scope="row">8. Rehearse and debrief</th><td>Records the after-action notes and feeds them back into the playbook</td><td>Rehearse out loud, deliver, and say what landed and what did not</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Three rules that hold every time</h3>
+    <ul>
+      <li><strong>No file changes without my yes.</strong> The agent shows any change in full and waits for explicit approval before it writes, creates, or changes anything.</li>
+      <li><strong>Dates become scheduled sessions.</strong> Prep commitments are scheduled sessions I can see and cancel, not lines in a document.</li>
+      <li><strong>Unattended work stops at a proposal.</strong> When a session runs and I am not there, the agent drafts, lists what it inferred and what only I can answer, and stops. I treat that work as a proposal until I approve it.</li>
+    </ul>
+
+    <h2 id="checks">What I always check</h2>
+    <ul>
+      <li><strong>Every number on a slide.</strong> A separate research pass traces each one to its source and marks it verified, corrected, or cut before the deck is final. A flagged number is not a resolved number.</li>
+      <li><strong>Institutional and policy references,</strong> against the current public source, including the URL.</li>
+      <li><strong>The proposal's promises.</strong> An accepted proposal is a promise to the audience, so the talk is checked against it; where the talk departs from it, that is a decision I made and can name.</li>
+      <li><strong>The deck, by checklist.</strong> Speakers are poor judges of their own slides, so review runs against a written checklist rather than my impression, and through an accessibility check against the organizer's guidance and my own accessibility standard.</li>
+      <li><strong>Demos.</strong> Any recorded demo has to show what the slide before it promises, and I edit recordings for privacy before they are shown.</li>
+      <li><strong>Every draft.</strong> I read everything the agent produces and change what I disagree with. Plenty of its proposals get cut.</li>
+    </ul>
+
+    <h2 id="mine">What is always mine, and what is the agent's</h2>
+    <div class="split">
+      <div>
+        <h3>Mine</h3>
+        <ul>
+          <li>The argument and its stakes</li>
+          <li>The research a talk reports; the agent builds slides from work that already exists and does not produce findings</li>
+          <li>The examples and stories, drawn from my own work</li>
+          <li>Every joke</li>
+          <li>Every approval and every cut</li>
+          <li>The verification standard the agent has to meet</li>
+          <li>Rehearsal, delivery, and every answer to a question</li>
+        </ul>
+      </div>
+      <div>
+        <h3>The agent's</h3>
+        <ul>
+          <li>First drafts of the message, storyboard, slides, and speaker notes</li>
+          <li>First drafts of take-home pages and handouts</li>
+          <li>Scheduling the prep sessions</li>
+          <li>The checklist review</li>
+          <li>All of it under the three rules above</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 id="data">Data limits</h2>
+    <ul>
+      <li><strong>No protected data.</strong> Nothing containing student data, internal institutional data, or personal data about anyone else is given to the agent for talk work.</li>
+      <li><strong>Narrow access.</strong> The agent can reach one project folder, not my whole drive or my inbox.</li>
+      <li><strong>The right tool for the data.</strong> My research, writing, and talk preparation run on a personal account with no institutional data in it. Anything specific to Northern Arizona University runs in the tool NAU licenses.</li>
+      <li><strong>A human says yes.</strong> The agent drafts; nothing is written, sent, or deleted until I approve it.</li>
+    </ul>
+
+    <h2 id="tools">Tools</h2>
+    <ul>
+      <li><strong>Claude (Anthropic),</strong> in its desktop application, runs the agent and its scheduled sessions.</li>
+      <li><strong>PowerPoint</strong> for every deck, on the organizer's template when there is one and on my own otherwise.</li>
+      <li><strong>DidaRec,</strong> a browser screen recorder I built, for demo recordings.</li>
+    </ul>
+    <p>The inclusion of any tool here is not an endorsement or approval by Northern Arizona University; approval for use with NAU data varies by department and context.</p>
+
+    <h2 id="talk-log">Talk log</h2>
+    <p>One entry per talk. Each entry records what was particular to that talk; the standing process above applies unless the entry says otherwise. For the NAU Tech Summit 2026 sessions, see the <a href="/ai-disclosure/tech-summit-2026">full Tech Summit disclosure</a>.</p>
+
+    <article class="entry" id="aacu-2026-beyond-compliance" aria-labelledby="h-bc">
+      <h3 id="h-bc"><cite>Beyond Compliance: Reading AI Governance as a Signal of Institutional Digital Maturity</cite></h3>
+      <p class="meta">AAC&amp;U Conference on AI and Higher Education, online. Thursday, October 29, 2026. Theory to Practice session, 45 minutes; Policy, Governance, and Ethics track. <span class="status">Upcoming</span></p>
+      <dl>
+        <dt>How it was built</dt>
+        <dd>I finished the intake in a live interview on October 7. The agent drafted the message, the arc, and the storyboard in a scheduled session, and I approved them on October 12 with changes, including how the talk would handle a gap between what the proposal described and what the analysis reports. The agent built the deck and the six-indicator self-assessment handout unattended on October 15 and showed them to me with seven departures from the storyboard listed and explained; I approved them on October 16.</dd>
+        <dt>What was checked</dt>
+        <dd>Two separate verification passes, on October 12 and October 15, checked the slide figures against the study manuscript, the quotations from Kane et al. (2019) against the book, and the details of the one institution named as an example against its current public pages. One slide headline was corrected: the ratio it reported holds across the full sample, not within each type of institution. The handout is a tagged, accessible PDF.</dd>
+        <dt>What was mine</dt>
+        <dd>The research the talk reports, a study of AI governance frameworks at 400 colleges and universities. The decision to name no institution as a poor example, since the session is recorded and some of the people who wrote those frameworks may be in the room. The examples, the discussion questions I chose to keep, and the humor.</dd>
+      </dl>
+      <p class="permalink">Link to this entry: <a href="#aacu-2026-beyond-compliance">bluebrazelton.com/ai-disclosure#aacu-2026-beyond-compliance</a></p>
+    </article>
+
+    <article class="entry" id="aacu-2026-reclaim" aria-labelledby="h-rc">
+      <h3 id="h-rc"><cite>Reclaim Your Time, Reclaim Your Agency: AI as Productivity Infrastructure for the Professoriate</cite></h3>
+      <p class="meta">AAC&amp;U Conference on AI and Higher Education, online. Thursday, October 29, 2026. Innovation session, 20 minutes including discussion; The Future of Work, the Professoriate, and Higher Education track. <span class="status">Upcoming</span></p>
+      <dl>
+        <dt>How it was built</dt>
+        <dd>A scheduled session pre-filled the intake from the accepted proposal on October 12, and I finished it in a live interview the same day. The agent drafted the message, the storyboard, and the interaction plan in a scheduled session on October 17, and I approved them that day. The deck build was scheduled for October 22. Parts of the first Tech Summit talk were reused and rebuilt for this conference's type sizes: the one-line disclosure, the system diagram, and the verification-audit appendix.</dd>
+        <dt>What was different</dt>
+        <dd>This talk is about the same agent system that helped build it. Its examples of what that system does come from the system's own files and records, and the talk states its limits plainly, including a small verification audit (18 items) in which the specialized personas only partly outperformed the base model. The demo is a recording of my real system, privacy-edited by me, not a live run.</dd>
+        <dt>What was checked</dt>
+        <dd>Flagged for verification before the deck is final: the scheduled-task figures, the wording of the verification-audit result, the current names of comparable tools from other vendors, and how my institution's data-classification policy is described.</dd>
+        <dt>What was mine</dt>
+        <dd>The origin story. The examples from my own teaching, research, service, and assessment work. The four privacy rules the talk teaches. The humor.</dd>
+      </dl>
+      <p class="permalink">Link to this entry: <a href="#aacu-2026-reclaim">bluebrazelton.com/ai-disclosure#aacu-2026-reclaim</a></p>
+    </article>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <p>Blue Brazelton &middot; Northern Arizona University</p>
+    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="/ai-disclosure/tech-summit-2026">Tech Summit 2026 disclosure</a> &middot; Last updated October 2026</p>
+  </div>
+</footer>
+</body>
+</html>
