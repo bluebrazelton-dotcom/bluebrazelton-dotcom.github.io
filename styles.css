@@ -816,3 +816,8 @@ a:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
 @media (max-width: 720px) {
   .home-hero { grid-template-columns: 1fr; }
 }
+
+/* Logo in header: favicon cut of the owl (Brand Standards: under 48 px use the favicon cut) */
+.brand { display: inline-flex; align-items: center; gap: 0.55rem; }
+.brand__owl { display: block; width: 34px; height: 34px; flex: none; }
+.site-header__inner { align-items: center; }
