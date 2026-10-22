@@ -1,7 +1,7 @@
 # Publishing a blog post
 
 Cadence: a new essay every other Tuesday, morning. Best day for this audience.
-Everything lives flat at the repo root — post pages included.
+Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` (see README.md).
 
 ## Steps
 1. Copy `_post-template.html` → `your-slug.html`.
@@ -32,7 +32,8 @@ Everything lives flat at the repo root — post pages included.
    post linking to the site.
 
 ## Notes
-- All links are flat: just `filename.html`, no folders, no `../`.
+- Internal links are root-absolute: `/filename.html` (leading slash), never `../`.
+  Post pages still live at the repo root.
 - Only the body, title, date, slug, description, and refs change between posts.
   Head/nav/footer are identical everywhere — don't edit them per-post.
 - Keep `aria-current="page"` on the Writing nav link in post pages.

@@ -1,4 +1,25 @@
+# Cloudflare Pages redirects. First matching rule wins.
+# Printed QR codes and slide links point at some of these addresses.
+# Never delete a rule for a URL that has been on a slide.
+
+# Hourglass (existing)
 /hourglass /hourglass.html 301
 /hourglass/ /hourglass.html 301!
 /prompt /prompt.html 301
 /prompt/ /prompt.html 301!
+
+# AI disclosure: the Tech Summit page moved under /ai-disclosure/ (Oct 2026).
+# Bare /ai-disclosure now serves the standing page (ai-disclosure/index.html),
+# which links prominently to the Tech Summit page.
+/ai-disclosure.html /ai-disclosure/ 301
+
+# NAU Tech Summit 2026 companion pages (on the Oct 20 decks)
+/pick-your-use-case            /talks/2026-tech-summit/pick-your-use-case 301
+/pick-your-use-case.html       /talks/2026-tech-summit/pick-your-use-case 301
+/unit-framework                /talks/2026-tech-summit/unit-framework 301
+/unit-framework.html           /talks/2026-tech-summit/unit-framework 301
+/Unit_AI_Framework_Packet.pdf  /talks/2026-tech-summit/Unit_AI_Framework_Packet.pdf 301
+/Unit_AI_Framework_Packet.docx /talks/2026-tech-summit/Unit_AI_Framework_Packet.docx 301
+
+# AAC&U 2026 short addresses (QR targets). Uncomment once the pages exist in /talks/2026-aacu/.
+# /beyond-compliance /talks/2026-aacu/beyond-compliance 302
