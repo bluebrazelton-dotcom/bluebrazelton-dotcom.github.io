@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/styles.css?v=10" />
+<link rel="stylesheet" href="/styles.css?v=11" />
 <script src="/mode.js"></script>
 <style>
   /* MAPS persona diagram --------------------------------------------- */
@@ -202,6 +202,14 @@
   }
   /* Brand: names in Roboto Slab SemiBold, Slate */
   .forge__hub-name, .forge__name, .forge__support-name { font-weight: 600; color: var(--slate); line-height: 1.25; }
+  /* Dark mode: names in Parchment, Sky for the hub outline and card top edges, handles as Sky outlines. */
+  @media screen {
+    html[data-mode="dark"] .forge { --c-hub: var(--sky); --card-color: var(--sky); }
+    html[data-mode="dark"] .forge__hub-name, html[data-mode="dark"] .forge__name,
+    html[data-mode="dark"] .forge__support-name { color: var(--parchment); }
+    html[data-mode="dark"] .forge__handle { background: transparent; color: var(--sky); border-color: var(--rule); }
+    html[data-mode="dark"] .forge__support-card::before { background: var(--sky); opacity: .6; }
+  }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -229,15 +237,19 @@
 <main>
   <div class="shell">
 
-    <header class="page-head" style="border-bottom: none; padding-bottom: 0;">
-      <span class="eyebrow mono" style="font-family: var(--mono); text-transform: none; letter-spacing: 0.04em;">// project &middot; aegis-maps</span>
-      <h1 style="margin-top: 0.6rem;">Aegis &nbsp;<span style="color: var(--ink-muted);">/</span>&nbsp; MAPS</h1>
-      <p class="lead" style="margin-top: 1.25rem;">
+    <header class="page-head page-head--owl">
+      <div>
+      <span class="eyebrow">Project</span>
+      <h1>Aegis &nbsp;<span style="color: var(--ink-muted);">/</span>&nbsp; MAPS</h1>
+      <p class="lead">
         A working system for AI-augmented academic knowledge work &mdash; built by, and for, someone whose day job is the work itself.
       </p>
+      </div>
+      <div class="page-head__owl" aria-hidden="true">
+        <img class="page-head__owl--light" src="/owl-slate.svg" alt="" width="114" height="102">
+        <img class="page-head__owl--dark" src="/owl-parchment.svg" alt="" width="114" height="102">
+      </div>
     </header>
-
-    <hr class="rule" style="margin-top: 2.5rem;" />
 
     <section class="two-col">
       <div class="aside-label">The shortest version</div>
