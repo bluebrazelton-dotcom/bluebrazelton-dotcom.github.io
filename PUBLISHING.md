@@ -1,6 +1,9 @@
 # Publishing a blog post
 
-Cadence: a new essay every other Tuesday, morning. Best day for this audience.
+Cadence: a new essay every other Tuesday, released at 9:00 am. Best day for this audience.
+Everything is prepared on the **Friday before**: the site goes live that Friday (so the
+page has a few days to be indexed before Substack picks it up), and the Substack and
+LinkedIn posts are scheduled that same Friday to publish Tuesday at 9:00 am.
 Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` (see README.md).
 
 ## Steps
@@ -27,10 +30,12 @@ Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` 
      </div>
    </li>
 ```
-4. Commit + push (or merge the PR) to `main`. GitHub Pages publishes in about a minute.
-5. ~1–2 weeks later: cross-post the full piece to Substack with the
-   canonical URL set to the bluebrazelton.com page. Then a short LinkedIn
-   post linking to the site.
+4. **Friday before release:** commit + push (or merge the PR) to `main`.
+   GitHub Pages publishes in about a minute. The dateline and the `writing.html`
+   entry still show the Tuesday release date.
+5. **Same Friday:** schedule the Substack cross-post (the full piece, with the
+   canonical URL set to the bluebrazelton.com page) and a short LinkedIn post
+   linking to the site, both for **Tuesday at 9:00 am**.
 
 ## Notes
 - Internal links are root-absolute: `/filename.html` (leading slash), never `../`.
