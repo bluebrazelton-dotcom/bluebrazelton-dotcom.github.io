@@ -821,3 +821,72 @@ a:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
 .brand { display: inline-flex; align-items: center; gap: 0.55rem; }
 .brand__owl { display: block; width: 34px; height: 34px; flex: none; }
 .site-header__inner { align-items: center; }
+
+/* ================================================================
+   DARK MODE (Oct 2026). Set by /mode.js as <html data-mode="dark">:
+   the visitor's saved choice, otherwise the device setting.
+   Night slate page, Slate header, Parchment text, Sky links.
+   Contrast on night #1F2B3D: Parchment 11.5, #D9D1C0 9.4, #BDB6A8 7.1,
+   Sky 8.4; on card #2A3A52: Parchment 9.3, #BDB6A8 5.7, Sky 6.8.
+   ================================================================ */
+html[data-mode="dark"] { color-scheme: dark; }
+@media screen {
+  html[data-mode="dark"] body,
+  html[data-mode="dark"] [data-theme],
+  html[data-mode="dark"] [data-accent],
+  html[data-mode="dark"] [data-type] {
+    --bg: #1F2B3D;
+    --bg-soft: #2A3A52;
+    --ink: #EFE6D3;
+    --ink-soft: #D9D1C0;
+    --ink-muted: #BDB6A8;
+    --rule: #4A5D7C;
+    --rule-soft: #34445E;
+    --accent: #9CCDEE;
+    --accent-soft: rgba(156, 205, 238, 0.14);
+    --accent-deep: #9CCDEE;
+    --accent-tint: #2A3A52;
+    --accent-tint-soft: #253349;
+  }
+  html[data-mode="dark"] main::before,
+  html[data-mode="dark"] main::after {
+    background:
+      repeating-linear-gradient(135deg, transparent 0 14px, rgba(156, 205, 238, 0.08) 14px 15px),
+      var(--accent-tint-soft);
+  }
+  html[data-mode="dark"] .site-header { border-bottom-color: #4A5D7C; }
+  html[data-mode="dark"] h1, html[data-mode="dark"] h2, html[data-mode="dark"] h3, html[data-mode="dark"] h4,
+  html[data-mode="dark"] .entry-list .entry-body__title, html[data-mode="dark"] .feature__title { color: var(--parchment); }
+  html[data-mode="dark"] .site-header .brand { color: var(--parchment); }
+  html[data-mode="dark"] a { text-decoration-color: rgba(156, 205, 238, 0.55); }
+  html[data-mode="dark"] a:hover { color: var(--sky); text-decoration-color: var(--sky); }
+  html[data-mode="dark"] a:focus-visible { outline-color: var(--sky); }
+  html[data-mode="dark"] ::selection { background: var(--sky); color: #1F2B3D; }
+  html[data-mode="dark"] img:not([src$=".svg"]) { filter: brightness(0.92); }
+}
+
+/* Light/dark button in the header (added by /mode.js) */
+.mode-toggle {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid rgba(239, 230, 211, 0.45);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--parchment);
+  cursor: pointer;
+  flex: none;
+  align-self: center;
+}
+.mode-toggle:hover { border-color: var(--sky); color: #fff; }
+.mode-toggle:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+@media print { .mode-toggle { display: none; } }
+.site-header__inner .nav { margin-left: auto; }
+.site-header__inner { gap: 1rem 1.5rem; }
+@media (max-width: 720px) {
+  .site-header__inner .mode-toggle { margin-left: auto; }
+  .site-header__inner .nav { margin-left: 0; }
+}
