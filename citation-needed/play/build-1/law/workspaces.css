@@ -1,0 +1,67 @@
+/* Chapter workspaces: papers, records and physical layouts, rather than a universal screen. */
+html{scrollbar-gutter:stable}
+.top-grid{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);align-items:start}
+.workspace{--surface:#e0d0b5;--edge:#b7a180;--accent:#665138;min-width:0;display:flex;flex-direction:column}
+.work{border:1px solid var(--edge);border-radius:4px;padding:20px;background:var(--surface);box-shadow:0 8px 24px #4e483a1c;min-width:0;position:relative}
+.work:before{content:'';position:absolute;inset:5px;border:1px solid #fff4;pointer-events:none}
+.workspace-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--edge);position:relative}
+.workspace-heading .eyebrow{color:var(--accent);font-size:.72rem;letter-spacing:.1em}
+.workspace-tools{font-size:.66rem;line-height:1.4;color:#504d41;text-align:right;max-width:55%}
+.panel-head{font-size:.67rem;color:#50513f;flex-wrap:wrap}
+.panel-head>span:first-child{color:var(--accent)}
+.work h2{font-family:Georgia,'Times New Roman',serif;font-size:1.65rem;letter-spacing:-.025em;margin:10px 0;line-height:1.14}
+.work>p{font-size:.82rem;color:#3f4b42;line-height:1.5;margin:0 0 16px}
+.source-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0 16px;align-items:stretch}
+.source-card{background:#faf6e9;border:1px solid #c1b49d;box-shadow:2px 3px 0 #745b3615;padding:15px 12px 12px;position:relative;min-width:0}
+.source-tab{display:inline-block;font-size:.59rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--accent);border-bottom:1px solid #c4b69e;padding-bottom:5px;margin-bottom:6px}
+.source-card h3{font:700 .95rem/1.2 Georgia,'Times New Roman',serif;color:#29332e;margin:0 0 5px}
+.source-card p{font-size:.71rem;line-height:1.45;margin:0;color:#4d5346}
+.artifact{border:1px solid #b9b7a7;border-left-width:1px;box-shadow:3px 4px 0 #675c3d18;background:#fffdf5;padding:0;min-width:0;min-height:100px;font-family:Kalam,cursive}
+.folio-label{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #d2cabb;padding:9px 14px;color:#555c4b;font:750 .64rem/1.4 ui-sans-serif,system-ui;text-transform:uppercase;letter-spacing:.09em;background:#f1eddf}
+.folio-body{padding:14px 16px;font-size:.98rem;line-height:1.45;overflow-wrap:anywhere}
+.artifact small{font-size:.63rem;color:#445443;line-height:1.45;display:block}
+.artifact p{margin:6px 0}
+.artifact .unwritten{color:#64705c;font-size:1.03rem;margin:14px 0 18px}
+.artifact .work-entries{list-style:none;margin:14px 0;padding:0}
+.work-entries li{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid #d5d9ce;padding:8px 0;margin:0}
+.entry-number{font:700 .6rem/1.4 ui-sans-serif,system-ui;color:#65705d;flex:0 0 18px}
+.work-entries li>span:last-child{min-width:0}
+.next-entry{background:#edf0e3;border-left:3px solid var(--accent);padding:10px 12px;margin-top:12px}
+.next-entry p{margin:5px 0 0}.next-entry small{font-weight:750;letter-spacing:.08em}
+.prepared-note{border-bottom:1px dashed #aab39b;padding:9px 0;color:#4a5b41;font-size:.82rem}
+.prepared-note strong{font:750 .66rem ui-sans-serif,system-ui}
+.workspace .actions{padding:16px;margin:16px 0;background:#faf8f2;border:1px solid var(--edge);border-radius:4px;overflow-anchor:none}
+.workspace .work{overflow-anchor:none}
+.workspace .choice{border-radius:4px}.workspace .choice.primary{background:#f4f5e9;border-color:#8c9a77;border-left:4px solid var(--accent)}
+.stable-text{display:grid;min-width:0}.stable-text>*{grid-area:1/1;min-width:0;align-self:start}
+.stable-text .text-measure{visibility:hidden;pointer-events:none}
+.choice.work-action{justify-content:center;min-height:48px}.choice.work-action>.stable-text{display:grid;width:100%}
+.work-action-detail{display:grid;gap:8px;font-size:.76rem;line-height:1.4;color:#46594a}
+.work-action-detail>.stable-text:last-child{font-weight:700;color:#344839;font-variant-numeric:tabular-nums}
+/* Legal surfaces are native HTML/SVG; the illustrated career atlas supplies age and fatigue. */
+.scene-crop{position:relative;aspect-ratio:1;overflow:hidden;background:#b4bba0}
+.frame .scene-crop img{position:absolute;width:300%;height:400%;max-width:none;max-height:none;aspect-ratio:auto;object-fit:fill;min-height:0}
+.scene-note{border-top:3px solid #faf8f2}
+.science-note{font-size:.68rem;color:#526158;margin:1rem 0;line-height:1.5}
+.work-diagram{margin:0 0 14px;border:1px solid #a8b9a7;background:#edf1df;box-shadow:2px 3px 0 #4d6c3c15;overflow:hidden}
+.work-diagram svg{display:block;width:100%;max-height:235px;background:repeating-linear-gradient(0deg,transparent,transparent 19px,#536b4d0d 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,#536b4d0d 20px)}
+.work-diagram svg text{font:11px ui-sans-serif,system-ui;fill:#3d5143}
+.work-diagram figcaption{padding:8px 12px;border-top:1px solid #b9c7b0;font-size:.69rem;line-height:1.45;color:#354c3e;background:#f3f5e9}
+.work-diagram figcaption span{display:block;font-size:.6rem;color:#586353;margin-top:3px}
+/* Legal work surfaces preserve the accepted reading and control order. */
+.workspace[data-surface='notice'],.workspace[data-surface='sources']{--surface:#e4d8bb;--accent:#705035;--edge:#b9a47e}
+.workspace[data-surface='casefile'],.workspace[data-surface='casebook']{--surface:#ddd0b8;--accent:#704739;--edge:#b2a088}
+.workspace[data-surface='authority'],.workspace[data-surface='citations']{--surface:#dce3e6;--accent:#344f62;--edge:#9eafb9}
+.workspace[data-surface='manuscript'],.workspace[data-surface='teaching']{--surface:#e9dfc8;--accent:#675238;--edge:#b6a57f}
+.workspace[data-surface='records']{--surface:#dce4dd;--accent:#3b5a50;--edge:#9fb1a5}
+.workspace[data-surface='appointment'],.workspace[data-surface='dossier']{--surface:#d8c4b2;--accent:#654639;--edge:#aa947e}
+.workspace[data-surface='program']{--surface:#dfcfae;--accent:#695034;--edge:#b19a74}
+.workspace[data-surface^='handoff']{--surface:#d8e0d6;--accent:#405747;--edge:#a2b2a0}
+.workspace[data-surface^='handoff'] .folio-label{background:#395447;color:#fffced}
+.workspace[data-surface='casebook'] .artifact{box-shadow:4px 4px 0 #faf6e9,6px 6px 0 #b8a68a}
+#story-portrait{width:min(100%,230px);aspect-ratio:1;margin:0 auto 1rem;border-radius:6px}
+#story-portrait img{position:absolute;width:300%;height:400%;max-width:none;max-height:none;object-fit:fill;border-radius:0}
+@media(max-width:850px){.top-grid,.bottom-grid{grid-template-columns:1fr}.rail{flex-wrap:wrap;gap:.45rem}.scene{display:grid;grid-template-columns:minmax(120px,.8fr) minmax(0,1fr)}.scene .frame{align-self:start}.scene-crop{aspect-ratio:1;height:auto;min-height:0}.scene-note{border-top:0}.workspace-tools{max-width:48%}}
+@media(max-width:450px){.scene{grid-template-columns:1fr}.scene-crop{aspect-ratio:1;min-height:0}.scene-note{padding:.75rem}.source-pair{grid-template-columns:1fr}.workspace-heading{flex-direction:column;gap:6px}.workspace-tools{max-width:none;text-align:left}.work{padding:14px}.folio-body{padding:12px}.workspace .actions{padding:12px}.rail a{font-size:.66rem}.rail .brand{display:none}footer{flex-wrap:wrap}.header-meta{max-width:42%}.work h2{font-size:1.45rem}}
+@media(forced-colors:active){.work,.source-card,.artifact,.folio-label,.next-entry,.work-diagram,.work-diagram figcaption{background:Canvas!important;color:CanvasText!important;border:1px solid CanvasText!important;box-shadow:none!important}.work-diagram svg{forced-color-adjust:none}}
+

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#26332c">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>The Living Record · Chapters 1–12</title>
+  <link rel="stylesheet" href="styles.css?v=20261013p7b">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to current work</a>
+  <div class="shell">
+    <aside class="rail" aria-label="Game navigation">
+      <div class="brand" aria-label="The Living Record">✦</div>
+      <div class="rail-actions">
+        <button id="undo" class="rail-button" type="button" disabled><span aria-hidden="true">←</span><span>Back</span></button>
+        <button id="restart" class="rail-button" type="button"><span aria-hidden="true">↺</span><span>New game</span></button>
+      </div>
+      <div class="rail-mark" aria-hidden="true">01<br>—<br>12</div>
+    </aside>
+    <div class="app">
+      <header class="topbar">
+        <div><p class="eyebrow">The Living Record <span class="slice-label">· the complete career</span></p><h1 id="chapter-title">First Openings</h1></div>
+        <div class="top-meta"><span id="save-status" role="status">Saved locally</span><span class="chapter-tag" id="chapter-tag">Chapter 1 of 12</span></div>
+      </header>
+      <main id="main" tabindex="-1">
+        <div class="main-grid">
+          <section class="scene-wrap" aria-label="Chapter scene">
+            <div class="scene-frame"><img id="scene-image" src="assets/high-school.png" alt="A student compares public program information outside a high school."><div class="scene-caption"><span class="caption-pin" aria-hidden="true">●</span><span id="scene-caption">Hillside Public High School · after class</span></div></div>
+            <div class="scene-note" id="scene-note"></div>
+          </section>
+          <div class="desk-workspace" id="desk-workspace">
+            <section class="work-panel" id="work-panel" aria-labelledby="work-title">
+              <div class="panel-header"><span class="status-dot" aria-hidden="true"></span><span id="phase-name">Current work</span></div>
+              <p class="eyebrow" id="step-label"></p>
+              <h2 id="work-title" tabindex="-1"></h2>
+              <p id="work-description" class="description"></p>
+              <div id="artifact" class="artifact"></div>
+            </section>
+            <div id="laptop-keyboard" class="laptop-keyboard" aria-hidden="true"></div>
+            <section id="action-zone" class="action-zone" aria-labelledby="action-zone-label">
+              <div class="action-zone-head"><span class="ready-dot" aria-hidden="true"></span><div><h3 id="action-zone-label">Ready now</h3><p id="action-hint"></p></div></div>
+              <div id="choices" class="choices"></div>
+            </section>
+            <div id="action-note" class="action-note"></div>
+          </div>
+        </div>
+        <div class="lower-grid">
+          <section class="metrics card" aria-label="Progress, energy and work quality">
+            <div class="metric"><div class="metric-heading"><h3>Progress</h3><strong id="progress-value"></strong></div><p id="progress-detail"></p><div class="meter"><div id="progress-fill" class="fill progress-fill"></div></div></div>
+            <div class="metric"><div class="metric-heading"><h3>Energy</h3><strong id="capacity-value"></strong></div><p id="energy-detail">Work still counts at zero; exhausted work loses polish.</p><div class="meter"><div id="capacity-fill" class="fill capacity-fill"></div></div></div>
+            <div id="quality-panel" class="quality-panel" hidden><div class="metric-heading"><h3>Work quality</h3><strong id="quality-value"></strong></div><progress id="quality-meter" max="100" value="100" aria-label="Current work quality" aria-describedby="quality-detail"></progress><p id="quality-detail"><span id="quality-detail-full"></span><span id="quality-detail-short"></span></p></div>
+          </section>
+          <section class="record card" aria-labelledby="career-heading"><div class="record-top"><h3 id="career-heading">Career record</h3><span id="record-count" class="record-count"></span></div><p id="standing-status" class="standing-status"></p><ul id="career-record" tabindex="0" aria-label="Completed work; scroll for older entries"></ul></section>
+        </div>
+        <p class="prototype-note"><span id="mode-note">Chapters 1–12 · Choices are final. Back undoes ordinary work.</span> <a href="history/">Play The Historian →</a> · <a href="environment/">Play The Environmental Scientist →</a> · <a href="law/">Play The Legal Scholar →</a> <span id="build-version" class="build-version">Build 20261013p7b</span></p>
+      </main>
+    </div>
+  </div>
+  <dialog id="restart-dialog" aria-labelledby="restart-title">
+    <h2 id="restart-title">Start a new game?</h2>
+    <p>This replaces the game saved in this browser.</p>
+    <div class="dialog-actions">
+      <button id="restart-cancel" type="button">Keep playing</button>
+      <button id="restart-confirm" type="button">Start over</button>
+    </div>
+  </dialog>
+  <dialog id="story-dialog" aria-labelledby="story-title" aria-describedby="story-body story-next">
+    <div class="story-mark" aria-hidden="true">✦</div>
+    <p id="story-eyebrow" class="eyebrow"></p>
+    <h2 id="story-title"></h2>
+    <img id="story-image" class="story-image" alt="" hidden>
+    <p id="story-body"></p>
+    <p id="story-next"></p>
+    <button id="story-continue" type="button">Continue</button>
+  </dialog>
+  <div id="announcement" class="sr-only" role="status" aria-atomic="true"></div>
+  <script type="module" src="app.js?v=20261013p7b"></script>
+</body>
+</html>

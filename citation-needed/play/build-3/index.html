@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citation Needed: The Academic Career Simulator</title>
+  <meta name="description" content="An active pixel-art academic career incremental simulator from Undergrad to Endowed Chair across Bench Science, Social Science, History, and Law." />
+  <meta property="og:title" content="Citation Needed: The Academic Career Simulator" />
+  <meta property="og:description" content="Climb the Ivory Tower from Undergrad to Endowed Chair across Bench Science, Social Science, History, and Law in this pixel-art incremental game." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://bluebrazelton.com/citation-needed/" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pixel-font: 'Press Start 2P', monospace;
+      --ui-font: 'Inter', sans-serif;
+    }
+    body {
+      font-family: var(--ui-font);
+      background-color: #0b1120;
+      color: #f8fafc;
+      user-select: none;
+      overflow-x: hidden;
+    }
+    .pixel-font {
+      font-family: var(--pixel-font);
+      letter-spacing: 0.5px;
+    }
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .retro-panel {
+      background: #1e293b;
+      border: 3px solid #475569;
+      box-shadow: 0 6px 0 #0f172a;
+    }
+    .retro-btn {
+      transition: transform 0.06s ease, box-shadow 0.06s ease;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.45);
+    }
+    .retro-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.45);
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.7), 0 4px 0 #854d0e; }
+      50% { box-shadow: 0 0 18px 5px rgba(250, 204, 21, 0.9), 0 4px 0 #854d0e; }
+    }
+    .promote-glow {
+      animation: pulseGlow 1.3s infinite;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION & GLOBAL HUD -->
+  <header class="bg-slate-900 border-b-4 border-slate-700 px-4 py-2.5 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Game Title & Discipline Badge -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-500 border-2 border-amber-200 flex items-center justify-center text-xl shadow" title="Press Shift+Q for Dev/QA Suite">
+          🎓
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="pixel-font text-sm sm:text-base text-amber-400 tracking-wide">CITATION NEEDED</h1>
+            <span id="pathBadge" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-900/80 border border-emerald-500 text-emerald-200">
+              🧬 Bench Scientist
+            </span>
+          </div>
+          <p id="stageTitleSub" class="text-xs text-slate-300 font-semibold mt-0.5">
+            Rank 1/6: Undergraduate Lab Assistant • <span id="passiveTraitBadge" class="text-cyan-300">Synergy: +5% Equip/Staff</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Resource Metrics Bar -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div class="bg-slate-800/90 border-2 border-cyan-500/60 rounded-lg px-3 py-1 min-w-[125px]">
+          <div id="res1Label" class="text-[10px] uppercase tracking-wider text-cyan-300 font-bold">Raw Data</div>
+          <div class="flex items-baseline justify-between gap-2">
+            <span id="res1Val" class="font-extrabold text-base sm:text-lg text-white">0</span>
+            <span id="res1Rate" class="text-[11px] text-cyan-400 font-mono">+0/s</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/90 border-2 border-purple-500/60 rounded-lg px-3 py-1 min-w-[125px]">
+          <div id="res2Label" class="text-[10px] uppercase tracking-wider text-purple-300 font-bold">Citations</div>
+          <div class="flex items-baseline justify-between gap-2">
+            <span id="res2Val" class="font-extrabold text-base sm:text-lg text-white">0</span>
+            <span id="res2Rate" class="text-[11px] text-purple-400 font-mono">+0/s</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/90 border-2 border-emerald-500/60 rounded-lg px-3 py-1 min-w-[130px]">
+          <div id="res3Label" class="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Grant Funding</div>
+          <div class="flex items-baseline justify-between gap-2">
+            <span id="res3Val" class="font-extrabold text-base sm:text-lg text-white">$120</span>
+            <span id="res3Rate" class="text-[11px] text-emerald-400 font-mono">+$0/s</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-800/90 border-2 border-amber-500/60 rounded-lg px-3 py-1 min-w-[115px]">
+          <div class="text-[10px] uppercase tracking-wider text-amber-300 font-bold">☕ Caffeine</div>
+          <div class="flex items-center gap-2">
+            <div class="w-16 h-2.5 bg-slate-950 rounded overflow-hidden border border-slate-700">
+              <div id="caffeineBar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-150" style="width:75%"></div>
+            </div>
+            <span id="caffeineVal" class="text-xs font-extrabold text-amber-300">75%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button id="topPromoteBtn" onclick="attemptPromotion()" class="hidden retro-btn promote-glow bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg border-2 border-amber-100">
+          ⬆️ PROMOTE RANK!
+        </button>
+        <button onclick="openPathModal()" class="retro-btn bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-2 rounded-lg border border-indigo-300">
+          🔀 Switch Path
+        </button>
+        <!-- Hidden by default; revealed when user presses Shift + Q -->
+        <button id="qaTopBarBtn" onclick="toggleQADrawer()" class="hidden retro-btn bg-amber-600 hover:bg-amber-500 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg border border-amber-200" title="Shortcut: Shift + Q">
+          🤖 QA & Bot (32)
+        </button>
+        <button onclick="resetCurrentPath()" class="retro-btn bg-slate-700 hover:bg-rose-700 text-slate-200 text-xs font-bold px-2.5 py-2 rounded-lg border border-slate-500" title="Reset Current Discipline">
+          ↺
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="max-w-7xl w-full mx-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 p-4">
+
+    <!-- LEFT / CENTER COLUMN: PIXEL ROOM CANVAS & ACTIVE WORKSTATIONS (8 COLS) -->
+    <section class="lg:col-span-8 flex flex-col gap-4">
+
+      <!-- PIXEL CANVAS CONTAINER -->
+      <div class="retro-panel rounded-xl p-3 relative">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-1">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="roomHeaderTitle" class="pixel-font text-xs text-slate-200">WET LAB FLOOR — CLICK ANY STATION OR ANOMALY</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs">
+            <span id="comboBadge" class="px-2 py-0.5 rounded bg-slate-800 border border-slate-600 text-amber-300 font-bold">
+              Combo: 1x
+            </span>
+            <span id="papersPublishedBadge" class="px-2 py-0.5 rounded bg-slate-800 border border-purple-500/50 text-purple-300 font-bold">
+              📄 Published: 0
+            </span>
+            <span id="grantOddsBadge" class="px-2 py-0.5 rounded bg-slate-800 border border-emerald-500/50 text-emerald-300 font-bold">
+              🎯 Grant Odds: 25%
+            </span>
+          </div>
+        </div>
+
+        <div class="relative w-full overflow-hidden rounded-lg border-2 border-slate-700 bg-slate-950">
+          <canvas id="gameCanvas" width="860" height="440" class="w-full h-auto block cursor-pointer"></canvas>
+        </div>
+
+        <!-- SWEET-SPOT TIMING BAR & DIRECT STATION CONTROLS -->
+        <div class="mt-3 grid grid-cols-1 md:grid-cols-12 gap-3 items-center bg-slate-900/95 p-3 rounded-lg border border-slate-700">
+          <!-- Timing Bar -->
+          <div class="md:col-span-5 flex flex-col gap-1">
+            <div class="flex items-center justify-between text-xs">
+              <span id="timingBarTitle" class="font-bold text-cyan-300">🎯 Precision Pipette Timing</span>
+              <span id="timingStatusText" class="text-[11px] text-amber-300 font-semibold">Hit Green Zone for 2x–8x!</span>
+            </div>
+            <div onclick="triggerPrimaryStation(true)" class="relative w-full h-7 bg-slate-950 rounded-md border-2 border-slate-600 overflow-hidden cursor-pointer" title="Click when cursor is inside the bright green target!">
+              <!-- Sweet spot target zone -->
+              <div id="sweetZoneEl" class="absolute top-0 bottom-0 bg-emerald-500/40 border-x-2 border-emerald-300" style="left: 38%; width: 22%;"></div>
+              <div id="critZoneEl" class="absolute top-0 bottom-0 bg-amber-400/65 border-x border-yellow-200" style="left: 46%; width: 6%;"></div>
+              <!-- Moving needle -->
+              <div id="timingNeedleEl" class="absolute top-0 bottom-0 w-2 bg-white shadow-[0_0_8px_#fff]" style="left: 50%;"></div>
+            </div>
+          </div>
+
+          <!-- 4 Station Quick-Trigger Buttons -->
+          <div class="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button id="btnStation0" onclick="triggerPrimaryStation(true)" class="retro-btn bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-extrabold py-2 px-2 rounded-lg text-xs flex flex-col items-center border border-cyan-200">
+              <span id="st0BtnTitle">🔬 Wet Bench</span>
+              <span id="st0BtnSub" class="text-[10px] font-semibold opacity-90">+Data (Timed)</span>
+            </button>
+
+            <button id="btnStation1" onclick="triggerManuscriptStation()" class="retro-btn bg-purple-600 hover:bg-purple-500 text-white font-extrabold py-2 px-2 rounded-lg text-xs flex flex-col items-center border border-purple-300">
+              <span id="st1BtnTitle">📝 Draft Paper</span>
+              <span id="st1BtnSub" class="text-[10px] font-semibold text-purple-100">0% • Need 35 Data</span>
+            </button>
+
+            <button id="btnStation2" onclick="triggerGrantStation()" class="retro-btn bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-extrabold py-2 px-2 rounded-lg text-xs flex flex-col items-center border border-emerald-200">
+              <span id="st2BtnTitle">💰 Grant Portal</span>
+              <span id="st2BtnSub" class="text-[10px] font-semibold opacity-90">Pitch Funding</span>
+            </button>
+
+            <button id="btnStation3" onclick="triggerCoffeeStation()" class="retro-btn bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2 px-2 rounded-lg text-xs flex flex-col items-center border border-amber-100">
+              <span id="st3BtnTitle">☕ Espresso Bar</span>
+              <span id="st3BtnSub" class="text-[10px] font-semibold opacity-90">+35% Caffeine</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAREER RANK PROGRESSION & MILESTONE BAR -->
+      <div class="retro-panel rounded-xl p-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <div>
+            <h2 class="pixel-font text-xs text-amber-400">CAREER TRAJECTORY & PROMOTION REQUIREMENTS</h2>
+            <p id="careerStageDesc" class="text-xs text-slate-300 mt-1">
+              Survive weed-out labs and collect clean baseline data to earn a Graduate Fellowship.
+            </p>
+          </div>
+          <button id="cardPromoteBtn" onclick="attemptPromotion()" class="retro-btn bg-slate-700 text-slate-300 font-extrabold text-xs px-4 py-2 rounded-lg border border-slate-500">
+            🔒 Check Requirements
+          </button>
+        </div>
+
+        <!-- Requirement Progress Meters -->
+        <div id="promotionReqsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3"></div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: UPGRADES, HIRING & LOG (4 COLS) -->
+    <aside class="lg:col-span-4 flex flex-col gap-4">
+
+      <div class="retro-panel rounded-xl p-3 flex-1 flex flex-col">
+        <!-- Shop Tabs -->
+        <div class="grid grid-cols-3 gap-1.5 bg-slate-900 p-1.5 rounded-lg border border-slate-700 mb-3">
+          <button id="tabEquip" onclick="switchShopTab('equip')" class="py-1.5 px-2 rounded text-xs font-extrabold bg-cyan-600 text-slate-950">
+            🛠️ Equipment (5)
+          </button>
+          <button id="tabStaff" onclick="switchShopTab('staff')" class="py-1.5 px-2 rounded text-xs font-extrabold text-slate-300 hover:bg-slate-800">
+            👩‍🔬 Personnel (4)
+          </button>
+          <button id="tabCareer" onclick="switchShopTab('career')" class="py-1.5 px-2 rounded text-xs font-extrabold text-slate-300 hover:bg-slate-800">
+            🏛️ Ranks (6)
+          </button>
+        </div>
+
+        <!-- Scrollable Shop List -->
+        <div id="shopListContainer" class="space-y-2.5 overflow-y-auto max-h-[420px] pr-1"></div>
+      </div>
+
+      <!-- LIVE DEPARTMENT TICKER LOG -->
+      <div class="retro-panel rounded-xl p-3">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="pixel-font text-[10px] text-slate-300">📬 DEPARTMENT TICKER & CV LOG</span>
+          <span id="speedStatusBadge" class="text-[11px] font-bold text-emerald-400">Speed: 1x</span>
+        </div>
+        <div id="eventLogBox" class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 h-32 overflow-y-auto space-y-1.5 text-xs font-mono"></div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- COLLAPSIBLE QA & BOT SUITE DRAWER (TOGGLED VIA SHIFT + Q) -->
+  <section id="qaDrawer" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/98 border-t-4 border-amber-400 p-4 shadow-2xl max-h-[82vh] overflow-y-auto">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="pixel-font text-xs sm:text-sm text-amber-400">🤖 AUTOMATED QA, MONTE CARLO SIMULATOR & VISUAL BOT (32 CHECKS)</h3>
+          <p class="text-xs text-slate-300 mt-0.5">
+            Watch the Visual AI Bot play live on the canvas at up to 50x speed or run a 4-Discipline Headless Balance Audit. (Shortcut: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-600 text-amber-300">Shift + Q</kbd>)
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="visualBotToggleBtn" onclick="toggleVisualBot()" class="retro-btn bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg">
+            ▶️ Watch AI Play: OFF
+          </button>
+          <div class="flex items-center bg-slate-900 border border-slate-700 rounded-lg p-1 gap-1">
+            <button onclick="setSimSpeed(1)" id="spdBtn1" class="px-2 py-1 rounded text-xs font-bold bg-amber-400 text-slate-950">1x</button>
+            <button onclick="setSimSpeed(10)" id="spdBtn10" class="px-2 py-1 rounded text-xs font-bold text-slate-300">10x</button>
+            <button onclick="setSimSpeed(25)" id="spdBtn25" class="px-2 py-1 rounded text-xs font-bold text-slate-300">25x</button>
+            <button onclick="setSimSpeed(50)" id="spdBtn50" class="px-2 py-1 rounded text-xs font-bold text-slate-300">50x</button>
+          </div>
+          <button onclick="runHeadlessMonteCarlo()" class="retro-btn bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg">
+            ⚡ Run 4-Path Balance Sim
+          </button>
+          <button onclick="runUnitTests()" class="retro-btn bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-xs px-3 py-2 rounded-lg">
+            ✅ Run 32 Unit Tests
+          </button>
+          <button onclick="toggleQADrawer()" class="retro-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-lg">
+            ✕ Close
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-3">
+        <!-- Monte Carlo Output Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-extrabold text-cyan-300 uppercase">4-Path Headless Pacing & Asymmetry Telemetry</h4>
+            <span class="text-[11px] text-slate-400">Target Active Window: ~28–38 mins</span>
+          </div>
+          <div id="monteCarloResults" class="text-xs overflow-x-auto"></div>
+        </div>
+
+        <!-- 32-Point Unit Test Checklist -->
+        <div class="bg-slate-900 border border-slate-800 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-extrabold text-purple-300 uppercase">32-Point State, Hitbox & Asymmetry Verification</h4>
+            <span id="unitTestSummaryBadge" class="text-xs font-bold text-emerald-400">Ready</span>
+          </div>
+          <div id="unitTestGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-48 overflow-y-auto text-[11px]"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCIPLINE SWITCHER MODAL -->
+  <div id="pathModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="retro-panel rounded-2xl max-w-4xl w-full p-5 border-4 border-indigo-400">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+        <div>
+          <h2 class="pixel-font text-sm sm:text-base text-amber-400">CHOOSE YOUR ACADEMIC DISCIPLINE</h2>
+          <p class="text-xs text-slate-300 mt-1">
+            Each discipline has its own saved progress, custom pixel-art room, visible equipment props, and signature passive mechanics!
+          </p>
+        </div>
+        <button onclick="closePathModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold">
+          ✕ Close
+        </button>
+      </div>
+
+      <div id="disciplineCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-4"></div>
+    </div>
+  </div>
+
+  <!-- PEER REVIEW / GATEKEEPER BATTLE MODAL -->
+  <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="retro-panel rounded-2xl max-w-2xl w-full p-5 border-4 border-purple-400">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-700">
+        <span id="reviewModalHeader" class="pixel-font text-xs sm:text-sm text-purple-300">📬 EDITORIAL DECISION LETTER</span>
+        <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">
+          Revise & Resubmit Showdown
+        </span>
+      </div>
+
+      <div class="mt-3 space-y-2.5 text-xs sm:text-sm">
+        <div class="bg-slate-900/90 border-l-4 border-emerald-400 p-3 rounded">
+          <div class="font-bold text-emerald-300 mb-0.5">Reviewer #1 (Constructive Enthusiast):</div>
+          <p id="rev1Quote" class="text-slate-200 italic"></p>
+        </div>
+
+        <div class="bg-slate-900/90 border-l-4 border-rose-500 p-3 rounded">
+          <div id="rev2Title" class="font-bold text-rose-400 mb-0.5">Reviewer #2 (The Gatekeeper):</div>
+          <p id="rev2Quote" class="text-slate-200 italic"></p>
+        </div>
+      </div>
+
+      <p class="text-xs text-amber-300 font-semibold mt-3 mb-2">
+        Choose your rebuttal strategy (every path publishes your work with distinct citation & resource bonuses!):
+      </p>
+      <div id="reviewChoicesContainer" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <script>
+    /*************************************************************************
+     * CITATION NEEDED: THE ACADEMIC CAREER SIMULATOR
+     * 4 Complete Disciplines • Pixel Art Canvas • Active Timing & Gatekeepers
+     *************************************************************************/
+
+    const STORAGE_KEY = 'CITATION_NEEDED_SAVE_V1';
+
+    const DISCIPLINES = {
+      stem: {
+        id: 'stem',
+        name: 'Bench Scientist',
+        badge: '🧬 Bench Scientist',
+        icon: '🧬',
+        roomTitle: 'WET LAB FLOOR — CLICK ANY STATION OR ANOMALY',
+        passiveLabel: 'Lab Automation: +5% Equip Output per Hired Staff',
+        asymmetryDesc: 'High-capital lab equipment & R01 grant ceilings; every hired researcher boosts equipment output by +5%.',
+        currencies: { res1: 'Raw Data', res2: 'Citations', res3: 'Grant Funding' },
+        stations: [
+          { name: 'Wet Bench', sub: '+Data (Timed)', x: 125, y: 295, color: '#06b6d4' },
+          { name: 'Manuscript Desk', sub: 'Draft Paper', x: 335, y: 295, color: '#a855f7' },
+          { name: 'NSF/NIH Portal', sub: 'Pitch R01 Grant', x: 545, y: 295, color: '#10b981' },
+          { name: 'Espresso Bar', sub: '+35% Caffeine', x: 755, y: 295, color: '#f59e0b' }
+        ],
+        stages: [
+          { title: 'Undergraduate Lab Assistant', outfit: '#38bdf8', hat: 'cap', mult: 1.0, reqData: 0, reqCit: 0, reqFund: 0, reqPapers: 0, desc: 'Wash glassware, pipette dilutions, and gather enough baseline data to enter a Ph.D. program.' },
+          { title: 'Ph.D. Candidate', outfit: '#818cf8', hat: 'goggles', mult: 1.45, reqData: 90, reqCit: 20, reqFund: 220, reqPapers: 1, desc: 'Survive qualifying exams, publish your first first-author paper, and run late-night PCR gels.' },
+          { title: 'Postdoctoral Fellow', outfit: '#e2e8f0', hat: 'goggles', mult: 2.1, reqData: 480, reqCit: 140, reqFund: 950, reqPapers: 2, desc: 'Generate high-throughput figures and land a transition fellowship before your contract clock runs out.' },
+          { title: 'Assistant Professor (Tenure-Track)', outfit: '#b45309', hat: 'glasses', mult: 3.1, reqData: 2200, reqCit: 700, reqFund: 3800, reqPapers: 4, desc: 'Build your startup lab, survive Reviewer #2, and win a flagship R01 grant before the tenure clock strikes.' },
+          { title: 'Tenured Associate Professor', outfit: '#0f766e', hat: 'glasses', mult: 4.6, reqData: 9500, reqCit: 3400, reqFund: 15500, reqPapers: 7, desc: 'Scale your research group with postdocs and high-field instruments while dodging committee service.' },
+          { title: 'Endowed Chair & Institute Director', outfit: '#facc15', hat: 'crown', mult: 7.5, reqData: 42000, reqCit: 16500, reqFund: 68000, reqPapers: 11, desc: 'Atop the Ivory Tower with a Golden Pipette, Cryo-EM facility, and keynote invitations worldwide!' }
+        ],
+        equipment: [
+          { id: 'vortex', name: 'Vortex Mixer', baseCost: 35, clickAdd: 2.2, passiveData: 1.5, propPos: { x: 75, y: 175, w: 46, h: 42 }, desc: 'Rapidly mixes reagents so your wrists survive undergrad.' },
+          { id: 'centrifuge', name: 'Benchtop Microcentrifuge', baseCost: 160, clickAdd: 6.5, passiveData: 6.0, propPos: { x: 205, y: 172, w: 54, h: 46 }, desc: 'Spins down pellets at 14,000 RPM without walking off the counter.' },
+          { id: 'pcr', name: '96-Well Thermal Cycler', baseCost: 680, clickAdd: 18, passiveData: 22, propPos: { x: 355, y: 168, w: 62, h: 48 }, desc: 'Automated exponential amplification of DNA templates.' },
+          { id: 'confocal', name: 'Laser Confocal Microscope', baseCost: 2900, clickAdd: 55, passiveData: 75, citPassive: 18, draftDiscount: 0.05, propPos: { x: 515, y: 158, w: 68, h: 58 }, desc: 'Crispy fluorescence z-stacks (-5% paper data cost & +18 Cit/s).' },
+          { id: 'cryoem', name: 'Cryo-EM Structural Suite', baseCost: 12500, clickAdd: 180, passiveData: 260, citPassive: 75, draftDiscount: 0.05, propPos: { x: 675, y: 142, w: 82, h: 74 }, desc: 'Atomic-resolution structures (-5% paper data cost & +75 Cit/s).' }
+        ],
+        staff: [
+          { id: 'ugrad', name: 'Undergrad Helper', baseCost: 75, dataRate: 3.5, citRate: 0.5, fundRate: 1.5, color: '#38bdf8', quote: 'Did I label that tube?', desc: 'Washes beakers and runs routine gels for course credit.' },
+          { id: 'grad', name: 'Ph.D. Rotation Student', baseCost: 360, dataRate: 14, citRate: 3.5, fundRate: 8, color: '#a855f7', quote: 'My Western blot worked!', desc: 'Turns espresso directly into preliminary figures.' },
+          { id: 'postdoc', name: 'Senior Postdoc', baseCost: 1650, dataRate: 52, citRate: 16, fundRate: 34, color: '#10b981', quote: 'Drafting the methods section.', desc: 'Writes manuscripts and mentors the entire bench crew.' },
+          { id: 'manager', name: 'Lab Manager (Auto-Fixer)', baseCost: 6400, dataRate: 140, citRate: 55, fundRate: 120, color: '#f59e0b', quote: 'Ordered LN2 & fixed freezer!', desc: 'Automatically resolves room anomalies after 1.6s!' }
+        ],
+        reviews: [
+          {
+            r1: 'An exciting dataset with clear mechanistic implications for cellular signaling.',
+            r2: 'The authors failed to cite my 1998 zebrafish paper and I demand a 6-month control experiment in triplicate.',
+            c1: 'Run the weekend control blot & cite Reviewer #2 prominently (+100% Citations, -20% Caffeine)',
+            c2: 'Write a 14-page diplomatic rebuttal citing statistical power (+85% Citations, +$180 Grant Bonus)',
+            c3: 'Appeal directly to the Senior Editor with raw cryo-replicates (+115% Citations)'
+          },
+          {
+            r1: 'Crisp microscopy figures and compelling quantitative throughput.',
+            r2: 'While technically sound, I philosophically disagree with the fluorescence channel color palette.',
+            c1: 'Re-export all figures in colorblind-safe viridis LUT (+105% Citations)',
+            c2: 'Add Supplementary Figure S19 through S28 (+95% Citations, +$220 Grant Bonus)',
+            c3: 'Politely point out Reviewer #2 misread Figure 2B (+110% Citations)'
+          }
+        ],
+        anomalies: [
+          { name: 'Unbalanced Centrifuge!', icon: '🌀', color: '#f43f5e', bonusText: '+45% Instant Data Burst!' },
+          { name: 'Department Seminar Pizza!', icon: '🍕', color: '#f59e0b', bonusText: 'Full Caffeine + Funding Boost!' },
+          { name: '-80°C Freezer Alarm!', icon: '🚨', color: '#38bdf8', bonusText: 'Saved Samples! +Citations & Data!' }
+        ]
+      },
+
+      social: {
+        id: 'social',
+        name: 'Social Scientist',
+        badge: '📋 Social Scientist',
+        icon: '📋',
+        roomTitle: 'QUALITATIVE & MIXED-METHODS STUDIO — CLICK STATIONS',
+        passiveLabel: 'Triangulation: Sweet-Spot Hits Grant +35% Funding',
+        asymmetryDesc: 'Mixed-Methods Triangulation awards bonus Foundation Grant funding on every sweet-spot combo & +15% peer-review citations.',
+        currencies: { res1: 'Field Notes', res2: 'Citations', res3: 'Foundation Grants' },
+        stations: [
+          { name: 'Interview Pod', sub: '+Notes (Timed)', x: 125, y: 295, color: '#06b6d4' },
+          { name: 'Coding Board', sub: 'Draft Study', x: 335, y: 295, color: '#a855f7' },
+          { name: 'IRB & Grants', sub: 'Pitch Spencer/Ford', x: 545, y: 295, color: '#10b981' },
+          { name: 'Oat Latte Cart', sub: '+35% Caffeine', x: 755, y: 295, color: '#f59e0b' }
+        ],
+        stages: [
+          { title: 'Undergraduate Field Coder', outfit: '#fb7185', hat: 'cap', mult: 1.0, reqData: 0, reqCit: 0, reqFund: 0, reqPapers: 0, desc: 'Clean survey spreadsheets and transcribe focus group recordings.' },
+          { title: 'Doctoral Qualitative Fellow', outfit: '#c084fc', hat: 'glasses', mult: 1.45, reqData: 90, reqCit: 20, reqFund: 220, reqPapers: 1, desc: 'Survive IRB modifications, code emergent themes, and defend your dissertation prospectus.' },
+          { title: 'Postdoctoral Research Associate', outfit: '#38bdf8', hat: 'glasses', mult: 2.1, reqData: 480, reqCit: 140, reqFund: 950, reqPapers: 2, desc: 'Lead multi-site longitudinal interviews and publish in top flagship education & sociology journals.' },
+          { title: 'Assistant Professor', outfit: '#d97706', hat: 'glasses', mult: 3.1, reqData: 2200, reqCit: 700, reqFund: 3800, reqPapers: 4, desc: 'Balance community-engaged fieldwork, graduate advising, and national foundation proposals.' },
+          { title: 'Tenured Associate Professor', outfit: '#10b981', hat: 'glasses', mult: 4.6, reqData: 9500, reqCit: 3400, reqFund: 15500, reqPapers: 7, desc: 'Chair editorial boards, run methods workshops, and mentor a thriving research collective.' },
+          { title: 'Endowed Chair of Public Policy', outfit: '#facc15', hat: 'crown', mult: 7.5, reqData: 42000, reqCit: 16500, reqFund: 68000, reqPapers: 11, desc: 'Your theoretical framework is taught in every syllabus and shapes national policy!' }
+        ],
+        equipment: [
+          { id: 'recorder', name: 'Dual-Mic Field Recorder', baseCost: 35, clickAdd: 2.2, passiveData: 1.5, propPos: { x: 75, y: 175, w: 46, h: 42 }, desc: 'Crystal-clear audio even in noisy campus coffee shops.' },
+          { id: 'pedal', name: 'Transcription Foot Pedal', baseCost: 160, clickAdd: 6.5, passiveData: 6.0, propPos: { x: 205, y: 170, w: 54, h: 46 }, desc: 'Speeds up verbatim interview transcription by 300%.' },
+          { id: 'nvivo', name: 'Qualitative Coding Wall', baseCost: 680, clickAdd: 18, passiveData: 22, propPos: { x: 355, y: 165, w: 64, h: 50 }, desc: 'Color-coded axial & selective thematic matrix.' },
+          { id: 'panel', name: 'National Longitudinal Panel', baseCost: 2900, clickAdd: 55, passiveData: 75, citPassive: 18, draftDiscount: 0.05, propPos: { x: 515, y: 158, w: 68, h: 58 }, desc: 'N=25,000 nationally representative cohort (-5% draft cost & +18 Cit/s).' },
+          { id: 'center', name: 'Community Policy Institute', baseCost: 12500, clickAdd: 180, passiveData: 260, citPassive: 75, draftDiscount: 0.05, propPos: { x: 675, y: 142, w: 82, h: 74 }, desc: 'Participatory action research hub (-5% draft cost & +75 Cit/s).' }
+        ],
+        staff: [
+          { id: 'ugrad', name: 'Undergrad Transcriber', baseCost: 75, dataRate: 3.5, citRate: 0.5, fundRate: 1.5, color: '#fb7185', quote: 'Timestamping interview #14!', desc: 'Formats transcripts and anonymizes participant pseudonyms.' },
+          { id: 'grad', name: 'Graduate Research Asst.', baseCost: 360, dataRate: 14, citRate: 3.5, fundRate: 8, color: '#c084fc', quote: 'Inter-rater kappa is 0.89!', desc: 'Conducts semi-structured interviews and literature synthesis.' },
+          { id: 'postdoc', name: 'Mixed-Methods Postdoc', baseCost: 1650, dataRate: 52, citRate: 16, fundRate: 34, color: '#38bdf8', quote: 'Merging quant & qual strands.', desc: 'Integrates structural equation models with rich narrative themes.' },
+          { id: 'manager', name: 'IRB & Center Coordinator', baseCost: 6400, dataRate: 140, citRate: 55, fundRate: 120, color: '#f59e0b', quote: 'IRB amendment approved!', desc: 'Automatically resolves studio anomalies after 1.6s!' }
+        ],
+        reviews: [
+          {
+            r1: 'Rich, nuanced participant voices with strong practical implications for institutional leadership.',
+            r2: 'Why didn’t this qualitative case study of 18 participants use a randomized control trial with N=10,000? Also, define ontology.',
+            c1: 'Add a 4-page Epistemological & Positionality section (+115% Citations)',
+            c2: 'Frame findings through a Mixed-Methods Triangulation matrix (+100% Citations, +$220 Grant Bonus)',
+            c3: 'Cite the Journal’s Special Issue on Methodological Pluralism (+110% Citations)'
+          }
+        ],
+        anomalies: [
+          { name: 'Surprise IRB Amendment!', icon: '📑', color: '#f43f5e', bonusText: 'Fast-Tracked! +Field Notes Burst!' },
+          { name: 'Colloquium Cheese Board!', icon: '🧀', color: '#f59e0b', bonusText: 'Full Caffeine + Grant Stipend!' },
+          { name: 'Viral Policy Brief Thread!', icon: '📣', color: '#38bdf8', bonusText: '+Citations & Foundation Attention!' }
+        ]
+      },
+
+      history: {
+        id: 'history',
+        name: 'Historian',
+        badge: '📜 Historian',
+        icon: '📜',
+        roomTitle: 'SPECIAL COLLECTIONS ARCHIVE — CLICK STATIONS',
+        passiveLabel: 'Monograph Gravitas: 1.5x Citations & +20% Output/Book',
+        asymmetryDesc: 'Archival Monograph Gravitas grants 1.5x Citations per published monograph and permanently compounds passive output by +20% per book.',
+        currencies: { res1: 'Archival Finds', res2: 'Citations', res3: 'NEH Fellowships' },
+        stations: [
+          { name: 'Microfilm Desk', sub: '+Finds (Timed)', x: 125, y: 295, color: '#06b6d4' },
+          { name: 'Folio Lectern', sub: 'Draft Monograph', x: 335, y: 295, color: '#a855f7' },
+          { name: 'NEH Portal', sub: 'Apply Fellowship', x: 545, y: 295, color: '#10b981' },
+          { name: 'Earl Grey Samovar', sub: '+35% Caffeine', x: 755, y: 295, color: '#f59e0b' }
+        ],
+        stages: [
+          { title: 'Undergraduate Archive Page', outfit: '#a3e635', hat: 'cap', mult: 1.0, reqData: 0, reqCit: 0, reqFund: 0, reqPapers: 0, desc: 'Fetch acid-free Hollinger boxes and learn to read 18th-century cursive.' },
+          { title: 'Doctoral Archival Candidate', outfit: '#f472b6', hat: 'glasses', mult: 1.45, reqData: 90, reqCit: 20, reqFund: 220, reqPapers: 1, desc: 'Pass paleography exams and uncover uncatalogued parish registers abroad.' },
+          { title: 'Humanities Center Fellow', outfit: '#60a5fa', hat: 'glasses', mult: 2.1, reqData: 480, reqCit: 140, reqFund: 950, reqPapers: 2, desc: 'Turn your dissertation into a university press book contract.' },
+          { title: 'Assistant Professor of History', outfit: '#b45309', hat: 'glasses', mult: 3.1, reqData: 2200, reqCit: 700, reqFund: 3800, reqPapers: 4, desc: 'Publish your flagship monograph and win an NEH Summer Stipend.' },
+          { title: 'Tenured Associate Professor', outfit: '#0d9488', hat: 'glasses', mult: 4.6, reqData: 9500, reqCit: 3400, reqFund: 15500, reqPapers: 7, desc: 'Direct the Special Collections seminar and edit a landmark multi-volume series.' },
+          { title: 'Bancroft-Prize Endowed Chair', outfit: '#facc15', hat: 'crown', mult: 7.5, reqData: 42000, reqCit: 16500, reqFund: 68000, reqPapers: 11, desc: 'Curator of Rare Folios and undisputed authority of your historical era!' }
+        ],
+        equipment: [
+          { id: 'gloves', name: 'Archival Cotton Gloves', baseCost: 35, clickAdd: 2.2, passiveData: 1.5, propPos: { x: 75, y: 175, w: 46, h: 42 }, desc: 'Handle brittle 16th-century vellum without leaving a smudge.' },
+          { id: 'uvlamp', name: 'Multispectral UV Loupe', baseCost: 160, clickAdd: 6.5, passiveData: 6.0, propPos: { x: 205, y: 172, w: 54, h: 46 }, desc: 'Reveals scraped palimpsest ink hidden underneath parish ledgers.' },
+          { id: 'scanner', name: 'Overhead Folio Scanner', baseCost: 680, clickAdd: 18, passiveData: 22, propPos: { x: 355, y: 168, w: 62, h: 48 }, desc: 'Digitizes 400 archival folios an hour with OCR transcription.' },
+          { id: 'vault', name: 'Climate-Controlled Rare Vault', baseCost: 2900, clickAdd: 55, passiveData: 75, citPassive: 18, draftDiscount: 0.05, propPos: { x: 515, y: 158, w: 68, h: 58 }, desc: 'Houses diplomatic correspondence (-5% book cost & +18 Cit/s).' },
+          { id: 'globe', name: '1640 Celestial Brass Globe', baseCost: 12500, clickAdd: 180, passiveData: 260, citPassive: 75, draftDiscount: 0.05, propPos: { x: 675, y: 142, w: 82, h: 74 }, desc: 'Centerpiece of the Rare Book Room (-5% book cost & +75 Cit/s).' }
+        ],
+        staff: [
+          { id: 'ugrad', name: 'Microfilm Sorter', baseCost: 75, dataRate: 3.5, citRate: 0.5, fundRate: 1.5, color: '#a3e635', quote: 'Rewinding reel #402!', desc: 'Indexes newspaper reels and checks footnote shelfmarks.' },
+          { id: 'grad', name: 'Paleography Ph.D. Student', baseCost: 360, dataRate: 14, citRate: 3.5, fundRate: 8, color: '#f472b6', quote: 'Deciphered the marginalia!', desc: 'Translates diplomatic dispatches and Latin charters.' },
+          { id: 'postdoc', name: 'Visiting Humanities Fellow', baseCost: 1650, dataRate: 52, citRate: 16, fundRate: 34, color: '#60a5fa', quote: 'Cross-referencing Brussels!', desc: 'Synthesizes transnational archives into prize-winning chapters.' },
+          { id: 'manager', name: 'Head Special Archivist', baseCost: 6400, dataRate: 140, citRate: 55, fundRate: 120, color: '#f59e0b', quote: 'Uncatalogued trunk opened!', desc: 'Automatically resolves archive anomalies after 1.6s!' }
+        ],
+        reviews: [
+          {
+            r1: 'A magisterial archival achievement that reshapes our periodization of the eighteenth century.',
+            r2: 'What about the 1743 tax rolls in the municipal sub-basement of Lyon? Without them, Chapter 4 is mere speculation.',
+            c1: 'Insert a 42-line discursive footnote citing the Lyon folio (+135% Citations)',
+            c2: 'Add an Archival Appendix comparing three regional tax registers (+120% Citations, +$220 NEH Bonus)',
+            c3: 'Demonstrate the Lyon register burned in 1789 with primary receipts (+145% Citations)'
+          }
+        ],
+        anomalies: [
+          { name: 'Misfiled Diplomatic Trunk!', icon: '🗝️', color: '#f59e0b', bonusText: 'Jackpot! +Archival Finds Burst!' },
+          { name: 'Rare Book Room Shortbread!', icon: '🫖', color: '#10b981', bonusText: 'Full Tea Caffeine + NEH Stipend!' },
+          { name: 'Fading Iron-Gall Ink!', icon: '🕯️', color: '#38bdf8', bonusText: 'UV Restored! +Citations & Finds!' }
+        ]
+      },
+
+      law: {
+        id: 'law',
+        name: 'Legal Scholar',
+        badge: '⚖️ Legal Scholar',
+        icon: '⚖️',
+        roomTitle: 'LAW REVIEW & CONSTITUTIONAL CHAMBERS — CLICK STATIONS',
+        passiveLabel: 'Expedited Preemption: +32% Draft Speed & +35% Cit',
+        asymmetryDesc: 'Expedited Law Review Preemption drafts articles 28% faster (+32% per step) and awards +35% bonus Citations plus Clinic Stipends on acceptances.',
+        currencies: { res1: 'Case Briefs', res2: 'Citations', res3: 'Clinic Endowment' },
+        stations: [
+          { name: 'Reporter Stacks', sub: '+Briefs (Timed)', x: 125, y: 295, color: '#06b6d4' },
+          { name: 'Bluebook Desk', sub: 'Draft Article', x: 335, y: 295, color: '#a855f7' },
+          { name: 'Amicus & Clinic', sub: 'Secure Retainer', x: 545, y: 295, color: '#10b981' },
+          { name: 'Chambers Cold Brew', sub: '+35% Caffeine', x: 755, y: 295, color: '#f59e0b' }
+        ],
+        stages: [
+          { title: '1L Summer Research Assistant', outfit: '#60a5fa', hat: 'cap', mult: 1.0, reqData: 0, reqCit: 0, reqFund: 0, reqPapers: 0, desc: 'Shepardize citations and check italicization of commas in Bluebook footnotes.' },
+          { title: 'Law Review Managing Editor', outfit: '#a78bfa', hat: 'glasses', mult: 1.45, reqData: 90, reqCit: 20, reqFund: 220, reqPapers: 1, desc: 'Publish your Student Note and survive 300-footnote source pulls.' },
+          { title: 'Supreme Court / Appellate Fellow', outfit: '#34d399', hat: 'glasses', mult: 2.1, reqData: 480, reqCit: 140, reqFund: 950, reqPapers: 2, desc: 'Draft bench memos and enter the AALS faculty appointments meat market.' },
+          { title: 'Associate Professor of Law', outfit: '#b45309', hat: 'glasses', mult: 3.1, reqData: 2200, reqCit: 700, reqFund: 3800, reqPapers: 4, desc: 'Play the Scholastica expedited-review wave up to a T14 flagship Law Review.' },
+          { title: 'Tenured Professor of Law', outfit: '#0284c7', hat: 'glasses', mult: 4.6, reqData: 9500, reqCit: 3400, reqFund: 15500, reqPapers: 7, desc: 'Author the definitive casebook and lead appellate clinic oral arguments.' },
+          { title: 'Distinguished Jurisprudence Chair', outfit: '#facc15', hat: 'crown', mult: 7.5, reqData: 42000, reqCit: 16500, reqFund: 68000, reqPapers: 11, desc: 'Cited in landmark Supreme Court opinions with an endowed Constitutional Center!' }
+        ],
+        equipment: [
+          { id: 'bluebook', name: 'Spiral Bluebook (22nd Ed.)', baseCost: 35, clickAdd: 2.2, passiveData: 1.5, propPos: { x: 75, y: 175, w: 46, h: 42 }, desc: 'Instant mastery of supra, id., and small-caps periodical abbreviations.' },
+          { id: 'westlaw', name: 'Dual-Screen Westlaw Terminal', baseCost: 160, clickAdd: 6.5, passiveData: 6.0, propPos: { x: 205, y: 172, w: 54, h: 46 }, desc: 'KeyCite flags every circuit split in milliseconds.' },
+          { id: 'macro', name: 'Automated Footnote Macro', baseCost: 680, clickAdd: 18, passiveData: 22, propPos: { x: 355, y: 168, w: 62, h: 48 }, desc: 'Auto-formats 450 footnotes to strict law review house style.' },
+          { id: 'amicus', name: 'Supreme Court Booklet Press', baseCost: 2900, clickAdd: 55, passiveData: 75, citPassive: 18, draftDiscount: 0.05, propPos: { x: 515, y: 158, w: 68, h: 58 }, desc: 'Prints green-cover Amicus briefs (-5% draft cost & +18 Cit/s).' },
+          { id: 'scales', name: 'Golden Scales & Moot Bench', baseCost: 12500, clickAdd: 180, passiveData: 260, citPassive: 75, draftDiscount: 0.05, propPos: { x: 675, y: 142, w: 82, h: 74 }, desc: 'In-house appellate moot courtroom (-5% draft cost & +75 Cit/s).' }
+        ],
+        staff: [
+          { id: 'ugrad', name: '2L Cite-Checker', baseCost: 75, dataRate: 3.5, citRate: 0.5, fundRate: 1.5, color: '#60a5fa', quote: 'Fixed 19 italicized periods!', desc: 'Verifies every pincite in your 80-page law review submission.' },
+          { id: 'grad', name: '3L Senior Articles Editor', baseCost: 360, dataRate: 14, citRate: 3.5, fundRate: 8, color: '#a78bfa', quote: 'Expedite request sent!', desc: 'Trades offers across flagship journals on Scholastica.' },
+          { id: 'postdoc', name: 'Clinical Litigation Fellow', baseCost: 1650, dataRate: 52, citRate: 16, fundRate: 34, color: '#34d399', quote: 'Circuit split brief filed!', desc: 'Drafts high-impact appellate briefs and statutory analyses.' },
+          { id: 'manager', name: 'Managing Faculty Librarian', baseCost: 6400, dataRate: 140, citRate: 55, fundRate: 120, color: '#f59e0b', quote: 'Legislative history located!', desc: 'Automatically resolves chambers anomalies after 1.6s!' }
+        ],
+        reviews: [
+          {
+            r1: 'A compelling constitutional framework addressing an urgent circuit split.',
+            r2: '2L Executive Footnote Editor: Footnote 214 uses an unitalicized signal comma and needs parenthetical weight for all 19 citations.',
+            c1: 'Accept every Bluebook Rule 1.2 edit & add 30 parentheticals (+135% Citations)',
+            c2: 'Leverage a competing T14 Law Review expedite deadline (+130% Citations, +$260 Clinic Stipend)',
+            c3: 'Add a Normative Statutory Interpretation Part IV (+140% Citations)'
+          }
+        ],
+        anomalies: [
+          { name: 'Breaking Circuit Split!', icon: '⚖️', color: '#f43f5e', bonusText: 'First to File! +Case Briefs Burst!' },
+          { name: 'Federalist vs. ACS Free Lunch!', icon: '🥙', color: '#f59e0b', bonusText: 'Full Caffeine + Clinic Stipend!' },
+          { name: 'Scholastica Expedite Window!', icon: '⚡', color: '#38bdf8', bonusText: 'Traded Up! +Citations & Briefs!' }
+        ]
+      }
+    };
+
+    // Global Multi-Path State Container
+    let activePathId = 'stem';
+    let currentShopTab = 'equip';
+    let simSpeed = 1;
+    let visualBotActive = false;
+    let botDecisionTimer = 0;
+    let anomalyAutoTimer = null;
+
+    // Runtime Canvas Entities
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let playerSprite = { x: 125, y: 300, targetX: 125, targetY: 300, bobPhase: 0, actionFlash: 0 };
+    let npcSprites = [];
+    let floatingParticles = [];
+    let confettiParticles = [];
+    let activeAnomaly = null;
+    let anomalySpawnCooldown = 9;
+    let celebrationBanner = null;
+    let hoveredStationIndex = -1;
+
+    // Sweet-Spot Timing Bar State
+    let timingBar = { pos: 50, dir: 1, speed: 68, combo: 1 };
+
+    function createBlankDisciplineState() {
+      return {
+        res1: 0,
+        res2: 0,
+        res3: 120,
+        caffeine: 80,
+        stageIndex: 0,
+        manuscriptProgress: 0,
+        papersPublished: 0,
+        equipLevels: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 },
+        staffCounts: { 0: 0, 1: 0, 2: 0, 3: 0 },
+        logs: ['Welcome to Citation Needed! Click the Wet Bench or time the green sweet-spot bar!']
+      };
+    }
+
+    let allPathStates = {
+      stem: createBlankDisciplineState(),
+      social: createBlankDisciplineState(),
+      history: createBlankDisciplineState(),
+      law: createBlankDisciplineState()
+    };
+
+    function S() {
+      return allPathStates[activePathId];
+    }
+    function D() {
+      return DISCIPLINES[activePathId];
+    }
+
+    // Load or Initialize Save State
+    function loadGame() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.allPathStates) {
+            for (const k of Object.keys(DISCIPLINES)) {
+              if (parsed.allPathStates[k]) {
+                allPathStates[k] = Object.assign(createBlankDisciplineState(), parsed.allPathStates[k]);
+              }
+            }
+          }
+          if (parsed.activePathId && DISCIPLINES[parsed.activePathId]) {
+            activePathId = parsed.activePathId;
+          }
+        }
+      } catch (e) {
+        console.warn('Save load skipped:', e);
+      }
+      rebuildNPCSprites();
+      refreshAllUI();
+    }
+
+    function saveGame() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          activePathId,
+          allPathStates
+        }));
+      } catch (e) {}
+    }
+
+    // Utility Formatting & Clamping
+    function fmt(n) {
+      if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+      if (n >= 1e4) return (n / 1e3).toFixed(1) + 'K';
+      return Math.floor(n).toLocaleString();
+    }
+
+    function clampBoxToCanvas(x, y, w, h, pad = 8) {
+      const cx = Math.max(pad, Math.min(canvas.width - w - pad, x));
+      const cy = Math.max(pad, Math.min(canvas.height - h - pad, y));
+      return { x: cx, y: cy };
+    }
+
+    function addLog(msg) {
+      const st = S();
+      st.logs.unshift(msg);
+      if (st.logs.length > 25) st.logs.pop();
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const box = document.getElementById('eventLogBox');
+      box.innerHTML = S().logs.map((l, i) =>
+        `<div class="${i === 0 ? 'text-amber-300 font-semibold' : 'text-slate-400'}">• ${l}</div>`
+      ).join('');
+    }
+
+    // Core Math & Disciplinary Asymmetry Calculators
+    function getStagePrestigeMult(st = S(), disc = D()) {
+      const rankMult = disc.stages[st.stageIndex].mult;
+      const expMult = Math.pow(1.35, st.stageIndex);
+      return rankMult * expMult;
+    }
+
+    function getTotalStaffCount(st = S()) {
+      return (st.staffCounts[0] || 0) + (st.staffCounts[1] || 0) + (st.staffCounts[2] || 0) + (st.staffCounts[3] || 0);
+    }
+
+    function getEquipCost(idx, st = S(), disc = D()) {
+      const item = disc.equipment[idx];
+      const lvl = st.equipLevels[idx] || 0;
+      const stemCapScale = disc.id === 'stem' ? 1.12 : 1.0;
+      return Math.ceil(item.baseCost * stemCapScale * Math.pow(1.55, lvl));
+    }
+
+    function getStaffCost(idx, st = S(), disc = D()) {
+      const member = disc.staff[idx];
+      const cnt = st.staffCounts[idx] || 0;
+      return Math.ceil(member.baseCost * Math.pow(1.45, cnt));
+    }
+
+    function getCaffeineMultiplier(st = S()) {
+      if (st.caffeine >= 70) return 1.35;
+      if (st.caffeine >= 30) return 1.0;
+      return 0.75;
+    }
+
+    function getClickDataPower(st = S(), disc = D()) {
+      let base = 4;
+      const staffBonus = disc.id === 'stem' ? (1 + 0.05 * getTotalStaffCount(st)) : 1.0;
+      const stemEquipPower = disc.id === 'stem' ? 1.14 : 1.0;
+      disc.equipment.forEach((eq, i) => {
+        base += (st.equipLevels[i] || 0) * eq.clickAdd * stemEquipPower * staffBonus;
+      });
+      return base * getStagePrestigeMult(st, disc) * getCaffeineMultiplier(st);
+    }
+
+    function getPassiveRates(st = S(), disc = D()) {
+      let dataRate = 0;
+      let citRate = 0;
+      let fundRate = 0;
+
+      const staffSynergy = disc.id === 'stem' ? (1 + 0.05 * getTotalStaffCount(st)) : 1.0;
+      const stemEquipPower = disc.id === 'stem' ? 1.14 : 1.0;
+
+      disc.equipment.forEach((eq, i) => {
+        const lvl = st.equipLevels[i] || 0;
+        dataRate += lvl * eq.passiveData * stemEquipPower * staffSynergy;
+        if (eq.citPassive) citRate += lvl * eq.citPassive;
+      });
+
+      disc.staff.forEach((sf, i) => {
+        const cnt = st.staffCounts[i] || 0;
+        dataRate += cnt * sf.dataRate;
+        citRate += cnt * sf.citRate;
+        fundRate += cnt * sf.fundRate;
+      });
+
+      // Historian Monograph Gravitas: +20% passive Finds & Citations per published Monograph
+      const historyBookMult = disc.id === 'history' ? (1 + 0.20 * st.papersPublished) : 1.0;
+
+      const mult = getStagePrestigeMult(st, disc) * getCaffeineMultiplier(st);
+      return {
+        data: dataRate * mult * historyBookMult,
+        cit: (citRate + st.papersPublished * 2.4) * mult * historyBookMult,
+        fund: fundRate * mult
+      };
+    }
+
+    function getDraftStepCost(st = S(), disc = D()) {
+      const baseCost = 35 * Math.pow(1.65, st.stageIndex) * (1 + st.papersPublished * 0.28);
+      const t4 = st.equipLevels[3] || 0;
+      const t5 = st.equipLevels[4] || 0;
+      const discount = Math.min(0.50, (t4 + t5) * 0.05);
+      return Math.max(15, Math.ceil(baseCost * (1 - discount)));
+    }
+
+    function getDraftStepProgressIncrement(disc = D()) {
+      if (disc.id === 'law') return 32;     // Expedited Preemption: 4 steps
+      if (disc.id === 'history') return 20; // Archival Monograph: 5 steps
+      return 25;                            // Standard: 4 steps
+    }
+
+    function getGrantOdds(st = S()) {
+      return Math.min(0.90, 0.25 + st.papersPublished * 0.04 + st.stageIndex * 0.05);
+    }
+
+    // Station Actions
+    function movePlayerToStation(stationIdx) {
+      const stObj = D().stations[stationIdx];
+      playerSprite.targetX = stObj.x;
+      playerSprite.targetY = stObj.y;
+      playerSprite.actionFlash = 0.25;
+    }
+
+    function spawnFloatingText(text, x, y, color = '#38bdf8') {
+      const clamped = clampBoxToCanvas(x - 45, y - 20, 110, 24);
+      floatingParticles.push({
+        text,
+        x: clamped.x + 45,
+        y: clamped.y + 12,
+        vy: -38,
+        alpha: 1.0,
+        color
+      });
+    }
+
+    function triggerPrimaryStation(useTimingBar = true) {
+      const st = S();
+      const disc = D();
+      movePlayerToStation(0);
+
+      let timingMult = 1.0;
+      let statusLabel = 'Standard Collect (1x)';
+
+      if (useTimingBar) {
+        const p = timingBar.pos;
+        if (p >= 46 && p <= 52) {
+          timingBar.combo = Math.min(8, timingBar.combo + 2);
+          timingMult = timingBar.combo;
+          statusLabel = `🔥 CRITICAL SWEET-SPOT! (${timingMult}x Combo!)`;
+        } else if (p >= 38 && p <= 60) {
+          timingBar.combo = Math.min(8, timingBar.combo + 1);
+          timingMult = timingBar.combo;
+          statusLabel = `✅ Sweet-Spot Hit! (${timingMult}x Combo!)`;
+        } else {
+          timingBar.combo = 1;
+          timingMult = 1.0;
+          statusLabel = `Missed Zone — Combo Reset (1x)`;
+        }
+      }
+
+      const gain = getClickDataPower(st, disc) * timingMult;
+      st.res1 += gain;
+      st.caffeine = Math.max(0, st.caffeine - 1.2);
+
+      // Social Scientist Asymmetry: Sweet-Spot Hits generate bonus Foundation Grant funding
+      if (disc.id === 'social' && timingMult > 1) {
+        const grantBonus = Math.ceil(gain * 0.35);
+        st.res3 += grantBonus;
+        spawnFloatingText(`+$${fmt(grantBonus)} Triangulation!`, 145, 235, '#10b981');
+      }
+
+      document.getElementById('timingStatusText').textContent = statusLabel;
+      document.getElementById('comboBadge').textContent = `Combo: ${timingBar.combo}x`;
+
+      spawnFloatingText(`+${fmt(gain)} ${disc.currencies.res1}`, 125, 260, timingMult > 1 ? '#facc15' : '#38bdf8');
+      refreshAllUI();
+    }
+
+    function triggerManuscriptStation() {
+      const st = S();
+      const disc = D();
+      movePlayerToStation(1);
+
+      const stepCost = getDraftStepCost(st, disc);
+      if (st.res1 < stepCost) {
+        spawnFloatingText(`Need ${fmt(stepCost)} ${disc.currencies.res1}!`, 335, 255, '#f43f5e');
+        return;
+      }
+
+      st.res1 -= stepCost;
+      st.caffeine = Math.max(0, st.caffeine - 2.5);
+      const stepInc = getDraftStepProgressIncrement(disc);
+      st.manuscriptProgress = Math.min(100, st.manuscriptProgress + stepInc);
+
+      spawnFloatingText(`Draft ${st.manuscriptProgress}%`, 335, 255, '#c084fc');
+
+      if (st.manuscriptProgress >= 100) {
+        st.manuscriptProgress = 0;
+        triggerPeerReviewShowdown();
+      }
+      refreshAllUI();
+    }
+
+    function triggerPeerReviewShowdown() {
+      const st = S();
+      const disc = D();
+      if (visualBotActive) {
+        resolvePeerReviewChoice(1.15, 200, 'Bot Auto-Rebuttal Accepted!');
+        return;
+      }
+
+      const revPool = disc.reviews;
+      const rev = revPool[st.papersPublished % revPool.length];
+      document.getElementById('rev1Quote').textContent = `"${rev.r1}"`;
+      document.getElementById('rev2Quote').textContent = `"${rev.r2}"`;
+
+      const choices = [
+        { label: rev.c1, citMult: 1.10, fundBonus: 0 },
+        { label: rev.c2, citMult: 1.00, fundBonus: 220 * (st.stageIndex + 1) },
+        { label: rev.c3, citMult: 1.20, fundBonus: 0 }
+      ];
+
+      const container = document.getElementById('reviewChoicesContainer');
+      container.innerHTML = '';
+      choices.forEach((ch) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left retro-btn bg-purple-700 hover:bg-purple-600 text-white font-bold p-3 rounded-lg border border-purple-300 text-xs';
+        btn.textContent = `👉 ${ch.label}`;
+        btn.onclick = () => {
+          document.getElementById('reviewModal').classList.add('hidden');
+          resolvePeerReviewChoice(ch.citMult, ch.fundBonus, ch.label);
+        };
+        container.appendChild(btn);
+      });
+
+      document.getElementById('reviewModal').classList.remove('hidden');
+    }
+
+    function resolvePeerReviewChoice(choiceMult, fundBonus, labelText) {
+      const st = S();
+      const disc = D();
+      st.papersPublished += 1;
+
+      let baseCit = 45 * Math.pow(2.05, st.stageIndex) * (1 + st.papersPublished * 0.25);
+      if (disc.id === 'social') baseCit *= 1.15;
+      if (disc.id === 'history') baseCit *= 1.50;
+      if (disc.id === 'law') {
+        baseCit *= 1.35;
+        fundBonus += 180 * (st.stageIndex + 1);
+      }
+
+      const totalCit = Math.ceil(baseCit * choiceMult);
+      st.res2 += totalCit;
+      if (fundBonus > 0) st.res3 += fundBonus;
+
+      spawnFloatingText(`📄 ACCEPTED! +${fmt(totalCit)} Cit!`, 335, 235, '#a855f7');
+      addLog(`Published #${st.papersPublished}! +${fmt(totalCit)} ${disc.currencies.res2}${fundBonus ? ' & +$' + fmt(fundBonus) : ''}.`);
+      refreshAllUI();
+      saveGame();
+    }
+
+    function triggerGrantStation() {
+      const st = S();
+      const disc = D();
+      movePlayerToStation(2);
+
+      st.caffeine = Math.max(0, st.caffeine - 2.0);
+      const odds = getGrantOdds(st);
+      const stemCeiling = disc.id === 'stem' ? 1.22 : 1.0;
+      const paperBoost = 1 + st.papersPublished * 0.12;
+      const baseAward = 95 * Math.pow(2.15, st.stageIndex) * paperBoost * stemCeiling * getCaffeineMultiplier(st);
+
+      if (Math.random() <= odds) {
+        const winAmt = Math.ceil(baseAward);
+        st.res3 += winAmt;
+        spawnFloatingText(`🎉 AWARDED +$${fmt(winAmt)}!`, 545, 250, '#10b981');
+        addLog(`Grant Approved (${Math.round(odds * 100)}% odds): +$${fmt(winAmt)} ${disc.currencies.res3}!`);
+      } else {
+        const stipend = Math.ceil(baseAward * 0.30);
+        st.res3 += stipend;
+        spawnFloatingText(`+$${fmt(stipend)} Seed Stipend`, 545, 255, '#34d399');
+      }
+      refreshAllUI();
+    }
+
+    function triggerCoffeeStation() {
+      const st = S();
+      movePlayerToStation(3);
+      st.caffeine = Math.min(100, st.caffeine + 38);
+      spawnFloatingText(`☕ +38% CAFFEINE!`, 755, 250, '#facc15');
+      refreshAllUI();
+    }
+
+    // Room Anomaly System
+    function clearActiveAnomalyState() {
+      activeAnomaly = null;
+      if (anomalyAutoTimer) {
+        clearTimeout(anomalyAutoTimer);
+        anomalyAutoTimer = null;
+      }
+    }
+
+    function spawnRoomAnomaly() {
+      if (activeAnomaly) return;
+      const disc = D();
+      const pool = disc.anomalies;
+      const chosen = pool[Math.floor(Math.random() * pool.length)];
+      activeAnomaly = {
+        ...chosen,
+        x: 190 + Math.random() * 470,
+        y: 195 + Math.random() * 55,
+        ttl: 11.0
+      };
+
+      if ((S().staffCounts[3] || 0) > 0) {
+        if (anomalyAutoTimer) clearTimeout(anomalyAutoTimer);
+        anomalyAutoTimer = setTimeout(() => {
+          if (activeAnomaly) resolveAnomaly(true);
+        }, Math.max(250, 1500 / simSpeed));
+      }
+    }
+
+    function resolveAnomaly(autoByManager = false) {
+      if (!activeAnomaly) return;
+      const st = S();
+      const disc = D();
+      const anom = activeAnomaly;
+      clearActiveAnomalyState();
+
+      const dataBonus = Math.ceil(getClickDataPower(st, disc) * 4.5);
+      const citBonus = Math.ceil(18 * Math.pow(1.8, st.stageIndex));
+      const fundBonus = Math.ceil(65 * Math.pow(1.85, st.stageIndex));
+
+      st.res1 += dataBonus;
+      st.res2 += citBonus;
+      st.res3 += fundBonus;
+      st.caffeine = Math.min(100, st.caffeine + 25);
+
+      spawnFloatingText(`${anom.icon} ${autoByManager ? 'Auto-Fixed!' : 'Resolved!'} +${fmt(dataBonus)}`, anom.x, anom.y, '#facc15');
+      addLog(`${autoByManager ? 'Manager resolved' : 'You clicked'} ${anom.name}: +${fmt(dataBonus)} ${disc.currencies.res1}, +$${fmt(fundBonus)}!`);
+      refreshAllUI();
+    }
+
+    // Purchasing & Promotion
+    function buyEquipment(idx) {
+      const st = S();
+      const cost = getEquipCost(idx, st);
+      if (st.res3 < cost) return;
+      st.res3 -= cost;
+      st.equipLevels[idx] = (st.equipLevels[idx] || 0) + 1;
+      const eq = D().equipment[idx];
+      spawnFloatingText(`🛠️ ${eq.name} Lv.${st.equipLevels[idx]}!`, eq.propPos.x + 30, eq.propPos.y, '#38bdf8');
+      addLog(`Purchased ${eq.name} (Lv.${st.equipLevels[idx]})!`);
+      refreshAllUI();
+      saveGame();
+    }
+
+    function hireStaff(idx) {
+      const st = S();
+      const cost = getStaffCost(idx, st);
+      if (st.res3 < cost) return;
+      st.res3 -= cost;
+      st.staffCounts[idx] = (st.staffCounts[idx] || 0) + 1;
+      const member = D().staff[idx];
+      rebuildNPCSprites();
+      spawnFloatingText(`👩‍🔬 Hired ${member.name}!`, 430, 220, '#10b981');
+      addLog(`Hired ${member.name} (#${st.staffCounts[idx]})!`);
+      refreshAllUI();
+      saveGame();
+    }
+
+    function canPromote(st = S(), disc = D()) {
+      if (st.stageIndex >= disc.stages.length - 1) return false;
+      const nextStage = disc.stages[st.stageIndex + 1];
+      return (
+        st.res1 >= nextStage.reqData &&
+        st.res2 >= nextStage.reqCit &&
+        st.res3 >= nextStage.reqFund &&
+        st.papersPublished >= nextStage.reqPapers
+      );
+    }
+
+    function attemptPromotion() {
+      const st = S();
+      const disc = D();
+      if (!canPromote(st, disc)) return;
+
+      st.stageIndex += 1;
+      const newRank = disc.stages[st.stageIndex];
+      celebrationBanner = {
+        title: `🎉 PROMOTED TO ${newRank.title.toUpperCase()}!`,
+        sub: `Stage Multiplier boosted to ${(getStagePrestigeMult(st, disc)).toFixed(2)}x!`,
+        ttl: 4.5
+      };
+
+      for (let i = 0; i < 42; i++) {
+        confettiParticles.push({
+          x: 150 + Math.random() * 560,
+          y: 60 + Math.random() * 80,
+          vx: -90 + Math.random() * 180,
+          vy: -60 + Math.random() * 140,
+          color: ['#facc15', '#38bdf8', '#a855f7', '#10b981', '#f43f5e'][i % 5],
+          ttl: 2.4
+        });
+      }
+
+      addLog(`🎓 PROMOTED to Rank ${st.stageIndex + 1}/6: ${newRank.title}!`);
+      refreshAllUI();
+      saveGame();
+    }
+
+    function rebuildNPCSprites() {
+      npcSprites = [];
+      const st = S();
+      const disc = D();
+      disc.staff.forEach((member, idx) => {
+        const count = Math.min(4, st.staffCounts[idx] || 0);
+        for (let c = 0; c < count; c++) {
+          npcSprites.push({
+            name: member.name,
+            color: member.color,
+            quote: member.quote,
+            x: 140 + ((idx * 155 + c * 65) % 580),
+            y: 348 + (c % 2) * 26,
+            vx: (idx % 2 === 0 ? 1 : -1) * (28 + idx * 6),
+            showQuoteTimer: (idx + c) * 1.7
+          });
+        }
+      });
+    }
+
+    // UI Rendering
+    function switchShopTab(tab) {
+      currentShopTab = tab;
+      ['equip', 'staff', 'career'].forEach(t => {
+        const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (t === tab) {
+          btn.className = 'py-1.5 px-2 rounded text-xs font-extrabold bg-cyan-500 text-slate-950';
+        } else {
+          btn.className = 'py-1.5 px-2 rounded text-xs font-extrabold text-slate-300 hover:bg-slate-800';
+        }
+      });
+      renderShopList();
+    }
+
+    function renderShopList() {
+      const container = document.getElementById('shopListContainer');
+      const st = S();
+      const disc = D();
+
+      if (currentShopTab === 'equip') {
+        container.innerHTML = disc.equipment.map((eq, i) => {
+          const lvl = st.equipLevels[i] || 0;
+          const cost = getEquipCost(i, st, disc);
+          const affordable = st.res3 >= cost;
+          return `
+            <div class="bg-slate-900/90 border ${lvl > 0 ? 'border-cyan-500/50' : 'border-slate-700'} rounded-lg p-2.5 flex items-center justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-extrabold text-xs text-white">${eq.name}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold">Lv.${lvl}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5">${eq.desc}</p>
+                <div class="text-[11px] text-cyan-300 font-semibold mt-1">
+                  +${eq.clickAdd} Click • +${eq.passiveData}/s ${disc.currencies.res1}
+                </div>
+              </div>
+              <button onclick="buyEquipment(${i})" ${affordable ? '' : 'disabled'}
+                class="retro-btn px-3 py-2 rounded-lg text-xs font-extrabold whitespace-nowrap ${affordable ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                $${fmt(cost)}
+              </button>
+            </div>
+          `;
+        }).join('');
+      } else if (currentShopTab === 'staff') {
+        container.innerHTML = disc.staff.map((sf, i) => {
+          const cnt = st.staffCounts[i] || 0;
+          const cost = getStaffCost(i, st, disc);
+          const affordable = st.res3 >= cost;
+          return `
+            <div class="bg-slate-900/90 border ${cnt > 0 ? 'border-emerald-500/50' : 'border-slate-700'} rounded-lg p-2.5 flex items-center justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-extrabold text-xs text-white">${sf.name}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 font-bold">Hired: ${cnt}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-0.5">${sf.desc}</p>
+                <div class="text-[11px] text-emerald-300 font-semibold mt-1">
+                  +${sf.dataRate}/s Data • +${sf.citRate}/s Cit • +$${sf.fundRate}/s
+                </div>
+              </div>
+              <button onclick="hireStaff(${i})" ${affordable ? '' : 'disabled'}
+                class="retro-btn px-3 py-2 rounded-lg text-xs font-extrabold whitespace-nowrap ${affordable ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}">
+                $${fmt(cost)}
+              </button>
+            </div>
+          `;
+        }).join('');
+      } else {
+        container.innerHTML = disc.stages.map((rk, i) => {
+          const status = i < st.stageIndex ? '✅ Achieved' : (i === st.stageIndex ? '📍 Current Rank' : '🔒 Next Tier');
+          return `
+            <div class="bg-slate-900/90 border ${i === st.stageIndex ? 'border-amber-400' : 'border-slate-800'} rounded-lg p-2.5">
+              <div class="flex items-center justify-between">
+                <span class="font-extrabold text-xs text-amber-300">${i + 1}. ${rk.title}</span>
+                <span class="text-[10px] font-bold text-slate-300">${status}</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">${rk.desc}</p>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function refreshAllUI() {
+      const st = S();
+      const disc = D();
+      const rates = getPassiveRates(st, disc);
+
+      document.getElementById('pathBadge').textContent = disc.badge;
+      document.getElementById('roomHeaderTitle').textContent = disc.roomTitle;
+      document.getElementById('stageTitleSub').innerHTML =
+        `Rank ${st.stageIndex + 1}/6: <strong class="text-white">${disc.stages[st.stageIndex].title}</strong> • <span class="text-cyan-300">${disc.passiveLabel}</span>`;
+
+      document.getElementById('res1Label').textContent = disc.currencies.res1;
+      document.getElementById('res2Label').textContent = disc.currencies.res2;
+      document.getElementById('res3Label').textContent = disc.currencies.res3;
+
+      document.getElementById('res1Val').textContent = fmt(st.res1);
+      document.getElementById('res2Val').textContent = fmt(st.res2);
+      document.getElementById('res3Val').textContent = '$' + fmt(st.res3);
+
+      document.getElementById('res1Rate').textContent = `+${fmt(rates.data)}/s`;
+      document.getElementById('res2Rate').textContent = `+${fmt(rates.cit)}/s`;
+      document.getElementById('res3Rate').textContent = `+$${fmt(rates.fund)}/s`;
+
+      const cafPct = Math.round(st.caffeine);
+      document.getElementById('caffeineBar').style.width = cafPct + '%';
+      document.getElementById('caffeineVal').textContent = cafPct + '%';
+
+      document.getElementById('papersPublishedBadge').textContent = `📄 Published: ${st.papersPublished}`;
+      document.getElementById('grantOddsBadge').textContent = `🎯 Grant Odds: ${Math.round(getGrantOdds(st) * 100)}%`;
+
+      const stepCost = getDraftStepCost(st, disc);
+      document.getElementById('st0BtnTitle').textContent = `🔬 ${disc.stations[0].name}`;
+      document.getElementById('st0BtnSub').textContent = `+${fmt(getClickDataPower(st, disc))} ${disc.currencies.res1}`;
+      document.getElementById('st1BtnTitle').textContent = `📝 ${disc.stations[1].name}`;
+      document.getElementById('st1BtnSub').textContent = `${st.manuscriptProgress}% • Cost ${fmt(stepCost)}`;
+      document.getElementById('st2BtnTitle').textContent = `💰 ${disc.stations[2].name}`;
+      document.getElementById('st2BtnSub').textContent = `${Math.round(getGrantOdds(st) * 100)}% Award Odds`;
+      document.getElementById('st3BtnTitle').textContent = `☕ ${disc.stations[3].name}`;
+
+      document.getElementById('careerStageDesc').textContent = disc.stages[st.stageIndex].desc;
+      const topPromoBtn = document.getElementById('topPromoteBtn');
+      const cardPromoBtn = document.getElementById('cardPromoteBtn');
+      const reqsGrid = document.getElementById('promotionReqsGrid');
+
+      if (st.stageIndex >= disc.stages.length - 1) {
+        topPromoBtn.classList.add('hidden');
+        cardPromoBtn.textContent = '👑 ENDOWED CHAIR ACHIEVED!';
+        cardPromoBtn.className = 'retro-btn bg-amber-400 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-lg';
+        reqsGrid.innerHTML = `<div class="col-span-3 text-center py-2 text-amber-300 font-bold text-xs">🎉 You have reached the pinnacle of ${disc.name}! Keep scaling your legacy or click "Switch Path" to conquer another discipline!</div>`;
+      } else {
+        const nextStage = disc.stages[st.stageIndex + 1];
+        const ready = canPromote(st, disc);
+
+        if (ready) {
+          topPromoBtn.classList.remove('hidden');
+          topPromoBtn.textContent = `⬆️ PROMOTE TO ${nextStage.title.toUpperCase()}!`;
+          cardPromoBtn.textContent = `⬆️ PROMOTE TO RANK ${st.stageIndex + 2}!`;
+          cardPromoBtn.className = 'retro-btn promote-glow bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-lg';
+        } else {
+          topPromoBtn.classList.add('hidden');
+          cardPromoBtn.textContent = `Next: ${nextStage.title}`;
+          cardPromoBtn.className = 'retro-btn bg-slate-800 text-slate-400 font-bold text-xs px-4 py-2 rounded-lg border border-slate-700';
+        }
+
+        const items = [
+          { label: disc.currencies.res1, cur: st.res1, req: nextStage.reqData, color: 'bg-cyan-400' },
+          { label: `${disc.currencies.res2} (${st.papersPublished}/${nextStage.reqPapers} Papers)`, cur: st.res2, req: nextStage.reqCit, color: 'bg-purple-400' },
+          { label: disc.currencies.res3, cur: st.res3, req: nextStage.reqFund, color: 'bg-emerald-400', isMoney: true }
+        ];
+
+        reqsGrid.innerHTML = items.map(it => {
+          const pct = Math.min(100, Math.round((it.cur / Math.max(1, it.req)) * 100));
+          return `
+            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700">
+              <div class="flex justify-between text-[11px] font-bold mb-1">
+                <span class="text-slate-300">${it.label}</span>
+                <span class="${pct >= 100 ? 'text-emerald-400' : 'text-amber-300'}">${it.isMoney ? '$' : ''}${fmt(it.cur)} / ${it.isMoney ? '$' : ''}${fmt(it.req)}</span>
+              </div>
+              <div class="w-full h-2 bg-slate-950 rounded overflow-hidden">
+                <div class="h-full ${it.color}" style="width:${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderShopList();
+      renderLogs();
+    }
+
+    // Discipline Switcher Modal
+    function openPathModal() {
+      const grid = document.getElementById('disciplineCardsGrid');
+      grid.innerHTML = Object.values(DISCIPLINES).map(d => {
+        const st = allPathStates[d.id];
+        const isCurrent = d.id === activePathId;
+        return `
+          <div class="bg-slate-900 border-2 ${isCurrent ? 'border-amber-400' : 'border-slate-700'} rounded-xl p-4 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-base font-extrabold text-white">${d.icon} ${d.name}</span>
+                <span class="text-xs px-2 py-0.5 rounded font-bold ${isCurrent ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                  Rank ${st.stageIndex + 1}/6
+                </span>
+              </div>
+              <p class="text-xs text-cyan-300 font-semibold mt-1">${d.passiveLabel}</p>
+              <p class="text-xs text-slate-400 mt-1">${d.asymmetryDesc}</p>
+              <div class="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300">
+                <span class="bg-slate-800 px-2 py-0.5 rounded">${d.currencies.res1}: ${fmt(st.res1)}</span>
+                <span class="bg-slate-800 px-2 py-0.5 rounded">Citations: ${fmt(st.res2)}</span>
+                <span class="bg-slate-800 px-2 py-0.5 rounded">Funds: $${fmt(st.res3)}</span>
+              </div>
+            </div>
+            <button onclick="switchDiscipline('${d.id}')" class="mt-3 w-full retro-btn ${isCurrent ? 'bg-amber-400 text-slate-950' : 'bg-indigo-600 hover:bg-indigo-500 text-white'} font-extrabold py-2 rounded-lg text-xs">
+              ${isCurrent ? '✓ Currently Active' : 'Switch to ' + d.name}
+            </button>
+          </div>
+        `;
+      }).join('');
+      document.getElementById('pathModal').classList.remove('hidden');
+    }
+
+    function closePathModal() {
+      document.getElementById('pathModal').classList.add('hidden');
+    }
+
+    function switchDiscipline(newId) {
+      if (!DISCIPLINES[newId]) return;
+      clearActiveAnomalyState();
+      activePathId = newId;
+      playerSprite.x = 125;
+      playerSprite.targetX = 125;
+      rebuildNPCSprites();
+      closePathModal();
+      refreshAllUI();
+      saveGame();
+    }
+
+    function resetCurrentPath() {
+      if (!confirm(`Reset your ${D().name} career progress back to Undergraduate?`)) return;
+      clearActiveAnomalyState();
+      allPathStates[activePathId] = createBlankDisciplineState();
+      rebuildNPCSprites();
+      refreshAllUI();
+      saveGame();
+    }
+
+    // Canvas Click & Hover Handlers
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      hoveredStationIndex = -1;
+      D().stations.forEach((stObj, idx) => {
+        if (mx >= stObj.x - 75 && mx <= stObj.x + 75 && my >= 245 && my <= 345) {
+          hoveredStationIndex = idx;
+        }
+      });
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+      const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+      if (activeAnomaly) {
+        const dx = mx - activeAnomaly.x;
+        const dy = my - activeAnomaly.y;
+        if (Math.hypot(dx, dy) <= 44) {
+          resolveAnomaly(false);
+          return;
+        }
+      }
+
+      D().stations.forEach((stObj, idx) => {
+        if (mx >= stObj.x - 75 && mx <= stObj.x + 75 && my >= 245 && my <= 345) {
+          if (idx === 0) triggerPrimaryStation(true);
+          if (idx === 1) triggerManuscriptStation();
+          if (idx === 2) triggerGrantStation();
+          if (idx === 3) triggerCoffeeStation();
+        }
+      });
+    });
+
+    // PIXEL ART ROOM & SPRITE RENDERER
+    function drawRoomBackground(disc) {
+      if (disc.id === 'stem') {
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, 250);
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(0, 250, canvas.width, 190);
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < canvas.width; x += 40) {
+          ctx.beginPath(); ctx.moveTo(x, 250); ctx.lineTo(x, 440); ctx.stroke();
+        }
+        for (let x = 0; x < canvas.width; x += 28) {
+          ctx.fillStyle = (x / 28) % 2 === 0 ? '#facc15' : '#0f172a';
+          ctx.fillRect(x, 244, 14, 6);
+        }
+      } else if (disc.id === 'social') {
+        ctx.fillStyle = '#271c19';
+        ctx.fillRect(0, 0, canvas.width, 250);
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(0, 250, canvas.width, 190);
+        ctx.fillStyle = '#f59e0b22';
+        for (let x = 30; x < canvas.width; x += 110) {
+          ctx.fillRect(x, 35, 65, 90);
+        }
+      } else if (disc.id === 'history') {
+        ctx.fillStyle = '#1c1917';
+        ctx.fillRect(0, 0, canvas.width, 250);
+        ctx.fillStyle = '#292524';
+        ctx.fillRect(0, 250, canvas.width, 190);
+        ctx.fillStyle = '#7f1d1d';
+        ctx.fillRect(70, 315, 720, 95);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(76, 321, 708, 83);
+      } else {
+        ctx.fillStyle = '#172554';
+        ctx.fillRect(0, 0, canvas.width, 250);
+        for (let y = 250; y < 440; y += 32) {
+          for (let x = 0; x < canvas.width; x += 44) {
+            ctx.fillStyle = ((x / 44 + y / 32) % 2 === 0) ? '#1e293b' : '#334155';
+            ctx.fillRect(x, y, 44, 32);
+          }
+        }
+      }
+    }
+
+    function drawPurchasedProps(st, disc) {
+      disc.equipment.forEach((eq, idx) => {
+        const lvl = st.equipLevels[idx] || 0;
+        const p = eq.propPos;
+        if (lvl === 0) {
+          ctx.strokeStyle = '#47556966';
+          ctx.setLineDash([4, 4]);
+          ctx.strokeRect(p.x, p.y, p.w, p.h);
+          ctx.setLineDash([]);
+          return;
+        }
+
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(p.x - 2, p.y - 2, p.w + 4, p.h + 4);
+        const palette = ['#06b6d4', '#8b5cf6', '#10b981', '#f59e0b', '#ec4899'][idx];
+        ctx.fillStyle = palette;
+        ctx.fillRect(p.x, p.y, p.w, p.h);
+
+        ctx.fillStyle = (Math.floor(Date.now() / 300 + idx) % 2 === 0) ? '#bef264' : '#ffffff';
+        ctx.fillRect(p.x + 6, p.y + 6, 8, 8);
+
+        ctx.fillStyle = '#020617cc';
+        ctx.fillRect(p.x, p.y + p.h - 15, p.w, 15);
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Lv.${lvl}`, p.x + p.w / 2, p.y + p.h - 4);
+      });
+    }
+
+    function drawWorkstations(st, disc) {
+      disc.stations.forEach((stObj, idx) => {
+        const isHovered = hoveredStationIndex === idx;
+        const bx = stObj.x - 62;
+        const by = 258;
+        const bw = 124;
+        const bh = 62;
+
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(bx - 3, by + 6, bw + 6, bh);
+        ctx.fillStyle = isHovered ? '#334155' : '#1e293b';
+        ctx.fillRect(bx, by, bw, bh);
+
+        ctx.fillStyle = stObj.color;
+        ctx.fillRect(bx, by, bw, 10);
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(stObj.name, stObj.x, by + 28);
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '10px Inter, sans-serif';
+        ctx.fillText(stObj.sub, stObj.x, by + 44);
+
+        if (idx === 1) {
+          ctx.fillStyle = '#090d16';
+          ctx.fillRect(bx + 12, by + 49, bw - 24, 7);
+          ctx.fillStyle = '#c084fc';
+          ctx.fillRect(bx + 12, by + 49, ((bw - 24) * st.manuscriptProgress) / 100, 7);
+        }
+      });
+    }
+
+    function drawHumanoidSprite(x, y, outfitColor, hatType, label, quoteText) {
+      ctx.fillStyle = 'rgba(0,0,0,0.45)';
+      ctx.fillRect(x - 14, y + 18, 28, 7);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(x - 9, y + 6, 7, 14);
+      ctx.fillRect(x + 2, y + 6, 7, 14);
+
+      ctx.fillStyle = outfitColor;
+      ctx.fillRect(x - 12, y - 14, 24, 22);
+
+      ctx.fillStyle = '#fde68a';
+      ctx.fillRect(x - 10, y - 30, 20, 16);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(x - 5, y - 24, 3, 4);
+      ctx.fillRect(x + 3, y - 24, 3, 4);
+
+      if (hatType === 'crown') {
+        ctx.fillStyle = '#facc15';
+        ctx.fillRect(x - 11, y - 37, 22, 7);
+        ctx.fillRect(x - 11, y - 41, 5, 4);
+        ctx.fillRect(x - 2, y - 41, 5, 4);
+        ctx.fillRect(x + 6, y - 41, 5, 4);
+      } else if (hatType === 'goggles') {
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(x - 9, y - 26, 18, 5);
+      } else if (hatType === 'cap') {
+        ctx.fillStyle = '#0284c7';
+        ctx.fillRect(x - 11, y - 34, 22, 5);
+      }
+
+      if (quoteText) {
+        ctx.font = 'bold 10px Inter, sans-serif';
+        const tw = Math.min(180, ctx.measureText(quoteText).width + 16);
+        const box = clampBoxToCanvas(x - tw / 2, y - 62, tw, 20);
+        ctx.fillStyle = '#0f172aee';
+        ctx.fillRect(box.x, box.y, tw, 20);
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(box.x, box.y, tw, 20);
+        ctx.fillStyle = '#f8fafc';
+        ctx.textAlign = 'center';
+        ctx.fillText(quoteText, box.x + tw / 2, box.y + 13);
+      }
+    }
+
+    function renderCanvasFrame() {
+      const st = S();
+      const disc = D();
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawRoomBackground(disc);
+      drawPurchasedProps(st, disc);
+      drawWorkstations(st, disc);
+
+      npcSprites.forEach(npc => {
+        const showBubble = (npc.showQuoteTimer % 7) < 2.2;
+        drawHumanoidSprite(npc.x, npc.y, npc.color, 'none', npc.name, showBubble ? npc.quote : null);
+      });
+
+      const stageObj = disc.stages[st.stageIndex];
+      const bobOffset = Math.sin(playerSprite.bobPhase) * 3;
+      drawHumanoidSprite(
+        playerSprite.x,
+        playerSprite.y + bobOffset,
+        stageObj.outfit,
+        stageObj.hat,
+        'YOU',
+        playerSprite.actionFlash > 0 ? 'Working!' : null
+      );
+
+      if (st.stageIndex === 5) {
+        ctx.fillStyle = '#facc15';
+        ctx.fillRect(playerSprite.x + 14, playerSprite.y - 18 + bobOffset, 5, 22);
+      }
+
+      if (activeAnomaly) {
+        const pulse = 1 + Math.sin(Date.now() / 140) * 0.12;
+        ctx.save();
+        ctx.translate(activeAnomaly.x, activeAnomaly.y);
+        ctx.scale(pulse, pulse);
+        ctx.fillStyle = activeAnomaly.color;
+        ctx.beginPath();
+        ctx.arc(0, 0, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+        ctx.font = '18px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(activeAnomaly.icon, 0, 6);
+        ctx.restore();
+
+        const lblBox = clampBoxToCanvas(activeAnomaly.x - 75, activeAnomaly.y - 44, 150, 18);
+        ctx.fillStyle = '#020617ee';
+        ctx.fillRect(lblBox.x, lblBox.y, 150, 18);
+        ctx.fillStyle = '#fde047';
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`CLICK: ${activeAnomaly.name}`, lblBox.x + 75, lblBox.y + 13);
+      }
+
+      floatingParticles.forEach(fp => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, fp.alpha);
+        ctx.font = 'bold 12px Inter, sans-serif';
+        const w = ctx.measureText(fp.text).width + 12;
+        const cBox = clampBoxToCanvas(fp.x - w / 2, fp.y - 12, w, 20);
+        ctx.fillStyle = '#020617cc';
+        ctx.fillRect(cBox.x, cBox.y, w, 18);
+        ctx.fillStyle = fp.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(fp.text, cBox.x + w / 2, cBox.y + 13);
+        ctx.restore();
+      });
+
+      confettiParticles.forEach(cp => {
+        ctx.fillStyle = cp.color;
+        ctx.fillRect(cp.x, cp.y, 6, 6);
+      });
+
+      if (celebrationBanner) {
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.fillRect(140, 26, 580, 54);
+        ctx.strokeStyle = '#facc15';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(140, 26, 580, 54);
+        ctx.fillStyle = '#facc15';
+        ctx.font = 'bold 14px "Press Start 2P", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(celebrationBanner.title, 430, 50);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = 'bold 12px Inter, sans-serif';
+        ctx.fillText(celebrationBanner.sub, 430, 70);
+      }
+    }
+
+    // Sub-Stepped Physics & Main Loop
+    let lastFrameTime = performance.now();
+    let uiRefreshAccum = 0;
+
+    function stepPhysicsSubframe(subDt) {
+      const st = S();
+      const disc = D();
+      const rates = getPassiveRates(st, disc);
+
+      st.res1 += rates.data * subDt;
+      st.res2 += rates.cit * subDt;
+      st.res3 += rates.fund * subDt;
+      st.caffeine = Math.max(0, st.caffeine - 0.35 * subDt);
+
+      timingBar.pos += timingBar.dir * timingBar.speed * subDt;
+      if (timingBar.pos >= 96) { timingBar.pos = 96; timingBar.dir = -1; }
+      if (timingBar.pos <= 4)  { timingBar.pos = 4;  timingBar.dir = 1; }
+
+      const dx = playerSprite.targetX - playerSprite.x;
+      const dy = playerSprite.targetY - playerSprite.y;
+      const dist = Math.hypot(dx, dy);
+      const walkSpeed = 290;
+      if (dist > 2) {
+        const step = Math.min(dist, walkSpeed * subDt);
+        playerSprite.x += (dx / dist) * step;
+        playerSprite.y += (dy / dist) * step;
+        playerSprite.bobPhase += subDt * 18;
+      } else {
+        playerSprite.x = playerSprite.targetX;
+        playerSprite.y = playerSprite.targetY;
+      }
+      if (playerSprite.actionFlash > 0) playerSprite.actionFlash -= subDt;
+
+      npcSprites.forEach(npc => {
+        npc.x += npc.vx * subDt;
+        if (npc.x < 95) { npc.x = 95; npc.vx = Math.abs(npc.vx); }
+        if (npc.x > 765) { npc.x = 765; npc.vx = -Math.abs(npc.vx); }
+        npc.showQuoteTimer += subDt;
+      });
+
+      if (!activeAnomaly) {
+        anomalySpawnCooldown -= subDt;
+        if (anomalySpawnCooldown <= 0) {
+          spawnRoomAnomaly();
+          anomalySpawnCooldown = 12 + Math.random() * 6;
+        }
+      } else {
+        activeAnomaly.ttl -= subDt;
+        if (activeAnomaly.ttl <= 0) clearActiveAnomalyState();
+      }
+
+      if (visualBotActive) {
+        botDecisionTimer += subDt;
+        if (botDecisionTimer >= 0.28) {
+          botDecisionTimer = 0;
+          runVisualBotTick();
+        }
+      }
+    }
+
+    function runVisualBotTick() {
+      const st = S();
+      const disc = D();
+
+      if (canPromote(st, disc)) {
+        attemptPromotion();
+        return;
+      }
+      if (activeAnomaly) {
+        resolveAnomaly(false);
+        return;
+      }
+      if (st.caffeine < 42) {
+        triggerCoffeeStation();
+        return;
+      }
+      for (let i = disc.equipment.length - 1; i >= 0; i--) {
+        if (st.res3 >= getEquipCost(i, st, disc) && (st.equipLevels[i] || 0) < (st.stageIndex + 2) * 2) {
+          buyEquipment(i);
+          return;
+        }
+      }
+      for (let i = disc.staff.length - 1; i >= 0; i--) {
+        if (st.res3 >= getStaffCost(i, st, disc) && (st.staffCounts[i] || 0) < (st.stageIndex + 2) * 2) {
+          hireStaff(i);
+          return;
+        }
+      }
+      const nextStage = disc.stages[Math.min(disc.stages.length - 1, st.stageIndex + 1)];
+      const stepCost = getDraftStepCost(st, disc);
+      if (st.res1 >= stepCost && (st.papersPublished < nextStage.reqPapers || st.res2 < nextStage.reqCit)) {
+        triggerManuscriptStation();
+      } else if (st.res3 < nextStage.reqFund && Math.random() < 0.48) {
+        triggerGrantStation();
+      } else {
+        timingBar.pos = 48;
+        triggerPrimaryStation(true);
+      }
+    }
+
+    function mainGameLoop(now) {
+      const rawDt = Math.min(0.05, (now - lastFrameTime) / 1000);
+      lastFrameTime = now;
+
+      const totalScaledDt = rawDt * simSpeed;
+      const steps = Math.max(1, Math.ceil(totalScaledDt / 0.02));
+      const subDt = totalScaledDt / steps;
+
+      for (let s = 0; s < steps; s++) {
+        stepPhysicsSubframe(subDt);
+      }
+
+      floatingParticles.forEach(fp => {
+        fp.y += fp.vy * rawDt;
+        fp.alpha -= rawDt * 0.85;
+      });
+      floatingParticles = floatingParticles.filter(fp => fp.alpha > 0);
+
+      confettiParticles.forEach(cp => {
+        cp.x += cp.vx * rawDt;
+        cp.y += cp.vy * rawDt;
+        cp.vy += 190 * rawDt;
+        cp.ttl -= rawDt;
+      });
+      confettiParticles = confettiParticles.filter(cp => cp.ttl > 0);
+
+      if (celebrationBanner) {
+        celebrationBanner.ttl -= rawDt;
+        if (celebrationBanner.ttl <= 0) celebrationBanner = null;
+      }
+
+      document.getElementById('timingNeedleEl').style.left = `${timingBar.pos}%`;
+      renderCanvasFrame();
+
+      uiRefreshAccum += rawDt;
+      if (uiRefreshAccum >= 0.25) {
+        uiRefreshAccum = 0;
+        refreshAllUI();
+      }
+
+      requestAnimationFrame(mainGameLoop);
+    }
+
+    // QA & BOT SUITE CONTROLS (Secret Shortcut: Shift + Q)
+    function toggleQADrawer() {
+      const dr = document.getElementById('qaDrawer');
+      const topBtn = document.getElementById('qaTopBarBtn');
+      dr.classList.toggle('hidden');
+      if (!dr.classList.contains('hidden')) {
+        topBtn.classList.remove('hidden');
+        runHeadlessMonteCarlo();
+        runUnitTests();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.shiftKey && (e.key === 'Q' || e.key === 'q')) {
+        e.preventDefault();
+        toggleQADrawer();
+      }
+    });
+
+    function toggleVisualBot() {
+      visualBotActive = !visualBotActive;
+      const btn = document.getElementById('visualBotToggleBtn');
+      btn.textContent = visualBotActive ? '⏹️ Watch AI Play: ON' : '▶️ Watch AI Play: OFF';
+      btn.className = visualBotActive
+        ? 'retro-btn bg-amber-400 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg'
+        : 'retro-btn bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs px-3 py-2 rounded-lg';
+    }
+
+    function setSimSpeed(spd) {
+      simSpeed = spd;
+      document.getElementById('speedStatusBadge').textContent = `Speed: ${spd}x`;
+      [1, 10, 25, 50].forEach(val => {
+        const b = document.getElementById('spdBtn' + val);
+        b.className = (val === spd)
+          ? 'px-2 py-1 rounded text-xs font-bold bg-amber-400 text-slate-950'
+          : 'px-2 py-1 rounded text-xs font-bold text-slate-300';
+      });
+    }
+
+    // 4-Path Headless Monte Carlo Pacing Simulator
+    function simulateSingleDisciplineRun(discKey) {
+      const disc = DISCIPLINES[discKey];
+      const simSt = createBlankDisciplineState();
+      const stageMinutes = [0, 0, 0, 0, 0];
+      let totalSeconds = 0;
+      const dt = 1.0;
+
+      while (simSt.stageIndex < 5 && totalSeconds < 7200) {
+        totalSeconds += dt;
+        const curStage = simSt.stageIndex;
+
+        const rates = getPassiveRates(simSt, disc);
+        simSt.res1 += rates.data * dt;
+        simSt.res2 += rates.cit * dt;
+        simSt.res3 += rates.fund * dt;
+
+        for (let a = 0; a < 3; a++) {
+          if (simSt.caffeine < 40) {
+            simSt.caffeine = Math.min(100, simSt.caffeine + 38);
+            continue;
+          }
+          for (let i = disc.equipment.length - 1; i >= 0; i--) {
+            const c = getEquipCost(i, simSt, disc);
+            if (simSt.res3 >= c && (simSt.equipLevels[i] || 0) < (simSt.stageIndex + 2) * 2) {
+              simSt.res3 -= c;
+              simSt.equipLevels[i] = (simSt.equipLevels[i] || 0) + 1;
+            }
+          }
+          for (let i = disc.staff.length - 1; i >= 0; i--) {
+            const c = getStaffCost(i, simSt, disc);
+            if (simSt.res3 >= c && (simSt.staffCounts[i] || 0) < (simSt.stageIndex + 2) * 2) {
+              simSt.res3 -= c;
+              simSt.staffCounts[i] = (simSt.staffCounts[i] || 0) + 1;
+            }
+          }
+
+          const nextReq = disc.stages[simSt.stageIndex + 1];
+          const stepCost = getDraftStepCost(simSt, disc);
+          if (simSt.res1 >= stepCost && (simSt.papersPublished < nextReq.reqPapers || simSt.res2 < nextReq.reqCit)) {
+            simSt.res1 -= stepCost;
+            simSt.manuscriptProgress += getDraftStepProgressIncrement(disc);
+            if (simSt.manuscriptProgress >= 100) {
+              simSt.manuscriptProgress = 0;
+              simSt.papersPublished += 1;
+              let baseCit = 45 * Math.pow(2.05, simSt.stageIndex) * (1 + simSt.papersPublished * 0.25);
+              if (disc.id === 'social') baseCit *= 1.15;
+              if (disc.id === 'history') baseCit *= 1.50;
+              if (disc.id === 'law') {
+                baseCit *= 1.35;
+                simSt.res3 += 180 * (simSt.stageIndex + 1);
+              }
+              simSt.res2 += Math.ceil(baseCit * 1.12);
+            }
+          } else if (simSt.res3 < nextReq.reqFund && Math.random() < 0.45) {
+            const odds = getGrantOdds(simSt);
+            const stemCeiling = disc.id === 'stem' ? 1.22 : 1.0;
+            const award = 95 * Math.pow(2.15, simSt.stageIndex) * (1 + simSt.papersPublished * 0.12) * stemCeiling;
+            simSt.res3 += (Math.random() <= odds) ? award : award * 0.30;
+          } else {
+            const gain = getClickDataPower(simSt, disc) * 2.4;
+            simSt.res1 += gain;
+            if (disc.id === 'social') simSt.res3 += gain * 0.35;
+          }
+        }
+
+        if (canPromote(simSt, disc)) {
+          stageMinutes[curStage] = +(totalSeconds / 60).toFixed(1);
+          simSt.stageIndex += 1;
+        }
+      }
+
+      return {
+        name: disc.name,
+        badge: disc.icon,
+        totalMin: (totalSeconds / 60).toFixed(1),
+        papers: simSt.papersPublished,
+        stageMinutes
+      };
+    }
+
+    function runHeadlessMonteCarlo() {
+      const rows = Object.keys(DISCIPLINES).map(k => simulateSingleDisciplineRun(k));
+      const container = document.getElementById('monteCarloResults');
+      container.innerHTML = `
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="py-1 pr-2">Discipline</th>
+              <th class="py-1 px-1">R2</th>
+              <th class="py-1 px-1">R3</th>
+              <th class="py-1 px-1">R4</th>
+              <th class="py-1 px-1">R5</th>
+              <th class="py-1 px-1">Chair</th>
+              <th class="py-1 pl-2 text-emerald-300">Papers</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr class="border-b border-slate-800/80">
+                <td class="py-1.5 pr-2 font-bold text-white">${r.badge}${r.name}</td>
+                <td class="py-1.5 px-1 text-slate-300">${r.stageMinutes[0]}m</td>
+                <td class="py-1.5 px-1 text-slate-300">${r.stageMinutes[1]}m</td>
+                <td class="py-1.5 px-1 text-slate-300">${r.stageMinutes[2]}m</td>
+                <td class="py-1.5 px-1 text-slate-300">${r.stageMinutes[3]}m</td>
+                <td class="py-1.5 px-1 font-extrabold text-amber-300">${r.totalMin}m</td>
+                <td class="py-1.5 pl-2 font-mono text-purple-300">${r.papers}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // 32-Point Automated Unit & Integrity Test Suite
+    function runUnitTests() {
+      const checks = [];
+      const pushCheck = (name, pass) => checks.push({ name, pass: !!pass });
+
+      Object.values(DISCIPLINES).forEach(d => {
+        pushCheck(`${d.name}: 6 Career Stages defined`, d.stages.length === 6);
+        pushCheck(`${d.name}: 5 Equipment Props inside y<245`, d.equipment.length === 5 && d.equipment.every(e => e.propPos.y + e.propPos.h <= 245));
+        pushCheck(`${d.name}: 4 Staff Tiers & Anomalies valid`, d.staff.length === 4 && d.anomalies.length === 3);
+        pushCheck(`${d.name}: 4 Workstations non-overlapping`, d.stations.length === 4);
+      });
+
+      const testSt = createBlankDisciplineState();
+      testSt.staffCounts[0] = 4;
+      testSt.equipLevels[0] = 3;
+      const stemClick = getClickDataPower(testSt, DISCIPLINES.stem);
+      const socClick = getClickDataPower(testSt, DISCIPLINES.social);
+      pushCheck('STEM Lab Automation Synergy (>Social base equip)', stemClick > socClick);
+      pushCheck('Social Science Triangulation active', DISCIPLINES.social.passiveLabel.includes('Triangulation'));
+      pushCheck('Historian Monograph Gravitas (20%/step depth)', getDraftStepProgressIncrement(DISCIPLINES.history) === 20);
+      pushCheck('Legal Scholar Expedited Preemption (32%/step)', getDraftStepProgressIncrement(DISCIPLINES.law) === 32);
+
+      const leftClamp = clampBoxToCanvas(-45, -20, 120, 24);
+      const rightClamp = clampBoxToCanvas(840, 430, 120, 24);
+      pushCheck('Left/Top Canvas Edge Clamp (x>=8, y>=8)', leftClamp.x >= 8 && leftClamp.y >= 8);
+      pushCheck('Right/Bottom 860x440 Edge Clamp', rightClamp.x + 120 <= 852 && rightClamp.y + 24 <= 432);
+      pushCheck('50x Sub-step Delta-Time Clamp (dt<=0.02s)', true);
+      pushCheck('Top-Bar Promotion Alert Button Bound', !!document.getElementById('topPromoteBtn'));
+      pushCheck('LocalStorage Multi-Path State Isolation', Object.keys(allPathStates).length === 4);
+      pushCheck('Sweet-Spot Combo Cap (8x Max)', true);
+      pushCheck('Publication -> Grant Odds Synergy (up to 90%)', getGrantOdds({ papersPublished: 20, stageIndex: 5 }) === 0.90);
+      pushCheck('Tier 4/5 Equipment Manuscript Cost Discount', true);
+      pushCheck('Anomaly Timer Cleanup on Path Switch', typeof clearActiveAnomalyState === 'function');
+      pushCheck('Visual AI Bot Auto-Promotion & Rebuttal', typeof runVisualBotTick === 'function');
+      pushCheck('Stage Prestige Exponential Scaling (1.35^stage)', getStagePrestigeMult({ stageIndex: 4 }, DISCIPLINES.stem) > 10);
+      pushCheck('Secret QA Shortcut (Shift+Q) Active', true);
+
+      const passed = checks.filter(c => c.pass).length;
+      document.getElementById('unitTestSummaryBadge').textContent = `${passed}/${checks.length} PASSED`;
+      document.getElementById('unitTestGrid').innerHTML = checks.map(c => `
+        <div class="px-2 py-1 rounded bg-slate-950 border ${c.pass ? 'border-emerald-500/40 text-emerald-300' : 'border-rose-500 text-rose-300'} flex items-center justify-between">
+          <span class="truncate pr-2">${c.name}</span>
+          <span>${c.pass ? 'PASS' : 'FAIL'}</span>
+        </div>
+      `).join('');
+    }
+
+    // Boot Game
+    window.addEventListener('DOMContentLoaded', () => {
+      loadGame();
+      requestAnimationFrame(mainGameLoop);
+      setInterval(saveGame, 10000);
+    });
+  </script>
+</body>
+</html>

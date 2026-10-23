@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Patience Game — Chapter 1</title>
+<style>
+  :root{
+    --bg:#f4efe4; --panel:#fffaf0; --ink:#2b2430; --muted:#7a7067; --line:#e0d7c6;
+    --red:#c9463f; --red-dk:#4b1518; --yellow:#f3b02c; --yellow-dk:#5a3806; --teal:#3d7a9c; --teal-dk:#15303f;
+    --pat:#5fa8d3; --pat-dk:#1f4e6b; --rush:#d9534f;
+  }
+
+  :root[data-theme="dark"]{ --bg:#1f1b24; --panel:#2b2632; --ink:#f1ebe0; --muted:#a89e94; --line:#3d3646; --pat:#5fa8d3; --pat-dk:#8cc6e6; --rush:#ef6b66; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#1f1b24; --panel:#2b2632; --ink:#f1ebe0; --muted:#a89e94; --line:#3d3646; --pat:#5fa8d3; --pat-dk:#8cc6e6; --rush:#ef6b66; } }
+  :root[data-theme="dark"] .bar, :root[data-theme="dark"] .station .meter{background:#15121a}
+  :root[data-theme="dark"] .up button:disabled{background:#3a3442;border-color:#4a4354;color:#8a8090}
+  :root[data-theme="dark"] .exit{background:#3a2426}
+  :root[data-theme="dark"] .toast{background:#f1ebe0;color:#1f1b24}
+  :root[data-theme="dark"] .up .eta{background:#3d3646}
+  :root[data-theme="dark"] .counter{box-shadow:3px 3px 0 #7a2a2e;border-color:#7a2a2e}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .bar, :root:not([data-theme="light"]) .station .meter{background:#15121a}
+    :root:not([data-theme="light"]) .up button:disabled{background:#3a3442;border-color:#4a4354;color:#8a8090}
+    :root:not([data-theme="light"]) .exit{background:#3a2426}
+    :root:not([data-theme="light"]) .toast{background:#f1ebe0;color:#1f1b24}
+    :root:not([data-theme="light"]) .up .eta{background:#3d3646}
+    :root:not([data-theme="light"]) .counter{box-shadow:3px 3px 0 #7a2a2e;border-color:#7a2a2e}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 "Trebuchet MS",Verdana,system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+  .wrap{max-width:860px;margin:0 auto;padding:16px}
+  header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  h1{font-size:20px;margin:0;letter-spacing:.3px}
+  h1 small{color:var(--muted);font-weight:normal;font-size:14px;margin-left:8px}
+  .counter{background:var(--panel);border:2px solid var(--red-dk);border-radius:14px;padding:12px 18px;display:flex;align-items:baseline;gap:10px;box-shadow:3px 3px 0 var(--red-dk)}
+  .counter .n{font-size:34px;font-weight:bold;font-variant-numeric:tabular-nums;min-width:4ch;text-align:right}
+  .counter .u{color:var(--muted)}
+  .counter .rate{color:var(--muted);font-size:13px;margin-left:8px}
+  .tank{margin:12px 0 6px}
+  .tank .lbl{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+  .bar{height:18px;border:2px solid var(--pat-dk);border-radius:9px;background:#fff;overflow:hidden;position:relative}
+  .bar > i{display:block;height:100%;background:var(--pat);transition:width .12s linear}
+  .bar.low > i{background:#e8a33c}
+  .bar.empty > i{background:var(--rush)}
+  .bar.empty{border-color:var(--rush)}
+  .stations{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0 18px}
+  .station{flex:1 1 180px;min-width:180px;background:var(--panel);border:3px solid var(--yellow-dk);border-radius:16px;padding:10px 12px;cursor:pointer;position:relative;box-shadow:4px 4px 0 var(--yellow-dk);transition:transform .05s,box-shadow .05s;text-align:left;font:inherit;color:inherit}
+  .station:active,.station.pressed{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--yellow-dk)}
+  .station.hidden{display:none}
+  .station img{width:96px;height:96px;image-rendering:pixelated;image-rendering:crisp-edges;display:block;margin:0 auto 6px}
+  .station .name{font-weight:bold;font-size:16px;text-align:center;line-height:1.15}
+  .station .sub{color:var(--muted);font-size:13px;text-align:center;min-height:18px}
+  .station .meter{height:10px;border:2px solid var(--yellow-dk);border-radius:6px;background:#fff;margin-top:8px;overflow:hidden}
+  .station .meter i{display:block;height:100%;width:0;background:var(--yellow)}
+  .station.cool{opacity:.75;cursor:default}
+  .station .tag{position:absolute;top:8px;right:10px;font-size:12px;color:var(--rush);font-weight:bold;opacity:0;transition:opacity .2s}
+  .station.rushed .tag{opacity:1}
+  .pop{position:absolute;pointer-events:none;font-weight:bold;color:var(--yellow-dk);animation:pop .7s ease-out forwards;font-size:15px}
+  @keyframes pop{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-34px)}}
+  h2{font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px}
+  .ups{display:grid;gap:8px}
+  .up{display:grid;grid-template-columns:1fr auto;gap:4px 12px;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:10px 12px;align-items:center}
+  .up.can{border-color:var(--teal);cursor:pointer}
+  .up.can:hover{background:#f3fbff}
+  .up.can:active{transform:translate(1px,1px)}
+  :root[data-theme="dark"] .up.can:hover{background:#2f3340}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .up.can:hover{background:#2f3340} }
+  .up .t{font-weight:bold;grid-column:1;grid-row:1}
+  .up .t .tier{color:var(--muted);font-weight:normal;font-size:13px;margin-left:6px}
+  .up .f{color:var(--muted);font-style:italic;font-size:14px;grid-column:1;grid-row:2}
+  .up .e{font-size:13px;color:var(--ink);grid-column:1;grid-row:3;padding-right:70px}
+  .up button{pointer-events:none;grid-column:2;grid-row:1/span 3;min-width:110px;font:inherit;font-weight:bold;padding:8px 14px;border-radius:10px;border:2px solid var(--teal-dk);background:var(--teal);color:#fff;cursor:pointer;box-shadow:2px 2px 0 var(--teal-dk);white-space:nowrap}
+  .up button:disabled{background:#ddd;border-color:#bbb;color:#888;box-shadow:none;cursor:default}
+  .up.hidden{display:none}
+  .up .eta{grid-column:1/span 2;grid-row:4;height:6px;border-radius:3px;background:#eee4d2;position:relative;margin-top:4px}
+  .up .eta i{display:block;height:100%;border-radius:3px;background:var(--teal);width:0}
+  .up .eta span{position:absolute;right:0;top:-18px;font-size:12px;color:var(--muted)}
+  .exit{margin:18px 0;padding:14px;border:3px dashed var(--red);border-radius:14px;background:#fff6f5;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .exit.show{display:flex}
+  .exit button{font:inherit;font-weight:bold;font-size:17px;padding:10px 18px;border-radius:12px;border:3px solid var(--red-dk);background:var(--red);color:#fff;cursor:pointer;box-shadow:3px 3px 0 var(--red-dk)}
+  footer{color:var(--muted);font-size:12px;margin-top:24px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  footer a{color:var(--muted)}
+  .testbadge{display:none;position:fixed;top:10px;left:50%;transform:translateX(-50%);background:var(--rush);color:#fff;font-size:12px;font-weight:bold;letter-spacing:1px;padding:4px 10px;border-radius:8px;z-index:6}
+  .testbadge.show{display:block}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none}
+  .toast.show{opacity:1}
+  .overlay{position:fixed;inset:0;background:rgba(43,36,48,.85);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .overlay.show{display:flex}
+  .letter{background:#fffdf7;color:var(--ink);max-width:460px;width:100%;border:3px solid var(--red-dk);border-radius:6px;padding:28px 30px;box-shadow:8px 8px 0 rgba(0,0,0,.35);font-family:Georgia,"Times New Roman",serif}
+  .letter .conv{font-family:"Trebuchet MS",Verdana,sans-serif;font-size:14px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+  .letter h3{margin:0 0 10px;font-size:26px}
+  .letter p{margin:8px 0}
+  .letter .joke{font-style:italic;color:#5a4a50;margin-top:16px}
+  .letter button{margin-top:20px;font:inherit;font-family:"Trebuchet MS",Verdana,sans-serif;font-weight:bold;padding:10px 16px;border-radius:10px;border:2px solid var(--red-dk);background:var(--red);color:#fff;cursor:pointer}
+  .letter .small{font-size:12px;color:var(--muted);font-family:"Trebuchet MS",Verdana,sans-serif;margin-top:14px}
+
+  /* phone: sticky compact header, stations side by side */
+  @media (max-width: 560px){
+    .wrap{padding:10px 12px}
+    .sticky{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 6px;margin:0 -12px;padding-left:12px;padding-right:12px;border-bottom:2px solid var(--line)}
+    header{margin-bottom:6px}
+    h1{font-size:16px} h1 small{display:block;margin:0;font-size:12px}
+    .counter{padding:6px 12px;box-shadow:2px 2px 0 var(--red-dk)}
+    .counter .n{font-size:24px}
+    .tank{margin:6px 0 0}
+    .bar{height:12px}
+    .stations{gap:8px;margin:10px 0 14px;flex-wrap:nowrap}
+    .station{flex:1 1 0;min-width:0;padding:8px 6px;border-width:2px;box-shadow:3px 3px 0 var(--yellow-dk)}
+    .station img{width:64px;height:64px}
+    .station .name{font-size:12px} .station .sub{font-size:11px}
+    .station .tag{font-size:10px;top:4px;right:6px}
+    .up button{min-width:84px;padding:8px 10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sticky">
+  <header>
+    <h1>The Patience Game <small>Chapter 1 · High School</small></h1>
+    <div class="counter"><span class="n" id="hw">0</span><span class="u">Homework</span><span class="rate" id="rate"></span></div>
+  </header>
+
+  <div class="tank">
+    <div class="lbl"><span id="patLbl">Patience</span><span id="patNum">100 / 100</span></div>
+    <div class="bar" id="patBar"><i style="width:100%"></i></div>
+  </div>
+  </div>
+
+  <div class="stations">
+    <button class="station" id="st-study" data-st="study">
+      <span class="tag">Rushed — still counts</span>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADSUlEQVR4nO2YzUsbQRjGn60tBQ+xFA+KNqUQECQxqGAPyTaxhR5cSQqFIkoxSA/9A9SbYhV7EMFLT6UgtigiCCLGgwW1rNcGhCDVSsRFSqGeApUKwvRQZlnX3Zn9chNKfhDY3dmdPO/O+8zsvECFChUqVKhQxsQSKVJqDY6IJVIklkiR97MrhBBCzAK56bcwK8QSKdKfGQAAPIp3MO8tuwBqGjpIf2aAK5wisBp7u5K+5l929wwAEKhrxufFt+r1plA9BEFgar1Cb1eS+E1NQwe5154h0fQMiaZnyLfvP5j5D1hIoYs/v2wF7pTaUDcCdc242xhVr03OHaAgv4ZwdCLGg21xen1Hye3Q47LwABWvpSXSitXZYQBApMr8WW4APz+tuBLHI/zmgyqevv2WSKvaHqm6EFnPcwOoe/nMjT4mtaFu9VgvfnV2mCsesJFCg6OLAIDp8R71WH8+Pd5jtTsVfd4D/8RL0Woo+SL3edOpqbcrSeazW9dmYiPT0rzPbUxhZGgMSr5oOAK2TLy5f+6JYC0vpOdM01KC4YBsFgSFG8DjpttONJqinXGMTCtFq9Xj+ewW+qROZhA3rP7x4Oii+tOem7WZiacYmTa3MXXp/sLeF64uyybWG1R7zmrTY2ba08M1KIU9q3JUfPMAzXsj0y5ll7G5f47QLfv9+uIB3kpL/0Mp2O/bsgecwjPt6eGaq/6vNQCead2KB3zwgJlpad5rKSsPsFZaszdfNh7gmdZLuCNgd25uezrMNG1uY8rRfG+GaQAL69sCpE5be2K6pwWMTStFqzEyNMbsY255yVaAzBFYWN8W7HyVGuU94N2MY4RnHnBiWi+w/C3EGlZt3lO0pvUy5/XwTZwvin1Sp2zWnt09434e8/LeCKtesDQCSr4oBsMBWe8FP1ZaHq494Ldp9diuC9FhpXlvtqe9zrzXwq03aitiwXBABoDj3wH0ZwYw8W7lUupQ02q3hW4x2k46rswp+aJIHjTKtPRNC7CTcwfqPZGqC9FKOcQrHJcWafm7KVSPjxP1uNP40FIhymtsm1g4OhH1tft4Ml0S8YDDEXj1pFsEAPn4qxxPpiEcnZREPOByGhXvt5dMOMX1OlDKt/9f8BfqOtknU7Zb5AAAAABJRU5ErkJggg==" alt="">
+      <div class="name">Make Flashcards</div><div class="sub">tap</div>
+    </button>
+    <button class="station hidden" id="st-read" data-st="read">
+      <span class="tag">Rushed — still counts</span>
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAADcElEQVR4nO2ZT0gUURzHv2617B5kU9olLNeLoOkSawT+XTaEjdrKQlRkB8PAQxqEEARmKYutQRB09ODVDhJBGl72FC7YpayYIgMhN9pDQgoeFCGmwzTTm/9vdmdmhfZz2nnvzW+/vzfffW9+b4ESJUqUKPE/U6bV4Q9HuUKDb75/XWZ1LCr84ShnBWurC9za6oIlsbQm4bCaeOHz7vZ6XrMFAN+/fZZcWxHLH45y8ifhIi/84SjXNTqV9xfZTdfolMKOiidA8lI6ibjaQN9mR6zM4nMAQEfwTAcAZLLvMroJqAmhbbMzFonLeMjBRvcJjE0vSa4f3YtTt9kZi0Q3AbWbadvsjEWim4D30AtTwaTUF3AvPboJjE558g48kpBeF8VCTx/sGenU5Kts3yrEQsnhHsQ8AH6sAB4gi5DYp5tAMRm6+G89ZToD4uf49W5EzmfEa8csZGYjW0yFgEoXmPAxAEB7W7lkXLCKXc7mQhHAQQvRblqLqRBuMbzwptNB7G9siX2+2hiYwRkI4gGDBHZ/d5vRLEM6vUYrGtM/AQAS8TQ4tpHp2XHz010AvHi5cHdNBfY3tsTZT++1og47dAlYuflo2ZHpn9CddW/1NXirAebCfbw9cRNY/yDpd2wVkttxiOGXQiPxAMAkJpDea0WlStyivAvpWYYUzyT438Vkah7pG09Uxzn+LjTEhKhnHQBm51hFdUfimIXMWmZ2jqWK60hFxlzyAqC3zJVxVoxpVODYXpElx/sAaItXs4wZbLVQcrzPcsvIsWUVIlcZQFu8MOv+xscYm146GBUZ+WOl8bt85i2tyMySzxJZKJYkYNcSSYNuAnobiEByuAeodJnaVWni0qKaQH18AIGmc4Y3xzwrYDoDONpIZ5l0rlnzlcCI+vgAfq59VLSrJjDbGwB672gGSw738ML+lnqNvnLFGFL8ZGoeADBpTrOCrofKNsWZu9FZfsyzwgvrDChKPXdNBQCpZdK55vzUalD3a0esxlTPRoXja+EAlSRYxS4Lsy4XDwDeI2eB4ydF8Vm2IUIWH3ZAvQoZiffVxgDwlsmyDRHFAJugTiCbC0Xa23aX1fqEck8YZ5E2KkydTl8e8UrE+WpjRRUP6PzJp8X2q1McQFhmcAbP3uybjlNUuC+3uUSLm0u0uAv+97FoHBTxfwAqFhA/jKawoQAAAABJRU5ErkJggg==" alt="">
+      <div class="name">Highlight Readings</div><div class="sub" id="readSub">hold</div>
+      <div class="meter"><i id="readMeter"></i></div>
+    </button>
+    <button class="station hidden" id="st-showup" data-st="showup">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAB4ElEQVR4nGNgGAUDCxjpYYm9isB/cvUevPMBrxtZyDWYWGCvIvB/apkPWXpXbj3GwMDA8B+fJ0jyQFSwG8kh+fTiKQYGBgaGJ/fvkaqVKEC0B6KC3f4vXbOTZAscVAVJ1kMKIDkJaWuYkKReFIl99NoLovSEe1sRHWM0zwPowFpLgqrmEfSAjZyRDVVtZGBgaP/ohFOukn8fSWbRPQZgYGZLNYZYek0ryeYMmAcYGBgYLj7/CGdfu/+ELDOYqOWYgQJD3gMDmoTITTbIYMA8QE6GxQYGxAOkFpX4AN09IKOoRFXz6OoBay0JqjfqhnwpNOqBgQZD3gN0zcSj/QEsYMgnoVEPDDSgqwfufn/HsOjsNaqaSTcPLDp7jWHO3CaGOXObqOoJuiehzctnUdU8uhWjccZaDCnJdXA2tQBd6wFlTqHRegAdjHpgoMHI9ICAgAiDgIAItd1CFqAoBgaDR6hSjMI88eHDG4JqB/WoBLpHRP/eZfB104HLD5lRCQEBEQzH0wrQpCZmfXsSw/HEdidJBTRrSmzedQUrm1Tw95eSLQPDOZzyGPOvG1ZMwDmVumr1NrIdQiwIC/UiqCYgogDubgwPnD++lexZdXoBQ0tvuLsxktDsOfPo65pRMMQBAC5xdqvtWxBQAAAAAElFTkSuQmCC" alt="">
+      <div class="name">Go to Club Meeting</div><div class="sub" id="showupSub">ready</div>
+      <div class="meter"><i id="showupMeter"></i></div>
+    </button>
+  </div>
+
+  <h2>Upgrades</h2>
+  <div class="ups" id="ups"></div>
+
+  <div class="exit" id="exit">
+    <div><b>Enough Homework to apply.</b><br><span style="color:var(--muted);font-size:14px">It takes all of it. That's how it works.</span></div>
+    <button id="applyBtn">Apply to College</button>
+  </div>
+
+  <footer>
+    <span>Saves in this browser. <a href="#" id="reset">Start over</a> · <a href="#" id="devPat" title="Testing only: the tank never drains">Test: infinite Patience</a></span>
+    <span><a href="#" id="themeBtn">Dark mode</a> · v0.3.2 slice · 2026-10-14</span>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="testbadge" id="testbadge">TEST MODE · INFINITE PATIENCE</div>
+
+<div class="overlay" id="overlay">
+  <div class="letter">
+    <div class="conv" id="convLine">4,312 Homework → 1 Acceptance Letter</div>
+    <h3>Dear Student,</h3>
+    <p>We are pleased to inform you.</p>
+    <p class="joke" id="joke">Thick envelope. You check it twice anyway.</p>
+    <div class="small">Chapter 2 isn't built yet. This is where the slice ends. You can keep studying — the trickle continues — but nothing more unlocks.</div>
+    <button id="closeLetter">Keep the letter</button>
+  </div>
+</div>
+
+<script>
+// ---------- balance (matches CH1_BALANCE.xlsx · Assumptions) ----------
+const B = {
+  tank: 100, refill: 1.2, rushed: 0.25,
+  studyBase: 3, studyPat: 1,
+  readHold: 3.0, readTaps: 6, readPat: 2, hlAdd: 0.25,
+  showupCd: 25, showupPat: 45, showupHw: 4, clubAdd: 10,
+  teacherRate: 4.0,
+  growth: 1.15,
+  threshold: 4312,
+  offlineCapSec: 8 * 3600,
+};
+// ---------- upgrades (order is the one-pager's) ----------
+const UPS = [
+  { id:'planner', name:'Planner', base:40, repeat:true,
+    flavor:"Color-coded. The colors don't mean anything yet.",
+    effect:()=>'+1 Homework per flashcard', req:()=>true },
+  { id:'library', name:'Library Card', base:250, repeat:false,
+    flavor:'Laminated. You will lose it twice.',
+    effect:()=>'Unlocks Highlight Readings — hold to fill: six flashcards\' worth for a third of the Patience', req:()=>S.t.planner>=1 },
+  { id:'highlighters', name:'More Colors', base:1200, repeat:true,
+    flavor:'Yellow for key points. Also pink. Also green.',
+    effect:()=>'+25% Highlight payout (now ' + (B.readTaps*(1+B.hlAdd*(S.t.highlighters+1))).toFixed(1) + ' flashcards\' worth per hold)', req:()=>S.t.library>=1 },
+  { id:'club', name:'A Club', base:2200, repeat:true,
+    flavor:"Meets Thursdays. It's mostly snacks.",
+    effect:()=> S.t.club===0 ? 'Unlocks Go to Club Meeting — refills Patience, on a cooldown' : '+10 Patience per meeting', req:()=>S.t.highlighters>=1 },
+  { id:'teacher', name:'Teacher Who Noticed', base:3200, repeat:true,
+    flavor:'Wrote "see me" on your paper. The good kind.',
+    effect:()=>'+4 Homework per second, even while you do nothing', req:()=>S.t.club>=1 },
+];
+const cost = u => Math.round(u.base * Math.pow(B.growth, S.t[u.id]));
+
+// ---------- state ----------
+const fresh = () => ({ hw:0, pat:B.tank, t:{planner:0,library:0,highlighters:0,club:0,teacher:0},
+                       showupReady:0, applied:false, totalHw:0, saved:Date.now(), started:Date.now() });
+let S = fresh();
+const KEY = 'patience-game-ch1-v03';
+function save(){ S.saved = Date.now(); try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(!raw) return false;
+       const o = JSON.parse(raw); S = Object.assign(fresh(), o); S.t = Object.assign(fresh().t, o.t||{}); return true; }catch(e){ return false; }
+}
+
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const fmt = n => Math.floor(n).toLocaleString('en-US');
+const perTap = () => B.studyBase + S.t.planner;
+const readPay = () => B.readTaps * perTap() * (1 + B.hlAdd * S.t.highlighters);
+const trickle = () => B.teacherRate * S.t.teacher;
+let toastT = 0;
+function toast(msg, ms=2600){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'), ms); }
+function pop(el, text){ const p=document.createElement('span'); p.className='pop'; p.textContent=text;
+  const r=el.getBoundingClientRect(); p.style.left=(r.left + r.width*0.5 + (Math.random()*40-20) + window.scrollX)+'px'; p.style.top=(r.top + 20 + window.scrollY)+'px';
+  document.body.appendChild(p); setTimeout(()=>p.remove(), 700); }
+function gain(n){ S.hw += n; S.totalHw += n; }
+
+// ---------- stations ----------
+function study(){
+  let mult = 1, rushed = false;
+  if (S.pat >= B.studyPat) S.pat -= B.studyPat; else { mult = B.rushed; rushed = true; }
+  const n = perTap() * mult; gain(n);
+  const el = $('st-study'); el.classList.toggle('rushed', rushed); pop(el, '+' + (n % 1 ? n.toFixed(1) : n));
+}
+let holding = false, holdT = 0;
+function readStart(){ if (S.t.library < 1 || holding) return; holding = true; holdT = 0; $('st-read').classList.add('pressed'); }
+function readEnd(){ if (!holding) return; holding = false; holdT = 0; $('readMeter').style.width = '0%'; $('st-read').classList.remove('pressed'); }
+function readComplete(){
+  let mult = 1, rushed = false;
+  if (S.pat >= B.readPat) S.pat -= B.readPat; else { mult = B.rushed; rushed = true; }
+  const n = readPay() * mult; gain(n);
+  const el = $('st-read'); el.classList.toggle('rushed', rushed); pop(el, '+' + fmt(n));
+  holdT = 0;  // keep holding = chain another read
+}
+function showUp(){
+  if (S.t.club < 1) return;
+  const now = performance.now()/1000; if (now < S.showupReady) return;
+  const add = B.showupPat + B.clubAdd * Math.max(0, S.t.club - 1);
+  S.pat = Math.min(B.tank, S.pat + add); gain(B.showupHw);
+  S.showupReady = now + B.showupCd; pop($('st-showup'), '+' + add + ' Patience');
+}
+
+// ---------- upgrades ----------
+function buy(u){ const c = cost(u); if (S.hw < c) return; if (!u.repeat && S.t[u.id] >= 1) return;
+  S.hw -= c; S.t[u.id] += 1;
+  if (u.id==='library') { $('st-read').classList.remove('hidden'); toast('A new button. Hold it.'); }
+  if (u.id==='club' && S.t.club===1) { $('st-showup').classList.remove('hidden'); toast('A new button. It refills Patience.'); }
+  if (u.id==='teacher' && S.t.teacher===1) toast('Homework now arrives on its own. Slowly.');
+  renderUps(); save();
+}
+function renderUps(){
+  const box = $('ups'); box.innerHTML = '';
+  for (const u of UPS){
+    if (!u.req()) continue;
+    if (!u.repeat && S.t[u.id] >= 1) continue;
+    const c = cost(u); const can = S.hw >= c;
+    const d = document.createElement('div'); d.className = 'up' + (can ? ' can' : ''); d.dataset.id = u.id;
+    d.innerHTML = `<div class="t">${u.name}${S.t[u.id] ? `<span class="tier">tier ${S.t[u.id]+1}</span>` : ''}</div>
+      <button ${can?'':'disabled'}>${fmt(c)}</button>
+      <div class="f">${u.flavor}</div>
+      <div class="e">${u.effect()}</div>
+      <div class="eta"><i></i><span></span></div>`;
+    d.addEventListener('click', ()=>buy(u));
+    box.appendChild(d);
+  }
+}
+function refreshUpButtons(){
+  for (const d of document.querySelectorAll('.up')){
+    const u = UPS.find(x=>x.id===d.dataset.id); const c = cost(u); const can = S.hw >= c;
+    d.classList.toggle('can', can); d.querySelector('button').disabled = !can;
+    const eta = d.querySelector('.eta'); if (eta){
+      if (can) { eta.style.display='none'; }
+      else { const need = c - S.hw; const secs = income > 0.05 ? need / income : Infinity;
+             eta.style.display='block'; eta.querySelector('i').style.width = Math.max(2, Math.min(100, S.hw / c * 100)) + '%';
+             eta.querySelector('span').textContent = isFinite(secs) ? (secs < 90 ? `~${Math.ceil(secs)} s` : `~${Math.ceil(secs/60)} min`) : ''; }
+    }
+  }
+}
+
+// ---------- exit ----------
+function apply(){
+  if (S.hw < B.threshold || S.applied) return;
+  S.hw -= B.threshold; S.applied = true;
+  $('convLine').textContent = `${fmt(B.threshold)} Homework → 1 Acceptance Letter`;
+  $('overlay').classList.add('show'); $('exit').classList.remove('show'); save();
+}
+$('applyBtn').addEventListener('click', apply);
+$('closeLetter').addEventListener('click', ()=>{ $('overlay').classList.remove('show'); $('patLbl').textContent = 'Patience (you have a letter)'; });
+
+// ---------- loop ----------
+let last = performance.now(), saveAcc = 0, upAcc = 0, rateAcc = 0, rateHw = 0, income = 0;
+function tick(now){
+  const dt = Math.min(0.25, (now - last)/1000); last = now;
+  S.pat = devPat ? B.tank : Math.min(B.tank, S.pat + B.refill*dt);
+  if (trickle() > 0) gain(trickle()*dt);
+  if (holding){ holdT += dt; $('readMeter').style.width = Math.min(100, holdT/B.readHold*100) + '%'; if (holdT >= B.readHold) readComplete(); }
+  // show up cooldown
+  if (S.t.club >= 1){ const left = S.showupReady - now/1000; const el = $('st-showup');
+    if (left > 0){ el.classList.add('cool'); $('showupSub').textContent = Math.ceil(left)+'s'; $('showupMeter').style.width = (100 - left/B.showupCd*100)+'%'; }
+    else { el.classList.remove('cool'); $('showupSub').textContent = 'ready'; $('showupMeter').style.width = '100%'; } }
+  // render
+  $('hw').textContent = fmt(S.hw);
+  $('rate').textContent = trickle() > 0 ? `+${trickle()}/s` : '';
+  const pct = S.pat / B.tank * 100; $('patBar').firstElementChild.style.width = pct+'%'; $('patBar').classList.toggle('low', S.pat < 20 && S.pat >= 1); $('patBar').classList.toggle('empty', S.pat < 1);
+  if (S.t.library >= 1) $('readSub').textContent = S.pat < 50 ? 'hold · easy on Patience' : 'hold';
+  $('patNum').textContent = `${Math.floor(S.pat)} / ${B.tank}`;
+  if (S.pat >= 1) { $('st-study').classList.remove('rushed'); }
+  if (S.pat >= B.readPat) { $('st-read').classList.remove('rushed'); }
+  $('exit').classList.toggle('show', S.hw >= B.threshold && !S.applied);
+  rateAcc += dt; if (rateAcc >= 1){ const g = S.totalHw - rateHw; rateHw = S.totalHw; income = income*0.6 + (g/rateAcc)*0.4; rateAcc = 0; }
+  upAcc += dt; if (upAcc > 0.2){ upAcc = 0; refreshUpButtons(); }
+  saveAcc += dt; if (saveAcc > 2){ saveAcc = 0; save(); }
+  requestAnimationFrame(tick);
+}
+
+// ---------- input ----------
+$('st-study').addEventListener('click', study);
+const rd = $('st-read');
+rd.addEventListener('mousedown', e=>{ e.preventDefault(); readStart(); });
+rd.addEventListener('touchstart', e=>{ e.preventDefault(); readStart(); }, {passive:false});
+['mouseup','touchend','touchcancel'].forEach(ev => rd.addEventListener(ev, readEnd));
+window.addEventListener('mouseup', readEnd);
+$('st-showup').addEventListener('click', showUp);
+$('reset').addEventListener('click', e=>{ e.preventDefault(); if (confirm('Start over? This clears the save in this browser.')) { localStorage.removeItem(KEY); S = fresh(); location.reload(); } });
+document.addEventListener('keydown', e=>{ if (e.code==='Space' && !e.repeat){ e.preventDefault(); study(); } });
+
+
+// ---------- theme ----------
+const TKEY = 'patience-game-theme';
+const DKEY = 'patience-game-devpat';
+let devPat = false; try{ devPat = localStorage.getItem(DKEY) === '1'; }catch(e){}
+function applyDev(){ $('testbadge').classList.toggle('show', devPat); $('devPat').textContent = devPat ? 'Test: infinite Patience ON' : 'Test: infinite Patience'; if (devPat) S.pat = B.tank; }
+$('devPat').addEventListener('click', e=>{ e.preventDefault(); devPat = !devPat; try{ localStorage.setItem(DKEY, devPat ? '1' : '0'); }catch(e){} applyDev(); });
+function applyTheme(t){ if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme');
+  const dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  $('themeBtn').textContent = dark ? 'Light mode' : 'Dark mode'; }
+$('themeBtn').addEventListener('click', e=>{ e.preventDefault();
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark' || (!document.documentElement.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const t = dark ? 'light' : 'dark'; try{ localStorage.setItem(TKEY, t); }catch(e){} applyTheme(t); });
+(function(){ let t=null; try{ t = localStorage.getItem(TKEY); }catch(e){} applyTheme(t); })();
+
+// ---------- boot ----------
+(function boot(){
+  const had = load();
+  if (S.t.library >= 1) $('st-read').classList.remove('hidden');
+  if (S.t.club >= 1) $('st-showup').classList.remove('hidden');
+  if (S.applied) $('patLbl').textContent = 'Patience (you have a letter)';
+  if (had && trickle() > 0){
+    const away = Math.min(B.offlineCapSec, (Date.now() - S.saved)/1000);
+    if (away > 30){ const earned = trickle()*away; gain(earned);
+      const h = Math.floor(away/3600), m = Math.floor(away%3600/60);
+      toast(`While you were gone (${h?h+'h ':''}${m}m): +${fmt(earned)} Homework${away>=B.offlineCapSec?' (capped at 8 h)':''}`, 5000); }
+  }
+  S.showupReady = 0;
+  applyDev();
+  renderUps();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

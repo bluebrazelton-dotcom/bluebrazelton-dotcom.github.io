@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blue Brazelton">
+  <meta property="og:title" content="Build 1 scope document — Citation Needed">
+  <meta property="og:description" content="The scope document for Build 1 of Citation Needed (The Living Record).">
+  <meta property="og:url" content="https://www.bluebrazelton.com/citation-needed/scope/build-1.html">
+  <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
+  <meta property="og:image:alt" content="Blue Brazelton owl logo and name, www.bluebrazelton.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Build 1 scope document — Citation Needed — Blue Brazelton</title>
+  <meta name="description" content="The scope document for Build 1 of Citation Needed (The Living Record).">
+  <link rel="canonical" href="https://www.bluebrazelton.com/citation-needed/scope/build-1.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=11">
+  <script src="/mode.js"></script>
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    .cn-section-head { font-family: var(--sans); font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--accent); margin: 3rem 0 0.8rem; display: block; }
+    .back-link { display: inline-block; font-family: var(--sans); font-size: 0.8125rem; margin-bottom: 2rem;
+      color: var(--ink-muted); text-decoration: none; }
+    .back-link:hover { color: var(--accent); }
+    .cn-facts { font-family: var(--sans); font-size: 0.9rem; display: grid; grid-template-columns: max-content 1fr;
+      gap: 0.5rem 1.25rem; margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: var(--bg-soft);
+      border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-facts dt { font-weight: 700; color: var(--ink); }
+    .cn-facts dd { margin: 0; color: var(--ink-soft); }
+    @media (max-width: 560px) { .cn-facts { grid-template-columns: 1fr; gap: 0.15rem; }
+      .cn-facts dd { margin-bottom: 0.6rem; } }
+    .cn-shot { margin: 1.5rem 0; }
+    .cn-shot img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-shot figcaption { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin-top: 0.5rem; }
+    .cn-play { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0.5rem; }
+    .cn-note { font-family: var(--sans); font-size: 0.85rem; color: var(--ink-muted); }
+    .cn-builds { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+    .cn-build { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--bg); }
+    .cn-build img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; display: block;
+      border-bottom: 1px solid var(--rule); }
+    .cn-build__body { padding: 1rem 1.25rem 1.25rem; }
+    .cn-build__body h2 { font-size: 1.2rem; margin: 0.2rem 0 0.4rem; }
+    .cn-build__meta { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin: 0 0 0.6rem; }
+    .cn-build__body p { font-family: var(--sans); font-size: 0.92rem; color: var(--ink-soft); }
+    .cn-timeline { font-family: var(--sans); font-size: 0.9rem; list-style: none; padding: 0; margin: 1rem 0;
+      border-left: 2px solid var(--rule); }
+    .cn-timeline li { padding: 0 0 0.8rem 1rem; position: relative; color: var(--ink-soft); }
+    .cn-timeline li::before { content: ""; position: absolute; left: -6px; top: 0.45em; width: 10px; height: 10px;
+      border-radius: 50%; background: var(--accent); }
+    .cn-timeline strong { color: var(--ink); }
+    .cn-doc-note { font-family: var(--sans); font-size: 0.875rem; padding: 0.9rem 1.1rem; background: var(--bg-soft);
+      border-left: 4px solid var(--accent); border-radius: 4px; margin: 1.25rem 0 2rem; color: var(--ink-soft); }
+    .cn-doc h2 { font-size: 1.25rem; margin-top: 2.2rem; }
+    .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+    .cn-doc li { margin-bottom: 0.35rem; }
+    .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
+    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
+    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
+      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
+    .cn-draft strong { color: #C0392B; }
+    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
+    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+  </style>
+</head>
+<body data-theme="warm" data-accent="warmblue" data-type="editorial">
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html"><img class="brand__owl" src="/favicon.svg" alt="" width="34" height="34">Blue Brazelton</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html" aria-current="page">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('.nav').classList.toggle('is-open');">☰</button>
+  </div>
+</header>
+<main>
+  <div class="shell shell--narrow">
+
+    <a href="/citation-needed/build-1.html" class="back-link">&larr; Back to Build 1: The Living Record</a>
+
+    <header class="page-head">
+      <span class="eyebrow">Citation Needed &middot; Build 1 scope document</span>
+      <h1>Confirmed Base-Game Scope</h1>
+    </header>
+
+    <p class="cn-doc-note">The scope document approved on September 11, 2026, at the start of Build 1, published as written. It describes one social-science campaign and lists separate legal and other campaigns as outside the base game.</p>
+
+    <div class="cn-doc">
+<p><strong>Status:</strong> Approved Phase 1 scope as of September 11, 2026.</p>
+<p>This document defines the promise and boundary of the first complete game. It does not specify detailed balance, exhaustive content, interface design, visual style, or implementation technology.</p>
+<h2>Player promise</h2>
+<blockquote>
+<p>Begin as a capable student in an ordinary public school and struggle toward academic eminence—building purpose, skill, support, and opportunity; turning setbacks into new routes; and shaping the scholar who emerges.</p>
+</blockquote>
+<p>The struggle to succeed is the game's greatest emphasis. Academic eminence is the destination, not the sole subject. The player should experience how motivation, learned capability, relationships, material resources, opportunity, and institutional conditions interact across a long career.</p>
+<p>The progression model will be informed by research on student success. It must not imply that talent, grit, intrinsic motivation, or prestige alone explains achievement. Setbacks should usually create motion by yielding feedback, experience, reusable work, relationships, insight, or a new strategic option.</p>
+<h2>What “the top” means</h2>
+<p>Every successful playthrough reaches a shared threshold of unmistakable academic eminence:</p>
+<ol>
+<li>The protagonist becomes a <strong>Distinguished Professor</strong>.</li>
+<li>The protagonist is elected to a <strong>fictional National Academy</strong>.</li>
+</ol>
+<p>Academy election unlocks the final summit rather than ending the game. Prior choices build visible affinity and eligibility for four summit families. The player then chooses among the summits for which the scholar is prepared:</p>
+<ul>
+<li><strong>Field-Defining Scholar:</strong> creates a theory, method, or body of work that permanently changes the discipline, potentially crowned by a fictional global prize.</li>
+<li><strong>Public Scholar:</strong> turns scholarship into lasting public understanding, policy, or practice, potentially through a senior government appointment.</li>
+<li><strong>Institution Builder/National Academic Leader:</strong> reshapes the institutions of scholarship, culminating in the presidency of the fictional National Academy and defined by what the scholar accomplishes through that office.</li>
+<li><strong>Generational Mentor:</strong> creates a scholarly lineage whose collective work changes the field and its culture.</li>
+</ul>
+<p>These are parallel forms of legacy, not a ranking of human or scholarly worth. Government office, academy leadership, and major prizes are vehicles or recognition for particular contributions rather than universal measures of success.</p>
+<h2>Scholarly identity</h2>
+<p>Four non-exclusive commitments express where the scholar directs growing capacity:</p>
+<ul>
+<li><strong>Discovery:</strong> theory, methods, evidence, rigor, and intellectual independence.</li>
+<li><strong>Scholarly Community:</strong> teaching, mentorship, collaboration, and field-building.</li>
+<li><strong>Public Contribution:</strong> communication, community engagement, policy, and practical impact.</li>
+<li><strong>Institutional Stewardship:</strong> service, funding, organizational leadership, and responsible use of power.</li>
+</ul>
+<p>Demonstrated commitments help establish which summits are prepared, but no relative ranking overrides the player's visible choice: any eligible summit may be selected as the primary finale. The strongest <strong>other</strong> demonstrated commitment then supplies one secondary modifier, even when the selected summit's commitment was not the strongest overall. If no distinct other commitment has demonstrated evidence, the ending is primary-only. This allows earned combinations rather than four rigid character classes, a hidden forced ending, or an invented secondary identity.</p>
+<p>Theory, methods, evidence, synthesis, interdisciplinarity, independence, and collaboration are cross-cutting approaches rather than additional top-level commitments. Integrity and rigor are universal standards, not optional virtues. Wellbeing and material conditions belong to the progression and sustainability model rather than scholarly identity.</p>
+<h2>Chapter arc</h2>
+<p>The base game uses twelve unequal chapters:</p>
+<ol>
+<li><strong>First Openings — public-high-school prologue:</strong> ambition, constraints, support, and the first recoverable setback.</li>
+<li><strong>Finding Your Footing — early state university:</strong> basic needs, time, belonging, study strategies, and the hidden curriculum.</li>
+<li><strong>Entering Inquiry — later undergraduate:</strong> social-science identity, mentorship, first research, and graduate-school preparation.</li>
+<li><strong>The Proving Ground — master's:</strong> specialization, funding, independent work, and the decision to continue.</li>
+<li><strong>Learning the Trade — doctoral formation:</strong> advanced methods, RA/TA work, professional norms, and candidacy.</li>
+<li><strong>An Original Claim — dissertation:</strong> original research, publishing, committee negotiation, and the defense.</li>
+<li><strong>A Question of Fit — academic job market:</strong> applications, recommendations, interviews, campus visits, rejection, and renewed opportunity.</li>
+<li><strong>Provisional Life — early-career appointments:</strong> temporary status, repeated evaluation, independent portfolio building, and mobility.</li>
+<li><strong>The Tenure Clock — assistant professor:</strong> competing research, teaching, service, funding, and tenure demands.</li>
+<li><strong>Security, Then More Work — associate to full professor:</strong> expanded freedom, mentorship, leadership, overload, and promotion.</li>
+<li><strong>A National Stage — distinguished professor and academy election:</strong> field-scale influence and the shared threshold of eminence.</li>
+<li><strong>What Outlasts You — summit:</strong> the prepared, identity-shaped finale and its lasting consequence.</li>
+</ol>
+<p>The prologue and job-market chapter are intentionally brief. If playtesting finds the arc fragmented, the dissertation and job market may be recombined without otherwise restructuring the game.</p>
+<h2>Target play experience</h2>
+<p>A satisfying first completion should take approximately <strong>2–3 hours</strong>, either in one long sitting or several shorter visits. The opening must establish the fantasy and deliver the first meaningful upgrade within a few minutes.</p>
+<p>The rhythm is an <strong>active-forward hybrid</strong>:</p>
+<ul>
+<li>The player frequently makes choices, buys story-linked upgrades, responds to setbacks, and redirects strategy.</li>
+<li>Automation progressively handles actions that have become routine and makes the career feel like an expanding academic operation.</li>
+<li>The game never requires waiting through an idle gate.</li>
+<li>Offline progress is modest and capped so that absence is not the optimal strategy.</li>
+<li>New decisions, developments, and complications interrupt accumulation before it becomes empty repetition.</li>
+</ul>
+<h2>Base-game boundary</h2>
+<p>The base game contains one authored U.S. social-scientist campaign, one shared twelve-chapter career spine, and one evolving progression system. The four commitments create meaningful variation throughout the career, and the final chapter contains four distinct summit finales. The base game does not contain four fully separate versions of the preceding career.</p>
+<p>The following are outside the required base game:</p>
+<ul>
+<li>AI-generated or AI-facilitated interdisciplinary playthroughs</li>
+<li>international scholar modes</li>
+<li>separate STEM, arts/humanities, or legal-academic campaigns</li>
+<li>state-versus-elite-private undergraduate routes</li>
+<li>an AI skill-tree branch</li>
+<li>replay or prestige systems</li>
+<li>fully divergent career campaigns</li>
+<li>public “making of” material, except as a separately scoped workshop companion</li>
+</ul>
+<p>These possibilities may reuse the base game's underlying structures later, but none should delay proof and polish of the single authored campaign.</p>
+<h2>Decisions intentionally deferred</h2>
+<p>The next design phase will determine the core action-and-reward loop, minimal resource model, exact function of automation, setback protections, randomness, upgrade families, chapter transitions, and ending mechanics. Detailed content catalogs, balance formulas, visual design, technology, and deployment remain later work.</p>
+    </div>
+
+    <hr class="rule">
+    <p class="cn-note"><a href="/citation-needed/build-1.html">&larr; Back to Build 1</a> &middot; <a href="/citation-needed/">Citation Needed</a></p>
+
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <div>
+      <span>Blue Brazelton</span>
+      <span class="muted"> &middot; Northern Arizona University</span>
+    </div>
+    <div>
+      <a href="/contact.html">Contact</a>
+      <span class="muted"> &middot; </span>
+      <a href="/cv.html">CV</a>
+      <span class="muted"> &middot; </span>
+      <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a>
+      <span class="muted"> &middot; Last updated October 2026 </span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
