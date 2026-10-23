@@ -49,6 +49,6 @@ export const MASTERS_POPUPS={
   'masters-defended':{eyebrow:'Master’s study · formal recognition',title:'Defended in its changed form',tone:'warm',body:'The Cedar Vale master’s committee recognizes your bounded contribution: one new Standing from the committee’s recognition. The completed response’s obligation is recorded once. A real next question opens doctoral formation through the ordinary program route.',next:'Read the doctoral-formation route and consolidate the inquiry.',button:'Read the next route'},
   'energy-exhausted-c4':{eyebrow:'Chapter 4 · Energy spent',title:'The calendar has used its footnotes',tone:'warm',chapter:4,body:'You lose your place in the design note. Further work at zero Energy is less polished, but source audit, revision and question preparation still count. Finished quality and evidence limits remain saved. The bounded master’s result and ordinary doctoral route remain available.',next:'Continue the changed project; watch the remaining draft’s quality.',button:'Keep the completion floor'}
 };
-export const MASTERS_PORTRAIT={normal:'assets/masters-office.png',depleted:'assets/masters-office-tired.png',
+export const MASTERS_PORTRAIT={normal:'assets/masters-office.webp',depleted:'assets/masters-office-tired.webp',
   normalAlt:'The curly-haired protagonist independently drafts a master’s design at a graduate office desk.',
   depletedAlt:'The protagonist rests one hand against her forehead, tired beside her master’s design and laptop.'};

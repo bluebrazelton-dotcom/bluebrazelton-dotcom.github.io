@@ -145,8 +145,8 @@ export function recordMilestone(item) {
 // Short story beats for the playable slice. These explain existing results; they do not grant rewards.
 // Each future chapter supplies its own matched normal/depleted protagonist pair.
 export const CHAPTER_PORTRAITS = Object.freeze({
-  1: Object.freeze({ normal:'assets/high-school.png', depleted:'assets/high-school-tired.png', depletedAlt:'The tired protagonist holds college research pages outside the high school.' }),
-  2: Object.freeze({ normal:'assets/state-university-desk-v2.png', depleted:'assets/state-university-tired.png', depletedAlt:'The tired protagonist rests their head on one hand while working at a university desk.' })
+  1: Object.freeze({ normal:'assets/high-school.webp', depleted:'assets/high-school-tired.webp', depletedAlt:'The tired protagonist holds college research pages outside the high school.' }),
+  2: Object.freeze({ normal:'assets/state-university-desk-v2.webp', depleted:'assets/state-university-tired.webp', depletedAlt:'The tired protagonist rests their head on one hand while working at a university desk.' })
 });
 
 export const POPUPS = {

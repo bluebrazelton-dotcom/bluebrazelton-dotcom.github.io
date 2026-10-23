@@ -31,7 +31,7 @@ function render(){
  $('workspace-label').textContent=workspace.label;$('workspace-tools').textContent=workspace.tool;
  $('work-materials').innerHTML=workspaceMaterials(state);
  $('chapter-title').textContent=c.title;$('chapter-number').textContent=`Chapter ${state.chapter} of 12`;$('place').textContent=c.place;$('era').textContent=c.era;
- const imagePath='assets/career-atlas.png';
+ const imagePath='assets/career-atlas.webp';
  $('scene-image').src=imagePath;const col=c.scene%3,row=Math.floor(c.scene/3)*2+(state.energy===0?1:0);
  $('scene-image').style.left=`${-col*100}%`;$('scene-image').style.top=`${-row*100}%`;
  $('scene-image').dataset.scene=c.scene;$('scene-image').dataset.tired=state.energy===0;$('scene-image').alt=`${state.energy===0?'The tired protagonist':'The protagonist'} at ${c.place}, during ${c.era.toLowerCase()}.`;

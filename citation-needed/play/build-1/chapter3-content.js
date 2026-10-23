@@ -83,7 +83,7 @@ export const RESEARCH_POPUPS = {
 };
 
 export const RESEARCH_PORTRAIT = {
-  normal:'assets/research-room.png', depleted:'assets/research-room-tired.png',
+  normal:'assets/research-room.webp', depleted:'assets/research-room-tired.webp',
   normalAlt:'The curly-haired, medium-brown protagonist compares research sources with Nia at a university table.',
   depletedAlt:'The protagonist rests their head on one hand, tired while revising research notes in the same university room.'
 };

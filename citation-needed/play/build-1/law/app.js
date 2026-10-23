@@ -31,7 +31,7 @@ function render(){
  $('workspace-label').textContent=workspace.label;$('workspace-tools').textContent=workspace.tool;
  $('work-materials').innerHTML=workspaceMaterials(state);
  $('chapter-title').textContent=c.title;$('chapter-number').textContent=`Chapter ${state.chapter} of 12`;$('place').textContent=c.place;$('era').textContent=c.era;
- const imagePath='assets/career-atlas.png';
+ const imagePath='assets/career-atlas.webp';
  $('scene-image').src=imagePath;const col=c.scene%3,row=Math.floor(c.scene/3)*2+(state.energy===0?1:0);
  $('scene-image').style.left=`${-col*100}%`;$('scene-image').style.top=`${-row*100}%`;
  $('scene-image').dataset.scene=c.scene;$('scene-image').dataset.tired=state.energy===0;$('scene-image').alt=`${state.energy===0?'The tired protagonist':'The protagonist'} at ${c.place}, during ${c.era.toLowerCase()}.`;
@@ -95,7 +95,7 @@ function render(){
  }
  lastContext=context;
  if(saveBlocked){if(!$('recovery').open)$('recovery').showModal();return;}
- if(pendingExhaustion(state)){story('This chapter has used your Energy',`You have used this chapter’s Energy. Further exhausted work may leave a rougher result: ${c.rough}. Your existing work remains useful, and required work still counts. ${state.chapter===12?'This is the final chapter; the submitted assessment remains in your completed career.':'Rest at the chapter break supports future work without changing a submitted assessment.'}`,'Keep the useful work','acknowledge',`Chapter ${state.chapter} · ${c.title}`,'assets/career-atlas.png');}
+ if(pendingExhaustion(state)){story('This chapter has used your Energy',`You have used this chapter’s Energy. Further exhausted work may leave a rougher result: ${c.rough}. Your existing work remains useful, and required work still counts. ${state.chapter===12?'This is the final chapter; the submitted assessment remains in your completed career.':'Rest at the chapter break supports future work without changing a submitted assessment.'}`,'Keep the useful work','acknowledge',`Chapter ${state.chapter} · ${c.title}`,'assets/career-atlas.webp');}
  else if(phase==='intro')story(c.title,c.intro,state.chapter===1?'See how to play':'Begin this chapter','begin',`Chapter ${state.chapter} of 12 · ${c.era}`);
  else if(phase==='instructions')story('Work, choose, and keep moving','Choose an approach, then press the work button to develop visible artifact sections. Energy is charged at the start and at work milestones. Work remains productive at zero, but further exhausted work loses polish. Finished work earns Progress for lasting skills. Choices are final; Back undoes work presses. Your legal-scholar career saves separately from the other three careers. Each chapter includes a first artifact and a response to its review. Each work press completes the listed sections; no waiting is required.','Start the project','continue','How to play');
  else if(phase==='submitted'||phase==='submitted-response')story('Your work is submitted',feedback(state),phase==='submitted'?'Read what happens next':'Receive recognition','continue',`${t.artifact} · ${qualityLabel(t)}`);

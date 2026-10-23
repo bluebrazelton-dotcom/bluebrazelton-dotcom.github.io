@@ -14,7 +14,7 @@ const esc=x=>{
 };
 const lines=rows=>`<dl class="draft-lines">${rows.map(([label,text])=>`<div><dt>${esc(label)}</dt><dd>${esc(text)}</dd></div>`).join('')}</dl>`;
 const imageNames={5:'doctoral-formation',6:'dissertation',7:'job-market',8:'early-career',9:'tenure',10:'full-professor',11:'national-stage',12:'legacy'};
-export const CAREER_PORTRAITS=Object.fromEntries(Object.entries(imageNames).map(([n,name])=>[n,{normal:`assets/${name}.png`,depleted:`assets/${name}-tired.png`,normalAlt:`The scholar at work during ${CAREER_CHAPTERS[n].title}.`,depletedAlt:`The same scholar pauses, visibly tired, during ${CAREER_CHAPTERS[n].title}.`}]));
+export const CAREER_PORTRAITS=Object.fromEntries(Object.entries(imageNames).map(([n,name])=>[n,{normal:`assets/${name}.webp`,depleted:`assets/${name}-tired.webp`,normalAlt:`The scholar at work during ${CAREER_CHAPTERS[n].title}.`,depletedAlt:`The same scholar pauses, visibly tired, during ${CAREER_CHAPTERS[n].title}.`}]));
 const fatigue={
   5:['A crowded doctoral week','Teaching preparation, methods work and the candidacy plan have used this chapter’s Energy. Further drafting may be less polished; the committee still assesses the completed, defensible plan.'],
   6:['The last pages take more effort','The dissertation’s sustained evidence and revision work has used your Energy. You can finish the stated contribution and defense. Further exhausted writing loses polish; it does not change what the evidence supports.'],
