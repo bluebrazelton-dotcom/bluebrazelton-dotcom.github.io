@@ -75,6 +75,11 @@
   .ach { --tier:var(--sky); display:flex; flex-direction:column; overflow:hidden; background:var(--card);
     border:2px solid var(--tier); border-radius:8px;
     box-shadow:0 0 0 4px color-mix(in srgb, var(--tier) 16%, transparent), 0 0 30px color-mix(in srgb, var(--tier) 16%, transparent); }
+  /* Line up the parts of side-by-side cards (banner, quip, image, body) so images sit level
+     even when one card's quip wraps to more lines. Falls back to the plain column. */
+  @supports (grid-template-rows: subgrid) {
+    .ach { display:grid; grid-row:span 4; grid-template-rows:subgrid; row-gap:0; }
+  }
   .ach--bronze { --tier:#FF9E6E; }
   .ach--silver { --tier:#6EE7B7; }
   .ach--gold { --tier:#F6C453; }
