@@ -9,6 +9,8 @@
   <meta property="og:description" content="Build 1 of Citation Needed, an academic-career incremental game built three times with AI. Six weeks of research, scoping and review documents before and during the code. The most complete build, and the most process.">
   <meta property="og:url" content="https://www.bluebrazelton.com/citation-needed/build-1.html">
   <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Blue Brazelton owl logo and name, www.bluebrazelton.com">
   <meta name="twitter:card" content="summary_large_image">
   <title>Build 1: The Living Record — Citation Needed — Blue Brazelton</title>
@@ -60,6 +62,16 @@
     .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
     .cn-doc li { margin-bottom: 0.35rem; }
     .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
+    .cn-wide { max-width: 72rem; }
+    .cn-hub { display: grid; grid-template-columns: minmax(0, 44rem) minmax(16rem, 1fr); gap: 3.5rem; align-items: start; row-gap: 0; }
+    .cn-hub .page-head { grid-column: 1 / -1; }
+    .cn-aside .cn-section-head:first-child { margin-top: 2rem; }
+    .cn-aside .cn-builds { gap: 1rem; margin-top: 0.5rem; }
+    .cn-aside .cn-build__body { padding: 0.85rem 1rem 1rem; }
+    .cn-aside .cn-build__body h2 { font-size: 1.05rem; }
+    .cn-aside .cn-build__body p { font-size: 0.85rem; }
+    .cn-aside .cn-play .button { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+    @media (max-width: 960px) { .cn-hub { grid-template-columns: 1fr; } .cn-hub .page-head { order: -2; } .cn-aside { order: -1; } .cn-aside .cn-section-head:first-child { margin-top: 0; } }
     .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
     .cn-essay { margin: 0.5rem 0 1rem; }
     .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
