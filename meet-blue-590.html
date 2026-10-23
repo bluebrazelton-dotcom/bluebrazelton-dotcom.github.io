@@ -71,7 +71,7 @@ section:first-of-type{border-top:0}
 .pane.ai .tag{background:var(--ai);color:#fff}
 .pane.real .tag{background:var(--real);color:#fff}
 .pane .bio{display:grid;gap:10px;align-content:start;min-width:0}
-.pane .bio h3{font-size:1.35rem}
+.pane .bio h3,.pane .bio .bio-name{font-size:1.35rem;font-weight:700;letter-spacing:0}
 .pane .bio p{font-size:.98rem}
 .pane .portrait{aspect-ratio:3/4;max-width:100%;border-radius:12px;border:2px solid var(--ink);display:grid;place-items:center;text-align:center;font-size:.8rem;color:var(--muted);padding:10px;background:var(--surface);overflow:hidden}
 .pane.ai .portrait{border-style:dashed}
@@ -163,11 +163,12 @@ img{max-width:100%}[hidden]{display:none!important}
 
 
 <div class="wrap">
-  <div class="mast">
+  <header class="mast">
     <span class="course">CCHE 590 · Technological Fluency and Leadership</span>
     <span class="eyebrow">Northern Arizona University</span>
-  </div>
+  </header>
 
+  <main>
   <!-- HERO -->
   <section class="hero">
     <div class="hero-top">
@@ -192,7 +193,7 @@ img{max-width:100%}[hidden]{display:none!important}
         </div>
         <div class="bio">
           <span class="tag">AI Me</span>
-          <h3>Dr. Blue Brazelton</h3>
+          <h2 class="bio-name">Dr. Blue Brazelton</h2>
           <p>Dr. Blue Brazelton is a passionate educator and thought leader at Northern Arizona University, where he serves as a Professor of Higher Education. With over 15 years of experience, he is dedicated to fostering student success and driving innovation in the classroom. He earned his Ph.D. in Educational Technology from Arizona State University and has published widely on online learning. In his free time, he enjoys hiking the beautiful trails of Flagstaff with his dog.</p>
         </div>
       </div>
@@ -203,7 +204,7 @@ img{max-width:100%}[hidden]{display:none!important}
         </div>
         <div class="bio">
           <span class="tag">Real Me</span>
-          <h3>G. Blue Brazelton, Ph.D.</h3>
+          <h2 class="bio-name">G. Blue Brazelton, Ph.D.</h2>
           <p>Associate Professor of Educational Leadership, Provost Leadership Fellow, and AI Fellow at Northern Arizona University. Twenty-plus years in higher education across five institutions. B.A. in English Literature and Philosophy (Texas Tech), M.S.Ed. (SIU Carbondale), Ph.D. in Higher, Adult, and Lifelong Education (Michigan State). Grew up on a farm outside Sweetwater, Texas, home of the world's largest rattlesnake round-up. Moved seven times between undergrad and a tenure-track job. Proud member of the MySpace generation. Lives in Flagstaff and runs his research life through a small team of AI personas led by a mechanical owl.</p>
         </div>
       </div>
@@ -458,6 +459,7 @@ Technological Fluency and Leadership. GenAI for real. Bring questions.</pre>
       </div>
     </div>
   </section>
+  </main>
 
   <footer>
     <p>Blue Brazelton · <a href="https://bluebrazelton.com" target="_blank" rel="noopener">bluebrazelton.com</a> · Built for CCHE 590. No rattlesnakes were consulted.</p>
