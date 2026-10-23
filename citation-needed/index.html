@@ -71,7 +71,10 @@
     .cn-aside .cn-build__body h2 { font-size: 1.05rem; }
     .cn-aside .cn-build__body p { font-size: 0.85rem; }
     .cn-aside .cn-play .button { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
-    @media (max-width: 960px) { .cn-hub { grid-template-columns: 1fr; } .cn-hub .page-head { order: -2; } .cn-aside { order: -1; } .cn-aside .cn-section-head:first-child { margin-top: 0; } }
+    @media (max-width: 960px) { .cn-hub { grid-template-columns: 1fr; } .cn-hub .page-head, .cn-hub .cn-status { order: -2; } .cn-aside { order: -1; } .cn-aside .cn-section-head:first-child { margin-top: 0; } }
+    .cn-status { grid-column: 1 / -1; font-family: var(--sans); font-size: 0.95rem; line-height: 1.55; color: var(--ink-soft);
+      background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px; padding: 0.9rem 1.15rem; margin: 0 0 0.5rem; max-width: none; }
+    .cn-status strong { color: var(--ink); }
     .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
     .cn-essay { margin: 0.5rem 0 1rem; }
     .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
@@ -103,6 +106,7 @@
       <h1>Citation Needed</h1>
       <p class="lead">One idea, an incremental game about an academic career, built three times with three different AI tools and three very different ways of working. All three builds are playable here, with notes on how each one was made.</p>
     </header>
+    <p class="cn-status"><strong>Status: game saved.</strong> I’m stepping away to other projects for a while, but I’ll be back to keep building. When I return, I’ll start fresh and use these three builds as research for the next one. <a href="mailto:blue.brazelton@gmail.com?subject=Citation%20Needed%20bug%20report&amp;body=Which%20build%3A%0AWhat%20happened%3A%0A">Found a bug?</a> Tell me which build and what happened. I read every report, and they will all go into the next version rather than patches to these three.</p>
     <div class="cn-main">
     <article class="cn-essay">
       <h2>I tried to build a video game and accidentally made three</h2>
