@@ -8,7 +8,7 @@
 <meta property="og:site_name" content="Blue Brazelton">
 <meta property="og:title" content="Blue Brazelton's BlueSpace profile">
 <meta property="og:description" content="The About page, the way we used to do it. Thanks for the add!">
-<meta property="og:url" content="https://www.bluebrazelton.com/myspace.html">
+<meta property="og:url" content="https://www.bluebrazelton.com/bluespace.html">
 <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -98,16 +98,17 @@
   .more { font-size: .75rem; }
 
   /* The Xanga box: same content, broodier */
-  .section--xanga { border: 1px solid #3B2140; background: #120E16; }
-  .section--xanga .section__head { background: linear-gradient(180deg, #2A1530, #0B080D); color: #D9B8F0; font: italic 700 1rem Georgia, "Times New Roman", serif; letter-spacing: .02em; text-shadow: 0 0 8px rgba(190,120,230,.55); border-bottom: 1px solid #3B2140; }
-  .section--xanga .section__head .more, .section--xanga .section__head .more a { color: #E07AA6; font: 400 .72rem Verdana, sans-serif; text-shadow: none; }
-  .section--xanga .section__body { color: #BDB3C6; background:
-      radial-gradient(ellipse 80% 60% at 100% 0%, rgba(120,40,110,.25), transparent 70%),
-      radial-gradient(ellipse 60% 50% at 0% 100%, rgba(40,30,90,.35), transparent 70%); }
-  .section--xanga .blog li::before { content: "‡ "; color: #8E3B63; }
-  .section--xanga a { color: #C9A9EC; }
-  .section--xanga a:hover { color: #FF7AAE; }
-  .section--xanga .xanga-mood { margin: .6rem 0 0; font: italic .75rem Georgia, serif; color: #8F8399; }
+  .section--xanga { border: 1px solid #3A3F47; background: #15171B; }
+  .section--xanga .section__head { background: linear-gradient(180deg, #2E333B, #0C0D10); color: #D8DDE3; font: 700 1rem "Arial Narrow", "Helvetica Neue", Arial, sans-serif; letter-spacing: .05em; text-shadow: 0 1px 0 #000, 0 0 6px rgba(163,40,45,.6); border-bottom: 2px solid #8C1F24; }
+  .section--xanga .section__head .more, .section--xanga .section__head .more a { color: #C9464A; font: 400 .72rem Verdana, sans-serif; letter-spacing: 0; text-shadow: none; }
+  .section--xanga .section__body { color: #B5BBC3; background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 2px, transparent 2px 6px),
+      radial-gradient(ellipse 80% 60% at 100% 0%, rgba(140,31,36,.22), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 0% 100%, rgba(30,45,70,.45), transparent 70%); }
+  .section--xanga .blog li::before { content: "✖ "; color: #A3282D; font-size: .75em; }
+  .section--xanga a { color: #9DB7D3; }
+  .section--xanga a:hover { color: #E0484D; }
+  .section--xanga .xanga-mood { margin: .6rem 0 0; font: italic .75rem Georgia, serif; color: #7D848D; }
 
   /* Profile songs: one <div class="track"> per song; the script pauses the others when one plays */
   .song { background: #F0F0F0; border: 1px solid #ccc; padding: .55rem .65rem; margin: 0 0 1rem; font-size: .78rem; }
@@ -176,7 +177,7 @@
 <div class="page">
 
   <header class="topbar">
-    <a class="logo" href="/myspace.html"><img src="/favicon.svg" alt="" width="30" height="30" />BlueSpace<small>a place for colleagues</small></a>
+    <a class="logo" href="/bluespace.html"><img src="/favicon.svg" alt="" width="30" height="30" />BlueSpace<small>a place for colleagues</small></a>
     <a class="topbar__back" href="/about.html">&larr; Back to the grown-up About page</a>
   </header>
   <nav class="navbar" aria-label="Site">
@@ -224,14 +225,14 @@
 
         <section class="box" aria-labelledby="url-h">
           <h2 class="box__head" id="url-h">BlueSpace URL:</h2>
-          <div class="box__body url">http://www.bluebrazelton.com/myspace.html</div>
+          <div class="box__body url">http://www.bluebrazelton.com/bluespace.html</div>
         </section>
 
         <section class="box" aria-labelledby="interests-h">
           <h2 class="box__head" id="interests-h">Blue's Interests</h2>
           <table class="info">
             <tr><th scope="row">General</th><td>AI in higher education, organizational theory, how institutions actually change, faculty work that leaves room for a life, building games with AI just to see what happens.</td></tr>
-            <tr><th scope="row">Music</th><td>Bubo and the Gorgons; Elder Millennials. Both are <a href="#profile-song">on my profile</a>. Neither band exists, which has never stopped a MySpace band before.</td></tr>
+            <tr><th scope="row">Music</th><td>Bubo and the Gorgons; Elder Millennials. Both are <a href="#profile-song">on my profile</a>. Neither band exists, which has never stopped a 2005 band before.</td></tr>
             <tr><th scope="row">Movies</th><td>Ask me in the coffee line in Atlanta.</td></tr>
             <tr><th scope="row">Television</th><td>Also a coffee-line question.</td></tr>
             <tr><th scope="row">Books</th><td><a href="/beyond-the-campus.html"><cite>Beyond the Campus</cite></a> (I helped write it, so it counts); the <cite>Dungeon Crawler Carl</cite> series (enough to <a href="/dcc/dcc_index.html">make a tabletop game</a> about it).</td></tr>
@@ -391,7 +392,7 @@
     });
     // Forward to Friend: share sheet where available, otherwise copy the link.
     var btn = document.getElementById('forward'), status = document.getElementById('forward-status');
-    var url = 'https://www.bluebrazelton.com/myspace.html';
+    var url = 'https://www.bluebrazelton.com/bluespace.html';
     if (btn) btn.addEventListener('click', function () {
       if (navigator.share) { navigator.share({ title: "Blue Brazelton's BlueSpace profile", url: url }).catch(function () {}); return; }
       var done = function () { btn.lastChild.textContent = 'Link copied!'; status.textContent = 'Link copied to clipboard.'; };
