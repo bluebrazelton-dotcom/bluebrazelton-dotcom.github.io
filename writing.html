@@ -26,6 +26,10 @@
   .scroll .entry-body__title, .scroll .entry-body__title a, .scroll a { color:#3A4F6E; }
   .scroll .entry-body__note { color:var(--ink-soft); }
   html[data-mode="dark"] .scroll .entry-body__title, html[data-mode="dark"] .scroll .entry-body__title a, html[data-mode="dark"] .scroll a { color:#3A4F6E; }
+  /* Underlines: Slate on the parchment in both modes (the sitewide dark-mode Sky underline vanishes on paper) */
+  .scroll a, html[data-mode="dark"] .scroll a { text-decoration-line: underline; text-decoration-color: rgba(58,79,110,.65); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+  .scroll a:hover, html[data-mode="dark"] .scroll a:hover { color:#2B2A27; text-decoration-color: #3A4F6E; text-decoration-thickness: 2px; }
+  .scroll a:focus-visible, html[data-mode="dark"] .scroll a:focus-visible { outline: 3px solid #3A4F6E; outline-offset: 2px; }
 
   /* rods: rolled paper, slightly scorched at the ends */
   .scroll::before, .scroll::after { content:""; position:absolute; z-index:3; left:-1.4rem; right:-1.4rem; height:2.3rem; border-radius:1.2rem;
