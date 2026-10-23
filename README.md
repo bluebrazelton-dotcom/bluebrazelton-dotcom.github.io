@@ -15,4 +15,5 @@ Source for Blue Brazelton's personal site. Served by **GitHub Pages** from `main
 - Favicon and header logo: `favicon.ico`, `favicon.svg`, `apple-touch-icon.png` at the root, copied from Brand Standards\logo\ (the favicon cut; under 48 px always use it). Branded pages carry the three `<link rel="icon">` tags and the owl in the `.brand` header link. Deliberately unbranded pages (Tech Summit, hourglass app, prompt, peer-scan, meet-blue-590) are left alone.
 - Bump `styles.css?v=N` on every page when styles.css changes.
 - Internal links are root-absolute (`/about.html`), so pages work from any folder.
-- Footer reads "Last updated Month YYYY". Update it sitewide.
+- Footer links: Contact · CV · LinkedIn (talk pages add AI disclosure), then "Last updated Month YYYY". Update the date sitewide. LinkedIn is the only profile link in the footer (Blue, 2026-10-22); ORCID, Scholar and Substack live on the Contact page.
+- Accessibility: every image needs alt text that describes the picture, not its caption; vague links ("Learn more", "Read more") get an `aria-label` that starts with the visible words; page banners sit inside `<main>`.

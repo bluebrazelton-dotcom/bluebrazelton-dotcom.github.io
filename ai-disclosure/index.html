@@ -45,7 +45,8 @@
   .page-head h1 { color:var(--parchment); font-size:clamp(1.9rem, 5vw, 2.6rem); margin:0 0 .6rem; }
   .page-head p.sub { margin:0; font-size:1.05rem; max-width:38rem; }
 
-  main { padding:1.8rem 0 3rem; }
+  main { padding:0 0 3rem; }
+  .page-head + .shell { padding-top:1.8rem; }
   h2 { font-size:1.45rem; margin:2.6rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--slate); }
   h3 { font-size:1.15rem; margin:1.6rem 0 .4rem; }
   p { margin:.6rem 0; }
@@ -126,6 +127,7 @@
   </div>
 </header>
 
+<main id="content">
 <div class="page-head">
   <div class="shell">
     <p class="kicker">AI disclosure</p>
@@ -134,7 +136,6 @@
   </div>
 </div>
 
-<main id="content">
   <div class="shell">
 
     <nav class="toc" aria-label="On this page">
@@ -279,7 +280,7 @@
 <footer class="site-footer">
   <div class="shell site-footer__inner">
     <p>Blue Brazelton &middot; Northern Arizona University</p>
-    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="/ai-disclosure/tech-summit-2026">Tech Summit 2026 disclosure</a> &middot; Last updated October 2026</p>
+    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a> &middot; <a href="/ai-disclosure/tech-summit-2026">Tech Summit 2026 disclosure</a> &middot; Last updated October 2026</p>
   </div>
 </footer>
 </body>

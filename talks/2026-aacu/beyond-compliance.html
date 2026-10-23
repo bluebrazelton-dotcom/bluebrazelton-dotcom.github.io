@@ -36,7 +36,8 @@
   .page-head h1 { color:var(--parchment); font-size:clamp(1.8rem,5vw,2.5rem); margin:0 0 .7rem; }
   .page-head p { margin:0; font-size:1.08rem; max-width:40rem; }
 
-  main { padding:1.6rem 0 3rem; }
+  main { padding:0 0 3rem; }
+  .page-head + .shell { padding-top:1.6rem; }
   h2 { font-size:1.4rem; margin:2.2rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--slate); }
   .downloads { display:flex; flex-wrap:wrap; gap:.6rem; margin:0 0 .4rem; }
   .btn { display:inline-block; font:inherit; font-weight:700; font-size:.98rem; padding:.55rem 1rem; border-radius:.4rem; border:2px solid var(--slate); background:var(--slate); color:var(--parchment); text-decoration:none; cursor:pointer; }
@@ -79,7 +80,7 @@
     body { background:#fff; font-size:10.5pt; }
     .page-head { background:#fff; color:var(--ink); padding:0 0 .5rem; border-bottom:2px solid var(--slate); }
     .page-head h1 { color:var(--slate); font-size:18pt; } .kicker { color:var(--slate); }
-    main { padding-top:.6rem; } h2 { margin-top:1rem; font-size:13pt; }
+    .page-head + .shell { padding-top:.6rem; } h2 { margin-top:1rem; font-size:13pt; }
     .indicator { break-inside:avoid; padding:.5rem .8rem; margin:.5rem 0; background:#fff; }
     .rate label { border-color:#999; } .rate label:has(input:checked) { background:#fff; color:var(--ink); border:2px solid var(--ink); font-weight:700; }
     .mine { background:#fff; border:1px solid var(--rule); }
@@ -107,6 +108,7 @@
   </div>
 </header>
 
+<main id="content">
 <div class="page-head">
   <div class="shell">
     <p class="kicker">AAC&amp;U Conference on AI and Higher Education &middot; October 29, 2026</p>
@@ -115,7 +117,6 @@
   </div>
 </div>
 
-<main id="content">
   <div class="shell">
     <div class="downloads">
       <a class="btn" href="/talks/2026-aacu/beyond-compliance-self-assessment.pdf">Download the one-page PDF</a>
@@ -257,7 +258,7 @@
 <footer class="site-footer">
   <div class="shell site-footer__inner">
     <p>Blue Brazelton &middot; Northern Arizona University</p>
-    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="/ai-disclosure/">AI disclosure</a> &middot; Last updated October 2026</p>
+    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a> &middot; <a href="/ai-disclosure/">AI disclosure</a> &middot; Last updated October 2026</p>
   </div>
 </footer>
 </body>
