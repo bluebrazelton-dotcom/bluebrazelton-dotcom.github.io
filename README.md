@@ -18,3 +18,6 @@ Source for Blue Brazelton's personal site. Served by **GitHub Pages** from `main
 - Internal links are root-absolute (`/about.html`), so pages work from any folder.
 - Footer links: Contact · CV · LinkedIn (talk pages add AI disclosure), then "Last updated Month YYYY". Update the date sitewide. LinkedIn is the only profile link in the footer (Blue, 2026-10-22); ORCID, Scholar and Substack live on the Contact page.
 - Accessibility: every image needs alt text that describes the picture, not its caption; vague links ("Learn more", "Read more") get an `aria-label` that starts with the visible words; page banners sit inside `<main>`.
+- **Link previews:** every branded page has Open Graph tags (`og:title`, `og:description`, `og:url`, `og:image`) plus `twitter:card`. Images live in `og/` at 1200×630: `og-default.png` for most pages, `og-reclaim.png` and `og-beyond-compliance.png` for the talk handouts (and their short addresses). New pages: copy the block from a sibling page. LinkedIn caches previews; after a change, paste the URL into linkedin.com/post-inspector to refresh it.
+- **404:** `404.html` is served by GitHub Pages for any missing address. Links on it must stay root-absolute.
+- **Images:** keep photos under ~250 KB (about 1600 px wide is plenty); check that a `.jpg` is really a JPEG.
