@@ -11,56 +11,102 @@
 <link rel="stylesheet" href="/styles.css?v=11" />
 <script src="/mode.js"></script>
 <style>
-  /* Essays list as a parchment scroll (Oct 2026). The list markup is unchanged
-     (PUBLISHING.md still applies: new <li> at the top of ul.entry-list).
-     Parchment sheet with a soft darkened edge, a rolled rod top and bottom,
-     Slate end caps. Stays parchment in dark mode, like a physical object. */
-  .scroll {
-    --ink: #2B2A27; --ink-soft: #4A4740; --ink-muted: #5C574E; --rule: #D6CBB4; --rule-soft: #DDD0B6;
-    position: relative;
-    margin: 1.4rem 0.6rem;
-    padding: 2.4rem clamp(1.1rem, 4vw, 2.4rem) 2.2rem;
-    color: var(--ink);
+  /* Essays list as a weathered parchment scroll (Oct 2026, option E).
+     The list markup is unchanged: PUBLISHING.md still applies (new <li> at the
+     top of ul.entry-list). Layers, back to front: .sheet (aged paper, ragged and
+     ripped edges, burn hole) > .mottle (blotchy aging) > .wear (coffee rings,
+     foxing, scorch around the hole) > the list > rods and the owl seal.
+     Stays parchment in dark mode; prints as a plain list. */
+  .scroll { --ink:#2B2A27; --ink-soft:#4A4740; --ink-muted:#5C574E; position:relative; color:var(--ink);
+    margin:2.2rem 0.4rem; padding:3.2rem clamp(1.3rem,4.5vw,2.9rem) 3.1rem; }
+  .scroll .entry-list { position:relative; z-index:2; border-top:0; margin:0; }
+  .scroll .entry-list > li { border-color:rgba(110,80,35,.30); }
+  .scroll .entry-list > li:last-child { border-bottom:0; }
+  .scroll .entry-meta { color:#4A4740; }
+  .scroll .entry-body__title, .scroll .entry-body__title a, .scroll a { color:#3A4F6E; }
+  .scroll .entry-body__note { color:var(--ink-soft); }
+  html[data-mode="dark"] .scroll .entry-body__title, html[data-mode="dark"] .scroll .entry-body__title a, html[data-mode="dark"] .scroll a { color:#3A4F6E; }
+
+  /* rods: rolled paper, slightly scorched at the ends */
+  .scroll::before, .scroll::after { content:""; position:absolute; z-index:3; left:-1.4rem; right:-1.4rem; height:2.3rem; border-radius:1.2rem;
     background:
-      radial-gradient(ellipse 120% 90% at 50% 50%, rgba(255,255,255,0) 55%, rgba(120, 96, 52, 0.16) 100%),
-      linear-gradient(90deg, rgba(120, 96, 52, 0.10), rgba(255,255,255,0) 7%, rgba(255,255,255,0) 93%, rgba(120, 96, 52, 0.10)),
-      #EFE6D3;
-    box-shadow: 0 1px 0 rgba(43, 42, 39, 0.06), 0 10px 24px -14px rgba(31, 43, 61, 0.45);
-  }
-  /* The rods: a rolled-up edge with Slate end caps */
-  .scroll::before, .scroll::after {
-    content: "";
-    position: absolute;
-    left: -0.75rem; right: -0.75rem;
-    height: 1.35rem;
-    border-radius: 0.7rem;
+      radial-gradient(ellipse 0.9rem 1.15rem at 0.9rem 50%, #3A4F6E 0 55%, #2E3F59 56% 70%, transparent 71%),
+      radial-gradient(ellipse 0.9rem 1.15rem at calc(100% - 0.9rem) 50%, #3A4F6E 0 55%, #2E3F59 56% 70%, transparent 71%),
+      linear-gradient(90deg, rgba(70,40,15,.45) 1.6rem, transparent 4rem, transparent calc(100% - 5rem), rgba(70,40,15,.35) calc(100% - 1.6rem)),
+      linear-gradient(180deg, #F6EEDB 0%, #E7D8B5 30%, #D8C496 55%, #C0A672 80%, #A68A58 100%);
+    box-shadow: inset 0 -3px 5px rgba(90,65,30,.3), 0 6px 10px -4px rgba(31,43,61,.5); }
+  .scroll::before { top:-1.15rem; }
+  .scroll::after { bottom:-1.15rem; }
+
+  /* the sheet: aged paper, ragged and ripped edges, a burn hole */
+  .scroll > .sheet { position:absolute; inset:0; z-index:0;
     background:
-      radial-gradient(circle at 0.55rem 50%, #3A4F6E 0 0.42rem, transparent 0.45rem),
-      radial-gradient(circle at calc(100% - 0.55rem) 50%, #3A4F6E 0 0.42rem, transparent 0.45rem),
-      linear-gradient(180deg, #F7F1E3 0%, #E9DDC2 45%, #D5C29B 85%, #C7B285 100%);
-    box-shadow: 0 3px 6px -2px rgba(31, 43, 61, 0.35);
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42  0 0 0 0 .30  0 0 0 0 .14  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.55'/></svg>"),
+      /* fold creases */
+      linear-gradient(180deg, transparent calc(36% - 1px), rgba(110,80,35,.22) 36%, rgba(255,250,235,.55) calc(36% + 1px), transparent calc(36% + 3px)),
+      linear-gradient(180deg, transparent calc(70% - 1px), rgba(110,80,35,.18) 70%, rgba(255,250,235,.5) calc(70% + 1px), transparent calc(70% + 3px)),
+      /* scorched corners */
+      radial-gradient(circle at 0 0, rgba(60,32,10,.75) 0 1.4rem, rgba(120,70,25,.45) 3rem, transparent 6.5rem),
+      radial-gradient(circle at 100% 100%, rgba(60,32,10,.7) 0 1.6rem, rgba(120,70,25,.4) 3.4rem, transparent 7rem),
+      radial-gradient(circle at 100% 0, rgba(120,70,25,.35) 0 1rem, transparent 4rem),
+      /* browned edges */
+      linear-gradient(90deg, rgba(110,70,25,.42), rgba(110,70,25,0) 2.4rem, rgba(110,70,25,0) calc(100% - 2.4rem), rgba(110,70,25,.42)),
+      radial-gradient(ellipse 125% 90% at 50% 50%, rgba(255,255,255,0) 48%, rgba(110,75,30,.34) 100%),
+      #E9DCBC;
+    clip-path: polygon(
+      0 1.2rem, 1.1% 4%, 0.2% 9%, 1.3% 15%, 0.4% 21%, 1.2% 27%, 0.3% 31.5%,
+      3.4% 32.6%, 1.1% 33.6%, 4.2% 34.8%, 0.6% 36.2%,
+      1.2% 42%, 0.2% 49%, 1.1% 57%, 0.3% 64%, 1.3% 72%, 0.2% 79%, 1.0% 86%, 0.3% 92%, 0 calc(100% - 1.2rem),
+      calc(100% - 4.5rem) calc(100% - 1.2rem), calc(100% - 3.6rem) calc(100% - 2.4rem), calc(100% - 2.7rem) calc(100% - 1.9rem),
+      calc(100% - 1.9rem) calc(100% - 3.3rem), calc(100% - 0.9rem) calc(100% - 3rem), 100% calc(100% - 4.4rem),
+      99.1% 88%, 99.8% 81%, 99% 74%, 99.7% 68%,
+      100% 47.5%, 96.4% 48.6%, 98.6% 49.4%, 95.6% 50.5%, 99.6% 51.8%,
+      99% 44%, 99.8% 37%, 99.1% 29%, 99.7% 21%, 99% 13%, 99.8% 6%, 100% 1.2rem);
+    -webkit-mask: radial-gradient(circle at calc(100% - 1.55rem) 63%, transparent 0 0.62rem, #000 0.66rem), radial-gradient(circle at calc(100% - 1.05rem) calc(63% + 0.55rem), transparent 0 0.42rem, #000 0.46rem);
+    -webkit-mask-composite: source-in;
+    mask: radial-gradient(circle at calc(100% - 1.55rem) 63%, transparent 0 0.62rem, #000 0.66rem), radial-gradient(circle at calc(100% - 1.05rem) calc(63% + 0.55rem), transparent 0 0.42rem, #000 0.46rem);
+    mask-composite: intersect;
   }
-  .scroll::before { top: -0.65rem; }
-  .scroll::after  { bottom: -0.65rem; }
-  .scroll .entry-list { border-top: 0; margin: 0; }
-  .scroll .entry-list > li { border-color: var(--rule); }
-  .scroll .entry-list > li:last-child { border-bottom: 0; }
-  .scroll .entry-meta { color: var(--ink-muted); }
-  .scroll .entry-body__title, .scroll .entry-body__title a { color: #3A4F6E; }
-  .scroll a { color: #3A4F6E; text-decoration-color: rgba(58, 79, 110, 0.45); }
-  .scroll a:hover { color: #2B2A27; text-decoration-color: currentColor; }
-  .scroll a:focus-visible { outline: 3px solid #3A4F6E; outline-offset: 2px; }
-  .scroll .entry-body__note { color: var(--ink-soft); }
-  @media screen {
-    html[data-mode="dark"] .scroll .entry-body__title,
-    html[data-mode="dark"] .scroll .entry-body__title a,
-    html[data-mode="dark"] .scroll a { color: #3A4F6E; }
-    html[data-mode="dark"] .scroll a:hover { color: #2B2A27; }
-    html[data-mode="dark"] .scroll { box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.6); }
-  }
+  .scroll .mottle { position:absolute; inset:0; z-index:0; pointer-events:none; background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='1600' preserveAspectRatio='none'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.010 .006' numOctaves='3' seed='7'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .40  0 0 0 0 .16  0 0 0 1.1 -.45'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>") center / 100% 100% no-repeat; mix-blend-mode: multiply; opacity:.9; }
+  .scroll-wrap { position:relative; filter: drop-shadow(0 12px 16px rgba(31,43,61,.38)); }
+
+  /* wear layer: coffee rings, foxing, the scorch around the hole (under the text) */
+  .scroll > .wear { position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      /* scorch ring around the burn hole */
+      radial-gradient(circle at calc(100% - 1.55rem) 63%, rgba(25,12,4,.95) 0 0.75rem, rgba(70,35,10,.75) 0.95rem, rgba(130,80,30,.35) 1.6rem, transparent 2.6rem),
+      radial-gradient(circle at calc(100% - 1.05rem) calc(63% + 0.55rem), rgba(25,12,4,.9) 0 0.55rem, rgba(90,50,15,.4) 1rem, transparent 1.6rem),
+      /* coffee ring, top right (partial) */
+      radial-gradient(circle at calc(100% + 0.4rem) 9.5rem, transparent 0 2.45rem, rgba(120,72,28,.38) 2.55rem, rgba(120,72,28,.16) 2.8rem, transparent 2.95rem),
+      radial-gradient(circle at calc(100% + 0.4rem) 9.5rem, rgba(150,95,40,.07) 0 2.5rem, transparent 2.55rem),
+      /* second, fainter ring lower left in the date column */
+      radial-gradient(circle at 3.6rem 81%, transparent 0 2rem, rgba(120,72,28,.26) 2.1rem, rgba(120,72,28,.1) 2.3rem, transparent 2.45rem),
+      /* drip stain */
+      radial-gradient(ellipse 1.1rem 0.8rem at 2.1rem 23%, rgba(130,85,35,.22), transparent 70%),
+      radial-gradient(ellipse 0.5rem 0.4rem at 3.2rem 25.5%, rgba(130,85,35,.2), transparent 70%),
+      /* foxing spots */
+      radial-gradient(circle at 18% 45%, rgba(140,90,40,.28) 0 0.12rem, transparent 0.35rem),
+      radial-gradient(circle at 21% 46.5%, rgba(140,90,40,.22) 0 0.09rem, transparent 0.28rem),
+      radial-gradient(circle at 93% 30%, rgba(140,90,40,.25) 0 0.14rem, transparent 0.4rem),
+      radial-gradient(circle at 91% 31.5%, rgba(140,90,40,.2) 0 0.08rem, transparent 0.25rem),
+      radial-gradient(circle at 12% 92%, rgba(140,90,40,.25) 0 0.15rem, transparent 0.45rem),
+      radial-gradient(circle at 57% 97%, rgba(140,90,40,.2) 0 0.1rem, transparent 0.3rem),
+      /* water mark, faint, along the left */
+      radial-gradient(ellipse 4rem 7rem at 0.8rem 58%, rgba(130,95,45,.16), transparent 70%);
+    clip-path: inherit; }
+
+  .scroll { padding-bottom:6.2rem; }
+  .seal { position:absolute; z-index:2; right:clamp(2.4rem,9%,4.2rem); bottom:2.0rem; width:4.4rem; height:4.4rem; border-radius:50%;
+    background: radial-gradient(circle at 38% 34%, #5A7196 0 18%, #3A4F6E 45%, #2C3D57 100%);
+    box-shadow: 0 0 0 4px rgba(58,79,110,.35), 0 3px 6px rgba(31,43,61,.45), inset 0 -3px 6px rgba(0,0,0,.25);
+    display:grid; place-items:center; transform: rotate(-8deg); }
+  .seal img { width:62%; height:auto; opacity:.95; }
+  .seal::before { content:""; position:absolute; inset:-0.45rem; border-radius:46% 54% 50% 50% / 52% 48% 55% 45%; background:rgba(58,79,110,.55); z-index:-1; }
+  .seal::after { content:""; position:absolute; left:-0.5rem; top:58%; width:0.9rem; height:0.55rem; border-radius:50%; background:rgba(58,79,110,.6); }
   @media print {
-    .scroll { background: none; box-shadow: none; padding: 0; margin: 0; }
-    .scroll::before, .scroll::after { display: none; }
+    .scroll-wrap { filter:none; }
+    .scroll { margin:0; padding:0; }
+    .scroll::before, .scroll::after, .scroll > .sheet, .scroll > .wear, .seal { display:none; }
   }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -103,7 +149,10 @@ The power of e-mentoring in modern higher education</a>
     <section class="two-col">
       <div class="aside-label">Essays</div>
       <div>
-        <div class="scroll">
+        <div class="scroll-wrap"><div class="scroll">
+          <span class="sheet" aria-hidden="true"><span class="mottle"></span></span>
+          <span class="wear" aria-hidden="true"></span>
+          <span class="seal" aria-hidden="true"><img src="/owl-parchment.svg" alt=""></span>
         <ul class="entry-list">
           <li>
             <div class="entry-meta">Oct 13, 2026</div>
@@ -169,7 +218,7 @@ The power of e-mentoring in modern higher education</a>
             </div>
           </li>
         </ul>
-        </div>
+        </div></div>
         <p class="muted small sans" style="margin-top: 2rem;">New essays every other Tuesday. Also on <a href="https://substack.com/@bluebrazelton" target="_blank" rel="noopener">Substack</a>.</p>
       </div>
     </section>
