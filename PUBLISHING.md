@@ -33,9 +33,10 @@ Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` 
 4. **Friday before release:** commit + push (or merge the PR) to `main`.
    GitHub Pages publishes in about a minute. The dateline and the `writing.html`
    entry still show the Tuesday release date.
-5. **Same Friday:** schedule the Substack cross-post (the full piece, with the
-   canonical URL set to the bluebrazelton.com page) and a short LinkedIn post
-   linking to the site, both for **Tuesday at 9:00 am**.
+5. **Same Friday:** schedule the Substack cross-post (the full piece, with a
+   line at the top linking back to the bluebrazelton.com page) and a short
+   LinkedIn post linking to the site, both for **Tuesday at 9:00 am**.
+   Substack has no canonical-URL field, which is why the site goes up first.
 
 ## Notes
 - Internal links are root-absolute: `/filename.html` (leading slash), never `../`.
