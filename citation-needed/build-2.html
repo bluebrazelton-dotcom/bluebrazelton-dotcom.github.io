@@ -60,12 +60,9 @@
     .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
     .cn-doc li { margin-bottom: 0.35rem; }
     .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
-    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
-    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
-      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
-    .cn-draft strong { color: #C0392B; }
-    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
-    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+    .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
+    .cn-essay { margin: 0.5rem 0 1rem; }
+    .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
   </style>
 </head>
 <body data-theme="warm" data-accent="warmblue" data-type="editorial">
@@ -116,20 +113,16 @@
     <p class="cn-note">Progress saves in your browser.</p>
 
     <span class="cn-section-head">How it was built</span>
-    <p>The one-page brief is dated October 13, the same day Build 1 closed, and states that nothing from the previous build's folder is in scope. The playable Chapter 1 slice is dated October 14.</p>
-
-    <div class="cn-draft"><strong>Draft slot, how it was built.</strong> Your account of the process for this build: what you asked for, how the sessions went, and what you had to spell out. Remove this box before merging.</div>
+    <p>I started Build 2 in Claude Code, with the Fable model, on October 13, the same day Build 1 closed, and it took fewer than five sessions. The difference was not the tool so much as the person using it: after six weeks with Build 1, I could finally express the project clearly, especially the game economy that had eaten so much of my time before. The brief fit on one page (one engine for every chapter, four kinds of buttons, a resource called Patience that drains when you click and refills when you rest, and a short list of joke rules), and its first line said nothing from the previous build’s folder was in scope. We balanced Chapter 1 in a spreadsheet and a small simulation before any code existed, and the brief told the agent to stop after Chapter 1 and show me, so most of my job was letting Claude Code run and answering a few questions here and there. I played the slice, the pacing got faster after that first playtest, and Chapter 1 was done on October 14.</p>
 
     <span class="cn-section-head">The scope document</span>
     <p>The one-page brief written on October 13, 2026, at the start of Build 2, published as written. It calls itself the whole brief for the first slice. <a href="/citation-needed/scope/build-2.html">Read the scope document</a>.</p>
 
     <span class="cn-section-head">What worked</span>
-
-    <div class="cn-draft"><strong>Draft slot, what worked.</strong> What came out well in this build. Remove this box before merging.</div>
+    <p>This is the build where I finally got more activity into the game for the player. The Patience Game is not an idle game (that’s next!), and I had learned that if there is nothing for a player to do while the currency stacks up, they lose interest, so the brief gave every chapter four kinds of buttons to tap, hold, wait on, and submit, each with its own rhythm. The discipline held, too: the game does what the one-page brief asked for, and I have not found anything in it that the brief did not ask for. The upgrade jokes land because the brief limited them to one dry line each (the Planner is “Color-coded. The colors don’t mean anything yet.”), and setbacks are a two-second animation instead of a punishment.</p>
 
     <span class="cn-section-head">Where the slop crept in</span>
-
-    <div class="cn-draft"><strong>Draft slot, where the slop crept in.</strong> Specific problems, ideally with a screenshot or a quoted line from the game, and what it took to fix them (or why you left them). Remove this box before merging.</div>
+    <p>Very little slop crept in, because very little was allowed in; the bigger problem is the opposite of slop, since Build 2 is one chapter of a planned seven, and the end of Chapter 1 is exactly where I told it to stop and exactly where my own patience ran out. The game is called The Patience Game, and I see the irony. Two small leftovers made it into the public build. The first is a “Test: infinite Patience” link in the footer, a developer shortcut that should have been hidden, and I have left it there on purpose as an honest artifact of how the game was tested. The second is a gray box behind the flashcard sprite, which is a flaw, and it is also exactly the kind of tiny fix I could get obsessed with, hunting for more issues like it while the bigger ones wait. I have been in that car before, and I already know the radio presets are not the problem.</p>
 
     <hr class="rule">
     <p class="cn-note">The other builds: <a href="/citation-needed/build-1.html">Build 1: The Living Record</a> &middot; <a href="/citation-needed/build-3.html">Build 3: Citation Needed</a></p>
