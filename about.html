@@ -9,6 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css?v=10" />
 <script src="/mode.js"></script>
+<style>
+  /* About: the photo floats left and the text wraps beside it, then fills the full width below. */
+  .about-wrap { display: flow-root; }
+  .about-wrap__photo { float: left; width: 15rem; margin: 0.35rem 2.25rem 1.25rem 0; }
+  .about-wrap__text p { max-width: none; text-wrap: wrap; }
+  .about-wrap__text p:first-child { margin-top: 0; }
+  @media (max-width: 560px) {
+    .about-wrap__photo { float: none; width: 100%; max-width: 20rem; margin: 0 auto 1.5rem; }
+  }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -41,11 +51,11 @@
       <p class="page-head__sub">My career focus has been to try to help others understand the college environment and help them succeed within it, and I'm still trying today.</p>
     </header>
 
-    <section class="two-col">
-      <figure style="margin: 0;">
+    <section class="about-wrap">
+      <figure class="about-wrap__photo">
         <img src="/portrait-about.jpg" alt="Blue Brazelton with a small dog" width="1000" height="1334" loading="eager" decoding="async" style="display:block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border: 1px solid var(--rule);" />
       </figure>
-      <div>
+      <div class="about-wrap__text">
         <p>I'm an Associate Professor at Northern Arizona University, where my work sits at the intersection of higher education, organizational theory leadership, and the technology that's quietly complicating and accelerating things. The short framing: I'm a practitioner-scholar who thinks human-centered organizations are the only ones that can effectively implement opportunity technologies. </p>
 
         <p>Most of what I do right now revolves around AI in higher education, specifically how institutions go about adopting generative tools without losing the parts of academic life that make them worth keeping. That includes a multi-phase governance study with some varying sample sizes and a few census studies too. I have a book in progress (proposal and sample chapter under review) that connects AI use frameworks and instructional design.  I am also preparing essays on the future of AI-supported faculty work, partially reflective of a working system called Aegis / MAPS that started as a personal tool and became a small piece of evidence about how this work can actually be done.</p>
