@@ -890,3 +890,31 @@ html[data-mode="dark"] { color-scheme: dark; }
   .site-header__inner .mode-toggle { margin-left: auto; }
   .site-header__inner .nav { margin-left: 0; }
 }
+
+/* ================================================================
+   PAGE TITLE BLOCKS (Oct 2026): one pattern on every top-level page.
+   Eyebrow + h1 + lead, left-aligned in the standard .shell width.
+   .page-head--owl adds the brand owl on the right (Slate; Parchment in
+   dark mode); hidden on phones, where the header already carries it.
+   ================================================================ */
+.page-head .lead { margin-top: 1rem; margin-bottom: 0; }
+.page-head--owl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem 3rem;
+  align-items: center;
+}
+.page-head__owl { width: clamp(6.5rem, 12vw, 9rem); }
+.page-head__owl img { display: block; width: 100%; height: auto; }
+.page-head__owl--dark { display: none !important; }
+@media screen {
+  html[data-mode="dark"] .page-head__owl--light { display: none !important; }
+  html[data-mode="dark"] .page-head__owl--dark { display: block !important; }
+}
+@media (max-width: 720px) {
+  .page-head--owl { grid-template-columns: 1fr; }
+  .page-head__owl { display: none; }
+}
+/* Body copy that reads best narrower than the shell stays left-aligned
+   (so the page edge never shifts between pages). */
+.measure-wide { max-width: 46rem; }

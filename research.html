@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/styles.css?v=10" />
+<link rel="stylesheet" href="/styles.css?v=11" />
 <script src="/mode.js"></script>
 <style>
   /* Research: expandable sections (native <details>; closed by default, opened for printing). */
@@ -56,12 +56,18 @@
 </header>
 <main>
   <div class="shell">
-    <header class="page-head">
+    <header class="page-head page-head--owl">
+      <div>
       <span class="eyebrow">Research</span>
       <h1>What animates the agenda.</h1>
-      <p class="lead" style="margin-top: 1rem;">
+      <p class="lead">
         The through-line is technology implementation: how universities actually take up new tools, who decides, who's left out of the deciding, and what the resulting governance looks like once the dust settles. Generative AI is the current case; the underlying questions are older but as relevant as ever.
       </p>
+      </div>
+      <div class="page-head__owl" aria-hidden="true">
+        <img class="page-head__owl--light" src="/owl-slate.svg" alt="" width="114" height="102">
+        <img class="page-head__owl--dark" src="/owl-parchment.svg" alt="" width="114" height="102">
+      </div>
     </header>
     <!-- Current projects -->
     <section class="two-col">
@@ -122,7 +128,7 @@
           <li>
             <span class="entry-meta">2026</span>
             <div class="entry-body">
-              <p class="entry-body__title">Beyond the campus: The power of e-mentoring in modern higher education.</p>
+              <p class="entry-body__title"><a href="https://www.mentoringbook.org/">Beyond the campus: The power of e-mentoring in modern higher education.</a></p>
               <span class="entry-body__cite">Baciu, C. B., &amp; Brazelton, G. B. Emerald Publishing.</span>
             </div>
           </li>
