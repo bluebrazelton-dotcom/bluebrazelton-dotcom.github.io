@@ -91,6 +91,8 @@
   p { margin: 0 0 14px; }
   a { color: var(--link); text-decoration: none; border-bottom: 1px solid transparent; }
   a:hover { border-bottom-color: currentColor; }
+  p a, td a, li a { text-decoration: underline; text-underline-offset: 2px; border-bottom: 0; }
+  nav.toc a { text-decoration: none; }
   strong { font-weight: 700; }
   ol { margin: 0 0 14px; padding-left: 22px; }
   ol li { margin-bottom: 8px; }
@@ -512,7 +514,7 @@
   </div>
   <p class="section-eyebrow">Full detail</p>
   <p class="matrix-note">Scroll right for full detail — the program column stays fixed.</p>
-  <div class="matrix-wrap">
+  <div class="matrix-wrap" tabindex="0" role="region" aria-label="Scorecard matrix (scrolls sideways)">
     <table class="matrix" aria-label="Peer comparison matrix">
       <thead>
         <tr>
