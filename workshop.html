@@ -6,7 +6,7 @@
   <meta property="og:type" content="website">
 <meta property="og:site_name" content="Blue Brazelton">
 <meta property="og:title" content="Workshop — Blue Brazelton">
-<meta property="og:description" content="Small tools and creative projects built at the intersection of professional work and AI collaboration. Free to try or download.">
+<meta property="og:description" content="Side quests: small tools and creative projects built at the intersection of professional work and AI collaboration. All free to use.">
 <meta property="og:url" content="https://www.bluebrazelton.com/workshop.html">
 <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
 <meta property="og:image:width" content="1200">
@@ -14,12 +14,103 @@
 <meta property="og:image:alt" content="Blue Brazelton owl logo and name, www.bluebrazelton.com">
 <meta name="twitter:card" content="summary_large_image">
 <title>Workshop — Blue Brazelton</title>
-  <meta name="description" content="Small tools and creative projects built at the intersection of professional work and AI collaboration. Free to try or download.">
+  <meta name="description" content="Side quests: small tools and creative projects built at the intersection of professional work and AI collaboration. All free to use.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@500;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css?v=11">
 <script src="/mode.js"></script>
+<style>
+  /* Workshop as a "side quest" floor (Oct 2026, direction D: "New achievement!",
+     inspired by the System notifications in Dungeon Crawler Carl; all wording original).
+     A dark dungeon panel holds one achievement card per project. The panel stays
+     dark in both modes (the way the Writing scroll stays parchment); the page head,
+     header and footer follow the sitewide light/dark colors. Each card sets its loot
+     tier color with --tier. Prints as a plain list.
+     To add a project: copy one <li class="ach"> and change --tier, text and links. */
+  .dungeon { --night:#17212F; --card:#22324A; --well:#1A2638; --line:#4A5D7C;
+    --parch:#EFE6D3; --soft:#D9D1C0; --muted:#BDB6A8; --sky:#9CCDEE;
+    --mono: "Roboto Mono", ui-monospace, Menlo, monospace;
+    position:relative; margin:2.75rem 0 1rem; padding:2.5rem clamp(1rem,4vw,2.75rem) 3.25rem;
+    border-radius:10px; color:var(--parch); background-color:var(--night);
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(246,196,83,.55) 0 2px, transparent 3px),
+      radial-gradient(circle at 34% 8%, rgba(255,158,110,.55) 0 2px, transparent 3px),
+      radial-gradient(circle at 58% 22%, rgba(110,231,183,.5) 0 2px, transparent 3px),
+      radial-gradient(circle at 82% 46%, rgba(196,161,255,.5) 0 2px, transparent 3px),
+      radial-gradient(circle at 6% 64%, rgba(156,205,238,.5) 0 2px, transparent 3px),
+      radial-gradient(circle at 92% 86%, rgba(246,196,83,.45) 0 2px, transparent 3px),
+      radial-gradient(circle at 44% 96%, rgba(255,158,110,.45) 0 2px, transparent 3px),
+      radial-gradient(ellipse 70% 45% at 85% 0%, rgba(196,161,255,.22), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 0% 100%, rgba(110,231,183,.14), transparent 70%),
+      linear-gradient(rgba(156,205,238,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(156,205,238,.05) 1px, transparent 1px);
+    background-size: 100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%, 48px 48px, 48px 48px;
+    box-shadow:0 18px 30px -12px rgba(15,22,33,.6); }
+  .dungeon p { max-width:none; }
+
+  /* System message + owl announcer */
+  .sys { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:1.5rem; }
+  .sys__text { flex:1 1 22rem; min-width:0; }
+  .sys__label { margin:0; font:700 .875rem/1.3 var(--mono); letter-spacing:.18em; text-transform:uppercase; color:var(--sky) !important; }
+  .sys__msg { margin:.65rem 0 0; max-width:36rem !important; font-family:var(--sans); font-size:1.0625rem; line-height:1.6; color:var(--soft); }
+  .sys__msg strong { color:var(--parch); }
+  .announcer { flex:none; margin-left:auto; display:flex; align-items:flex-start; gap:.4rem; }
+  .announcer img { display:block; width:8.25rem; height:auto; filter:drop-shadow(0 0 18px rgba(156,205,238,.45)) !important; }
+  .bubble { position:relative; margin-top:.5rem; padding:.75rem 1rem; border-radius:14px; background:#F6C453; color:#17212F;
+    font:700 1.125rem/1.1 var(--mono); letter-spacing:.04em; transform:rotate(-4deg);
+    box-shadow:0 6px 0 #B98A2A, 0 10px 20px rgba(0,0,0,.35); }
+  .bubble::after { content:""; position:absolute; right:-12px; top:1.4rem; border-top:10px solid transparent; border-bottom:10px solid transparent; border-left:14px solid #F6C453; }
+  @media (prefers-reduced-motion: no-preference) {
+    .bubble { animation: pop .6s cubic-bezier(.3,1.6,.5,1) .3s both; }
+    @keyframes pop { from { transform:rotate(-4deg) scale(.4); opacity:0; } to { transform:rotate(-4deg) scale(1); opacity:1; } }
+  }
+  @media (max-width: 560px) {
+    .announcer img { width:5.5rem; }
+    .bubble { font-size:.95rem; }
+  }
+
+  /* Achievement cards */
+  .ach-list { list-style:none; margin:2.5rem 0 0; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap:2.1rem; }
+  .ach { --tier:var(--sky); display:flex; flex-direction:column; overflow:hidden; background:var(--card);
+    border:2px solid var(--tier); border-radius:8px;
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--tier) 16%, transparent), 0 0 30px color-mix(in srgb, var(--tier) 16%, transparent); }
+  .ach--bronze { --tier:#FF9E6E; }
+  .ach--silver { --tier:#6EE7B7; }
+  .ach--gold { --tier:#F6C453; }
+  .ach--legendary { --tier:#C4A1FF; }
+  .ach__banner { padding:.85rem 1.25rem 1rem; background:var(--tier); color:#17212F; }
+  .ach__unlocked { margin:0; display:flex; flex-wrap:wrap; justify-content:space-between; gap:.25rem .75rem;
+    font:700 .78rem/1.3 var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+  .ach__name { margin:.35rem 0 0; font-family:var(--serif); font-weight:700; font-size:1.3rem; line-height:1.2; }
+  .ach__quip { margin:0; padding:.85rem 1.25rem; font-family:var(--sans); font-style:italic; font-size:.95rem; line-height:1.5; color:var(--soft); border-bottom:1px solid var(--line); }
+  .ach__thumb { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
+  .ach__body { display:flex; flex-direction:column; gap:.9rem; flex:1; padding:1.1rem 1.25rem 1.4rem; }
+  .ach__head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem .9rem; }
+  .ach__head h3 { margin:0; font-size:1.45rem; line-height:1.25; color:var(--parch) !important; }
+  .ach__status { margin:0; padding:.25rem .65rem; border:1.5px solid var(--tier); border-radius:999px;
+    font:700 .78rem/1.3 var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--tier); }
+  .ach__desc { margin:0; font-family:var(--sans); font-size:.97rem; line-height:1.55; color:var(--soft); }
+  .loot { padding:.9rem 1rem; background:var(--well); border:1px dashed var(--tier); border-radius:6px; }
+  .loot h4 { margin:0; font:700 .78rem/1.3 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--tier) !important; }
+  .loot ul { list-style:none; margin:.6rem 0 0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  .loot li { font-family:var(--sans); font-size:.92rem; line-height:1.5; color:var(--soft); }
+  .loot strong { color:var(--parch); }
+  .dungeon a.claim, html[data-mode="dark"] .dungeon a.claim { align-self:flex-start; margin-top:auto; display:inline-flex; align-items:center; min-height:44px; padding:0 1.1rem;
+    border-radius:4px; background:var(--tier); color:#17212F; font-family:var(--sans); font-weight:700; font-size:.95rem; text-decoration:none; }
+  .dungeon a.claim:hover, html[data-mode="dark"] .dungeon a.claim:hover { color:#17212F; filter:brightness(1.12); }
+  .dungeon a.claim:focus-visible, html[data-mode="dark"] .dungeon a.claim:focus-visible { outline:3px solid var(--parch); outline-offset:3px; }
+  .visually-hidden { position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+  @media print {
+    .dungeon { background:none; color:#2B2A27; box-shadow:none; padding:0; }
+    .announcer, .ach__thumb { display:none; }
+    .ach { border:1px solid #999; box-shadow:none; background:none; }
+    .ach__banner { background:none; }
+    .sys__msg, .ach__quip, .ach__desc, .loot li, .ach__head h3, .loot strong, .sys__msg strong { color:#2B2A27 !important; }
+    .loot { background:none; }
+  }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -48,9 +139,9 @@
 
     <header class="page-head page-head--owl">
       <div>
-      <span class="eyebrow">Projects</span>
+      <span class="eyebrow">Side quests</span>
       <h1>Workshop</h1>
-      <p class="lead">Small tools and creative projects I've built at the intersection of my professional work and AI collaboration. Some are practical, some are for fun. All are free to try or download.</p>
+      <p class="lead">Small tools and creative projects I take on beside my professional work, usually with an AI collaborator. Some are practical, some are for fun. All of them are free to use, and I hope you will.</p>
       </div>
       <div class="page-head__owl" aria-hidden="true">
         <img class="page-head__owl--light" src="/owl-slate.svg" alt="" width="114" height="102">
@@ -58,57 +149,126 @@
       </div>
     </header>
 
-    <div class="workshop-grid">
-
-      <!-- Citation Needed -->
-      <article class="workshop-card">
-        <img class="workshop-card__thumb"
-             src="/citation-needed/img/thumb.jpg"
-             alt="Screenshots of three versions of the same game overlapping: an illustrated career dashboard, a simple flashcard clicker, and a dark pixel-art lab">
-        <div class="workshop-card__body">
-          <h2>Citation Needed</h2>
-          <p>One incremental game about an academic career, built three times with three AI tools: six weeks with ChatGPT and Codex, two days with Claude Code, and one afternoon with Gemini. All three are playable, with notes on how each was made.</p>
-          <a class="button button--accent arrow" href="/citation-needed/" aria-label="Play and read about Citation Needed">Play and read</a>
+    <section class="dungeon" aria-labelledby="sys-label">
+      <div class="sys">
+        <div class="sys__text">
+          <h2 id="sys-label" class="sys__label">System message</h2>
+          <p class="sys__msg"><strong>Welcome, visitor. You have found the Workshop.</strong> Nothing in here is required. That is what makes them side quests. Everything on this floor is free to use: no coins, no sign-up, no catch. Take whatever helps. Four achievements are logged here, and every one of them dropped loot. Please do not feed the AI.</p>
         </div>
-      </article>
-
-      <!-- The Dimming -->
-      <article class="workshop-card">
-        <img class="workshop-card__thumb"
-             src="/dimming/dimming-thumb.jpg"
-             alt="Abandoned gas station at night, fog rolling in, a single overhead light glowing warm amber under the service canopy">
-        <div class="workshop-card__body">
-          <h2>The Dimming</h2>
-          <p>A fake AI radio station broadcasting from a slow apocalypse. 108.1 FM out of Dimming, MI: DJ Cass at the mic, the world quieter than it used to be, the signal still finding you.</p>
-          <a class="button button--accent arrow" href="/dimming/dimming.html">Tune in</a>
+        <div class="announcer" aria-hidden="true">
+          <div class="bubble">NEW<br>ACHIEVEMENT!</div>
+          <img src="/owl-parchment.svg" alt="" width="132" height="118">
         </div>
-      </article>
+      </div>
 
-      <!-- The Hourglass -->
-      <article class="workshop-card">
-        <img class="workshop-card__thumb"
-             src="/hourglass/demohourglass.gif"
-             alt="Animated demo of The Hourglass: a 7-day grid with color-coded time blocks">
-        <div class="workshop-card__body">
-          <h2>The Hourglass</h2>
-          <p>Plan your typical week in 30-minute blocks. Drag them onto a 7-day grid yourself, or use the built-in prompt to hand the draft to any AI assistant and negotiate from there.</p>
-          <a class="button button--accent arrow" href="/hourglass.html">Open</a>
-        </div>
-      </article>
+      <ul class="ach-list">
 
-      <!-- Dungeon Crawler Carl TTRPG -->
-      <article class="workshop-card">
-        <img class="workshop-card__thumb"
-             src="/dcc/dcc-thumb.jpg"
-             alt="Top-down view of a neon-lit dungeon floor, its chambers glowing red, blue, and magenta, scattered with dice and confetti">
-        <div class="workshop-card__body">
-          <h2>Dungeon Crawler Carl — TTRPG</h2>
-          <p>A tabletop RPG built inside the world of Matt Dinniman's Dungeon Crawler Carl novels. Half game, half AI cognition lab: designing rules under an AI referee turned out to be the sharpest test of what these models could and couldn't hold onto.</p>
-          <a class="button button--accent arrow" href="/dcc/dcc_index.html" aria-label="Learn more about the Dungeon Crawler Carl TTRPG">Learn more</a>
-        </div>
-      </article>
+        <!-- Citation Needed -->
+        <li class="ach ach--bronze">
+          <div class="ach__banner">
+            <p class="ach__unlocked"><span>★ Achievement unlocked</span><span>Bronze tier</span></p>
+            <p class="ach__name">Three Times the Charm, Allegedly</p>
+          </div>
+          <p class="ach__quip">You built the same game three times with three different AIs. Most crawlers stop at one. The System respects your commitment to the bit.</p>
+          <img class="ach__thumb" src="/citation-needed/img/thumb.jpg"
+               alt="Screenshots of three versions of the same game overlapping: an illustrated career dashboard, a simple flashcard clicker, and a dark pixel-art lab">
+          <div class="ach__body">
+            <div class="ach__head">
+              <h3>Citation Needed</h3>
+              <p class="ach__status"><span class="visually-hidden">Status: </span>Game saved</p>
+            </div>
+            <p class="ach__desc">One incremental game about an academic career, built three times with three AI tools: six weeks with ChatGPT and Codex, two days with Claude Code, and one afternoon with Gemini. All three are playable, with notes on how each was made.</p>
+            <div class="loot">
+              <h4>Loot dropped ×2</h4>
+              <ul>
+                <li><strong>Scroll of Scoping (cursed).</strong> The AI builds exactly what you asked for. That is the curse.</li>
+                <li><strong>Mirror of Playtesting.</strong> If you didn’t play it, nobody did. The slop lives in the parts you skipped.</li>
+              </ul>
+            </div>
+            <a class="claim" href="/citation-needed/" aria-label="Play and read about Citation Needed">Play and read →</a>
+          </div>
+        </li>
 
-    </div>
+        <!-- The Dimming -->
+        <li class="ach ach--silver">
+          <div class="ach__banner">
+            <p class="ach__unlocked"><span>★ Achievement unlocked</span><span>Silver tier</span></p>
+            <p class="ach__name">Dead Air Is Not an Option</p>
+          </div>
+          <p class="ach__quip">You handed an AI a radio station and the end of the world. It stayed on the air for 45 episodes. Rating: ominous, but consistent.</p>
+          <img class="ach__thumb" src="/dimming/dimming-thumb.jpg"
+               alt="Abandoned gas station at night, fog rolling in, a single overhead light glowing warm amber under the service canopy">
+          <div class="ach__body">
+            <div class="ach__head">
+              <h3>The Dimming</h3>
+              <p class="ach__status"><span class="visually-hidden">Status: </span>Quest complete</p>
+            </div>
+            <p class="ach__desc">A fake AI radio station broadcasting from a slow apocalypse. 108.1 FM out of Dimming, MI: DJ Cass at the mic, the world quieter than it used to be, the signal still finding you.</p>
+            <div class="loot">
+              <h4>Loot dropped ×2</h4>
+              <ul>
+                <li><strong>Storyboard, slightly late.</strong> Found at episode 18. Would have been extremely useful at episode 1.</li>
+                <li><strong>Bottomless bag of instrumentals.</strong> The music AI does not want to make long tracks without lyrics. Keep rolling. It will eventually give in.</li>
+              </ul>
+            </div>
+            <a class="claim" href="/dimming/dimming.html" aria-label="Tune in to The Dimming">Tune in →</a>
+          </div>
+        </li>
+
+        <!-- The Hourglass -->
+        <li class="ach ach--gold">
+          <div class="ach__banner">
+            <p class="ach__unlocked"><span>★ Achievement unlocked</span><span>Gold tier</span></p>
+            <p class="ach__name">Master of the Half Hour</p>
+          </div>
+          <p class="ach__quip">You sorted a whole week into 210 tidy little blocks. The System is impressed and only slightly concerned.</p>
+          <img class="ach__thumb" src="/hourglass/demohourglass.gif"
+               alt="Animated demo of The Hourglass: a 7-day grid with color-coded time blocks">
+          <div class="ach__body">
+            <div class="ach__head">
+              <h3>The Hourglass</h3>
+              <p class="ach__status"><span class="visually-hidden">Status: </span>Complete! (for now)</p>
+            </div>
+            <p class="ach__desc">Plan your typical week in 30-minute blocks. Drag them onto a 7-day grid yourself, or use the built-in prompt to hand the draft to any AI assistant and negotiate from there.</p>
+            <div class="loot">
+              <h4>Loot dropped ×2</h4>
+              <ul>
+                <li><strong>Empty flask.</strong> Built it in Flask, then remembered a static site can’t run Flask. Ported. Humbled.</li>
+                <li><strong>Seven questions.</strong> An AI plans a better week when it has to ask before it answers. Same, honestly.</li>
+              </ul>
+            </div>
+            <a class="claim" href="/hourglass.html">Open The Hourglass →</a>
+          </div>
+        </li>
+
+        <!-- Dungeon Crawler Carl TTRPG (fan-project credit lives on the DCC page) -->
+        <li class="ach ach--legendary">
+          <div class="ach__banner">
+            <p class="ach__unlocked"><span>★ Achievement unlocked</span><span>Legendary tier</span></p>
+            <p class="ach__name">The Referee Has Notes</p>
+          </div>
+          <p class="ach__quip">You asked an AI to run a dungeon, then kept a log of every rule it forgot. Bold. The System is choosing not to take this personally.</p>
+          <img class="ach__thumb" src="/dcc/dcc-thumb.jpg"
+               alt="Top-down view of a neon-lit dungeon floor, its chambers glowing red, blue, and magenta, scattered with dice and confetti">
+          <div class="ach__body">
+            <div class="ach__head">
+              <h3>Dungeon Crawler Carl — TTRPG</h3>
+              <p class="ach__status"><span class="visually-hidden">Status: </span>Complete! (for now)</p>
+            </div>
+            <p class="ach__desc">A tabletop RPG built inside the world of Matt Dinniman's Dungeon Crawler Carl novels. Half game, half AI cognition lab: designing rules under an AI referee turned out to be the sharpest test of what these models could and couldn't hold onto.</p>
+            <div class="loot">
+              <h4>Loot dropped ×2</h4>
+              <ul>
+                <li><strong>Potion of amnesia (auto-equipped).</strong> The narrator wakes up every session remembering nothing. Build around it or relive it.</li>
+                <li><strong>Loaded dice, confiscated.</strong> Let an AI roll its own dice and the dungeon gets suspiciously convenient.</li>
+              </ul>
+            </div>
+            <a class="claim" href="/dcc/dcc_index.html" aria-label="Enter the dungeon: the Dungeon Crawler Carl TTRPG">Enter the dungeon →</a>
+          </div>
+        </li>
+
+      </ul>
+    </section>
 
   </div>
 </main>
