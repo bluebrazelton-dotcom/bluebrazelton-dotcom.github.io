@@ -146,6 +146,22 @@
   .pic svg { width: 100%; height: 100%; display: block; }
   .pic.pic--none, .pic.pic--private { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #E6E6E6; color: #888; font: 700 .7rem/1.25 Verdana, sans-serif; text-transform: uppercase; letter-spacing: .04em; }
   .pic.pic--private span { display: block; font-size: 1.6rem; margin-bottom: .2rem; }
+  /* Glamorously private: hot-pink velvet, gold trim, sparkles */
+  .pic.pic--glam { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .1rem;
+    border: 2px solid #E8C35A; box-shadow: inset 0 0 0 2px #7A1450;
+    background:
+      radial-gradient(circle at 18% 22%, #fff 0 1.2px, transparent 2px),
+      radial-gradient(circle at 80% 18%, #FFE9A8 0 1.5px, transparent 2.5px),
+      radial-gradient(circle at 72% 80%, #fff 0 1px, transparent 2px),
+      radial-gradient(circle at 25% 78%, #FFE9A8 0 1.2px, transparent 2px),
+      radial-gradient(ellipse at 50% 30%, #FF5FAE, #C2186F 55%, #6E0F45); }
+  .glam__lock { font-size: 1.35rem; filter: drop-shadow(0 0 4px #FFD86B); }
+  .glam__word { font: italic 700 .95rem/1 Georgia, "Times New Roman", serif; color: #FFE9A8; text-shadow: 0 0 6px rgba(255,216,107,.9), 0 1px 0 #6E0F45; letter-spacing: .03em; }
+  .glam__note { font: .52rem/1.1 Verdana, sans-serif; color: #FFD3EA; text-transform: lowercase; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pic.pic--glam::after { content: "✦"; position: absolute; top: 6%; right: 9%; color: #FFE9A8; font-size: .8rem; animation: twinkle 1.6s ease-in-out infinite; }
+    @keyframes twinkle { 50% { opacity: .2; transform: scale(.6); } }
+  }
   .pic { display: grid; place-items: center; width: 100%; aspect-ratio: 1; max-width: 90px; margin: 0 auto; border: 1px solid #999; overflow: hidden; font-size: 2.1rem; color: #fff; }
   .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .pic--owl { background: #EFE6D3; } .pic--owl img { object-fit: contain; padding: 12%; }
@@ -219,7 +235,7 @@
             <p>Last Login:<br><span id="last-login">10/23/2026</span></p>
           </div>
         </div>
-        <p class="mood"><b>Mood:</b> conference-ready ☕</p>
+        <p class="mood"><b>Mood:</b> conference-ready 🍵</p>
         <p class="viewmy"><b>View My:</b> <a href="/writing.html">Blog</a> | <a href="/research.html">Research</a> | <a href="/workshop.html">Side Quests</a></p>
         <p class="views"><b>Profile Views:</b> <span class="odometer" role="img" aria-label="001337"><span>0</span><span>0</span><span>1</span><span>3</span><span>3</span><span>7</span></span></p>
 
@@ -246,8 +262,8 @@
           <table class="info">
             <tr><th scope="row">General</th><td>AI in higher education, organizational theory, how institutions actually change, faculty work that leaves room for a life, building games with AI just to see what happens.</td></tr>
             <tr><th scope="row">Music</th><td>Bubo and the Gorgons; Elder Millennials. Both are <a href="#profile-song">on my profile</a>. Neither band exists, which has never stopped a 2005 band before.</td></tr>
-            <tr><th scope="row">Movies</th><td>Ask me in the coffee line in Atlanta.</td></tr>
-            <tr><th scope="row">Television</th><td>Also a coffee-line question.</td></tr>
+            <tr><th scope="row">Movies</th><td>Ask me in the matcha line in Atlanta.</td></tr>
+            <tr><th scope="row">Television</th><td><cite>The X-Files</cite>. The truth is out there.</td></tr>
             <tr><th scope="row">Books</th><td><a href="/beyond-the-campus.html"><cite>Beyond the Campus</cite></a> (I helped write it, so it counts); the <cite>Dungeon Crawler Carl</cite> series (enough to <a href="/dcc/dcc_index.html">make a tabletop game</a> about it).</td></tr>
             <tr><th scope="row">Heroes</th><td>Anyone who has ever made a committee meeting shorter.</td></tr>
           </table>
@@ -299,7 +315,7 @@
             <ol class="top8">
               <li><span class="friend"><span class="who">Thena</span><span class="pic"><img src="/bluespace/thena.jpg" alt="A small black-and-tan dog with big ears" width="240" height="240" /></span></span></li>
               <li><span class="friend"><span class="who">Dayne</span><span class="pic"><img src="/bluespace/dayne.jpg" alt="Dayne in aviator sunglasses and a black leather jacket" width="240" height="240" loading="lazy" /></span></span></li>
-              <li><a href="/dcc/dcc_index.html"><span class="who">Princess Donut</span><span class="pic pic--private"><span aria-hidden="true">🔒</span>Private</span></a></li>
+              <li><a href="/dcc/dcc_index.html"><span class="who">Princess Donut</span><span class="pic pic--glam"><span class="glam__lock" aria-hidden="true">🔒</span><span class="glam__word">Private</span><span class="glam__note">no paparazzi, darling</span></span></a></li>
               <li><a href="/aegis.html"><span class="who">Bubo</span><span class="pic pic--owl"><img src="/favicon.svg" alt="" /></span></a></li>
               <li><a href="/aegis.html"><span class="who">Calliope</span><span class="pic"><img src="/bluespace/calliope.jpg" alt="Painting of the muse Calliope wearing a laurel wreath" width="240" height="240" loading="lazy" /></span></a></li>
               <li><span class="friend"><span class="who">Steve Hodgson</span><span class="pic pic--private"><span aria-hidden="true">🔒</span>Private</span></span></li>
