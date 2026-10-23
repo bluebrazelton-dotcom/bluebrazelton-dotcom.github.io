@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reclaim Your Time: Starter Harness | Blue Brazelton</title>
+<meta name="description" content="A one-page starter harness for building your first faculty AI agent: one persona, one context file, one tedious step. From the AAC&U Conference on AI and Higher Education, October 29, 2026.">
+<link rel="canonical" href="https://www.bluebrazelton.com/talks/2026-aacu/reclaim.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  /* Brand Standards v0.4, web: Slate + Sky + Parchment/Ink, one accent (Sky, on Slate only). */
+  :root { --slate:#3A4F6E; --sky:#9CCDEE; --parchment:#EFE6D3; --ink:#2B2A27; --paper:#F7F2E7; --rule:#D6CBB4; --card:#FBF8F1; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:'Roboto','Segoe UI',Arial,sans-serif; font-size:1.0625rem; line-height:1.6; }
+  h1, h2, h3, legend.ind { font-family:'Roboto Slab',Rockwell,Georgia,serif; font-weight:600; color:var(--slate); line-height:1.2; }
+  a { color:var(--slate); text-underline-offset:2px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline:3px solid var(--slate); outline-offset:2px; }
+  strong { font-weight:700; }
+  .skip { position:absolute; left:-999px; } .skip:focus { left:1rem; top:1rem; background:var(--parchment); padding:.5rem .8rem; z-index:10; }
+
+  .site-header { background:var(--slate); }
+  .shell { max-width:46rem; margin:0 auto; padding:0 1rem; }
+  .site-header__inner { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem 1.2rem; padding:.9rem 1rem; max-width:62rem; }
+  .brand { font-family:'Roboto Slab',Georgia,serif; font-weight:600; font-size:1.2rem; color:var(--parchment); text-decoration:none; }
+  .brand { display:inline-flex; align-items:center; gap:0.55rem; }
+  .brand__owl { display:block; width:34px; height:34px; flex:none; }
+  .brand__dot { color:var(--sky); }
+  .nav { display:flex; flex-wrap:wrap; gap:.2rem 1rem; }
+  .nav a { color:var(--parchment); text-decoration:none; font-size:.95rem; }
+  .nav a:hover, .nav a:focus-visible { text-decoration:underline; outline-color:var(--sky); }
+
+  .page-head { background:var(--slate); color:var(--parchment); padding:2rem 0 2.2rem; border-top:1px solid rgba(239,230,211,.18); }
+  .kicker { color:var(--sky); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem; margin:0 0 .5rem; }
+  .page-head h1 { color:var(--parchment); font-size:clamp(1.8rem,5vw,2.5rem); margin:0 0 .7rem; }
+  .page-head p { margin:0; font-size:1.08rem; max-width:40rem; }
+
+  main { padding:1.6rem 0 3rem; }
+  h2 { font-size:1.4rem; margin:2.2rem 0 .7rem; padding-bottom:.35rem; border-bottom:2px solid var(--slate); }
+  .downloads { display:flex; flex-wrap:wrap; gap:.6rem; margin:0 0 .4rem; }
+  .btn { display:inline-block; font:inherit; font-weight:700; font-size:.98rem; padding:.55rem 1rem; border-radius:.4rem; border:2px solid var(--slate); background:var(--slate); color:var(--parchment); text-decoration:none; cursor:pointer; }
+  .btn.secondary { background:transparent; color:var(--slate); }
+  .btn:hover { filter:brightness(1.08); }
+  .note { font-size:.93rem; margin:.4rem 0 0; }
+  ol li { margin:.35rem 0; }
+
+  .mine { background:var(--parchment); border-radius:.5rem; padding:1.1rem 1.2rem; margin:1rem 0; }
+  .field { margin:0 0 1rem; }
+  .field label { display:block; font-weight:700; margin:0 0 .3rem; }
+  textarea { font:inherit; width:100%; padding:.5rem .6rem; border:1.5px solid var(--slate); border-radius:.35rem; background:#fff; color:var(--ink); min-height:3.2rem; resize:vertical; }
+
+  .tmpl { background:var(--card); border:1px solid var(--rule); border-left:.35rem solid var(--slate); border-radius:.5rem; padding:.9rem 1.15rem 1rem; margin:1rem 0; }
+  .tmpl__bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .6rem; }
+  .tmpl__bar h3 { font-size:1.15rem; margin:0; }
+  .tmpl pre { margin:0; white-space:pre-wrap; word-wrap:break-word; font-family:Consolas,'Courier New',monospace; font-size:.95rem; line-height:1.55; }
+  .copied { font-size:.9rem; font-weight:700; color:var(--slate); margin:.4rem 0 0; }
+  .copied:empty { display:none; }
+
+  .ladder { list-style:none; padding:0; margin:1rem 0; }
+  .ladder li { background:var(--card); border:1px solid var(--rule); border-radius:.5rem; padding:.7rem 1rem; margin:.6rem 0; }
+  .ladder .rung { font-family:'Roboto Slab',Georgia,serif; font-weight:600; color:var(--slate); }
+  .rules { margin:1rem 0; padding-left:1.4rem; }
+  .rules li { margin:.6rem 0; }
+  .sources { font-size:.92rem; border-top:1px solid var(--rule); margin-top:2rem; padding-top:1rem; }
+  .sources p { margin:.4rem 0; }
+
+  .site-footer { background:var(--parchment); border-top:3px solid var(--slate); }
+  .site-footer__inner { padding:1.3rem 1rem 1.6rem; font-size:.95rem; }
+  .site-footer p { margin:.3rem 0; }
+
+  @media print {
+    .site-header, .skip, .downloads, .note.screen, .site-footer, .tmpl .btn, .copied { display:none; }
+    body { background:#fff; font-size:10.5pt; }
+    .page-head { background:#fff; color:var(--ink); padding:0 0 .5rem; border-bottom:2px solid var(--slate); }
+    .page-head h1 { color:var(--slate); font-size:18pt; } .kicker { color:var(--slate); }
+    main { padding-top:.6rem; } h2 { margin-top:1rem; font-size:13pt; }
+    .tmpl, .ladder li { break-inside:avoid; background:#fff; padding:.5rem .8rem; margin:.5rem 0; }
+    .mine { background:#fff; border:1px solid var(--rule); }
+  }
+</style>
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html"><img class="brand__owl" src="/favicon.svg" alt="" width="34" height="34" />Blue Brazelton</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="shell">
+    <p class="kicker">AAC&amp;U Conference on AI and Higher Education &middot; October 29, 2026</p>
+    <h1>Starter Harness: Build Rung 1 on Monday</h1>
+    <p>Pick the project you keep not starting, name the one tedious step in front of it, and give that step to one persona with one context file.</p>
+  </div>
+</div>
+
+<main id="content">
+  <div class="shell">
+    <div class="downloads">
+      <a class="btn" href="/talks/2026-aacu/reclaim-starter-harness.pdf">Download the one-page PDF</a>
+      <a class="btn secondary" href="/talks/2026-aacu/reclaim-starter-harness.docx">Editable Word version</a>
+      <button class="btn secondary" type="button" onclick="window.print()">Print or save this page</button>
+    </div>
+    <p class="note screen">Works with any AI tool: paste the persona file in as instructions (Claude Projects and Skills, ChatGPT, Gemini, Microsoft 365 Copilot agents) and attach the context file. Nothing you type on this page leaves your browser, and it is not saved when you close the page.</p>
+
+    <h2 id="step1">Step 1. Name the target</h2>
+    <div class="mine">
+      <div class="field">
+        <label for="project">The project I keep not starting</label>
+        <textarea id="project" name="project"></textarea>
+      </div>
+      <div class="field">
+        <label for="step">The one tedious step in front of it</label>
+        <textarea id="step" name="step"></textarea>
+      </div>
+    </div>
+
+    <h2 id="step2">Step 2. Write the persona file</h2>
+    <p>Copy it, fill in the brackets, and paste it in as the AI's instructions.</p>
+    <div class="tmpl">
+      <div class="tmpl__bar">
+        <h3 id="persona-h">Persona file</h3>
+        <button class="btn secondary" type="button" data-copy="persona" aria-describedby="persona-h">Copy</button>
+      </div>
+      <pre id="persona">You are [name], my [job title] for [the tedious step]. Your one job: [what you produce].
+Who I am: [role, discipline, what I care about in this work].
+How to work: ask me up to three questions before you draft. Show me drafts; never finalize.
+Guardrail: propose, never act. Nothing is sent, saved, or deleted without my yes.
+Scope: use only the files I give you. If you don&rsquo;t know, say so; never guess a number, date, or citation.
+Done looks like: [one sentence describing a finished result].</pre>
+      <p class="copied" id="persona-msg" role="status"></p>
+    </div>
+
+    <h2 id="step3">Step 3. Write the context file</h2>
+    <p>One per project. Update it every session.</p>
+    <div class="tmpl">
+      <div class="tmpl__bar">
+        <h3 id="context-h">Context file</h3>
+        <button class="btn secondary" type="button" data-copy="context" aria-describedby="context-h">Copy</button>
+      </div>
+      <pre id="context">Project: [name and one-line goal]
+Where it stands: [what is done, what is not]
+Decisions so far: [the choices you don&rsquo;t want re-argued]
+Sources and files it may use: [list them]
+Next step: [the very next thing]</pre>
+      <p class="copied" id="context-msg" role="status"></p>
+    </div>
+
+    <h2 id="ladder">Then climb only when you need to</h2>
+    <ol class="ladder">
+      <li><span class="rung">Rung 2. Add a skill.</span> Write down one procedure you repeat (a rubric pass, a report format) so it runs the same way every time.</li>
+      <li><span class="rung">Rung 3. Add a connector and a scheduled task.</span> One folder, not your whole drive; one date it runs on, not one you have to remember.</li>
+      <li><span class="rung">Rung 4. Add guardrails and a second agent.</span> Approvals written into the files, and a regular check for drift.</li>
+    </ol>
+
+    <h2 id="privacy">Four privacy rules</h2>
+    <ol class="rules">
+      <li><strong>Classify before you connect.</strong> Know your institution&rsquo;s data levels; keep anything above what a tool is approved for out of it.</li>
+      <li><strong>Match the tool to the data.</strong> A personal account gets no institutional data; institutional work goes in the tool your institution licenses.</li>
+      <li><strong>Scope connectors narrowly.</strong> One project folder, not the whole drive or the inbox.</li>
+      <li><strong>Approve before it acts.</strong> Agents draft; a person says yes before anything is written, sent, or deleted. Content an agent reads can carry instructions, so this matters more for agents than for chat.</li>
+    </ol>
+
+    <div class="sources">
+      <p>From the session <cite>Reclaim Your Time, Reclaim Your Agency: AI as Productivity Infrastructure for the Professoriate</cite>, AAC&amp;U Conference on AI and Higher Education, October 29, 2026. How this talk was built with AI: <a href="/ai-disclosure/#aacu-2026-reclaim">AI disclosure</a>. Questions or follow-up: <a href="/contact.html">contact me</a>.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var id = b.getAttribute('data-copy');
+    var text = document.getElementById(id).innerText;
+    var msg = document.getElementById(id + '-msg');
+    function done(ok) { msg.textContent = ok ? 'Copied. Paste it into your AI tool.' : 'Copy didn\'t work here; select the text and copy it instead.'; }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  });
+});
+</script>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <p>Blue Brazelton &middot; Northern Arizona University</p>
+    <p><a href="/contact.html">Contact</a> &middot; <a href="/cv.html">CV</a> &middot; <a href="/ai-disclosure/">AI disclosure</a> &middot; Last updated October 2026</p>
+  </div>
+</footer>
+</body>
+</html>
