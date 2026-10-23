@@ -10,6 +10,59 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css?v=11" />
 <script src="/mode.js"></script>
+<style>
+  /* Essays list as a parchment scroll (Oct 2026). The list markup is unchanged
+     (PUBLISHING.md still applies: new <li> at the top of ul.entry-list).
+     Parchment sheet with a soft darkened edge, a rolled rod top and bottom,
+     Slate end caps. Stays parchment in dark mode, like a physical object. */
+  .scroll {
+    --ink: #2B2A27; --ink-soft: #4A4740; --ink-muted: #5C574E; --rule: #D6CBB4; --rule-soft: #DDD0B6;
+    position: relative;
+    margin: 1.4rem 0.6rem;
+    padding: 2.4rem clamp(1.1rem, 4vw, 2.4rem) 2.2rem;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse 120% 90% at 50% 50%, rgba(255,255,255,0) 55%, rgba(120, 96, 52, 0.16) 100%),
+      linear-gradient(90deg, rgba(120, 96, 52, 0.10), rgba(255,255,255,0) 7%, rgba(255,255,255,0) 93%, rgba(120, 96, 52, 0.10)),
+      #EFE6D3;
+    box-shadow: 0 1px 0 rgba(43, 42, 39, 0.06), 0 10px 24px -14px rgba(31, 43, 61, 0.45);
+  }
+  /* The rods: a rolled-up edge with Slate end caps */
+  .scroll::before, .scroll::after {
+    content: "";
+    position: absolute;
+    left: -0.75rem; right: -0.75rem;
+    height: 1.35rem;
+    border-radius: 0.7rem;
+    background:
+      radial-gradient(circle at 0.55rem 50%, #3A4F6E 0 0.42rem, transparent 0.45rem),
+      radial-gradient(circle at calc(100% - 0.55rem) 50%, #3A4F6E 0 0.42rem, transparent 0.45rem),
+      linear-gradient(180deg, #F7F1E3 0%, #E9DDC2 45%, #D5C29B 85%, #C7B285 100%);
+    box-shadow: 0 3px 6px -2px rgba(31, 43, 61, 0.35);
+  }
+  .scroll::before { top: -0.65rem; }
+  .scroll::after  { bottom: -0.65rem; }
+  .scroll .entry-list { border-top: 0; margin: 0; }
+  .scroll .entry-list > li { border-color: var(--rule); }
+  .scroll .entry-list > li:last-child { border-bottom: 0; }
+  .scroll .entry-meta { color: var(--ink-muted); }
+  .scroll .entry-body__title, .scroll .entry-body__title a { color: #3A4F6E; }
+  .scroll a { color: #3A4F6E; text-decoration-color: rgba(58, 79, 110, 0.45); }
+  .scroll a:hover { color: #2B2A27; text-decoration-color: currentColor; }
+  .scroll a:focus-visible { outline: 3px solid #3A4F6E; outline-offset: 2px; }
+  .scroll .entry-body__note { color: var(--ink-soft); }
+  @media screen {
+    html[data-mode="dark"] .scroll .entry-body__title,
+    html[data-mode="dark"] .scroll .entry-body__title a,
+    html[data-mode="dark"] .scroll a { color: #3A4F6E; }
+    html[data-mode="dark"] .scroll a:hover { color: #2B2A27; }
+    html[data-mode="dark"] .scroll { box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.6); }
+  }
+  @media print {
+    .scroll { background: none; box-shadow: none; padding: 0; margin: 0; }
+    .scroll::before, .scroll::after { display: none; }
+  }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -50,6 +103,7 @@ The power of e-mentoring in modern higher education</a>
     <section class="two-col">
       <div class="aside-label">Essays</div>
       <div>
+        <div class="scroll">
         <ul class="entry-list">
           <li>
             <div class="entry-meta">Oct 13, 2026</div>
@@ -115,6 +169,7 @@ The power of e-mentoring in modern higher education</a>
             </div>
           </li>
         </ul>
+        </div>
         <p class="muted small sans" style="margin-top: 2rem;">New essays every other Tuesday. Also on <a href="https://substack.com/@bluebrazelton" target="_blank" rel="noopener">Substack</a>.</p>
       </div>
     </section>

@@ -16,7 +16,8 @@ Post pages live at the repo root. Talk material goes in `talks/<year>-<event>/` 
    - References: paste each cite in its own `<p class="muted small sans">`;
      wrap any bare URL or DOI as `<a href="URL">URL</a>`
 3. Add the post to `writing.html`: paste a new `<li>` at the TOP of
-   `<ul class="entry-list">` (newest first):
+   `<ul class="entry-list">` (newest first). The list sits inside the parchment
+   scroll (`<div class="scroll">`); leave that wrapper alone and only add the `<li>`:
 ```html
    <li>
      <div class="entry-meta">Mon DD, YYYY</div>
