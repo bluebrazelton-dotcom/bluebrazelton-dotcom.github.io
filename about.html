@@ -29,6 +29,17 @@
   @media (max-width: 560px) {
     .about-wrap__photo { float: none; width: 100%; max-width: 20rem; margin: 0 auto 1.5rem; }
   }
+  /* BlueSpace banner: invites visitors to the 2000s-style profile at /myspace.html.
+     Fixed colors, so it reads the same in light and dark mode. */
+  .bluespace-banner { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; margin: 0 0 2.25rem;
+    padding: .6rem .9rem; background: #003399; color: #fff; border: 2px solid #6698CB; border-radius: 4px;
+    font: 13px/1.4 Verdana, Tahoma, Arial, sans-serif; text-decoration: none; }
+  .bluespace-banner:hover, .bluespace-banner:focus-visible { background: #002A80; color: #fff; }
+  .bluespace-banner:focus-visible { outline: 3px solid #FF9933; outline-offset: 2px; }
+  .bluespace-banner__logo { font: 700 1.05rem "Trebuchet MS", Verdana, sans-serif; letter-spacing: -.02em; }
+  .bluespace-banner__text { flex: 1 1 16rem; color: #E5EEF8; }
+  .bluespace-banner__cta { font-weight: 700; color: #FFCC99; white-space: nowrap; }
+  .bluespace-banner:hover .bluespace-banner__cta { text-decoration: underline; }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -55,6 +66,12 @@
 
 <main>
   <div class="shell">
+
+    <a class="bluespace-banner" href="/myspace.html">
+      <span class="bluespace-banner__logo">BlueSpace</span>
+      <span class="bluespace-banner__text">Remember when an About page had a Top 8 and a profile song? Mine still does.</span>
+      <span class="bluespace-banner__cta">View my BlueSpace profile &rarr;</span>
+    </a>
 
     <header class="page-head page-head--owl">
       <div>
