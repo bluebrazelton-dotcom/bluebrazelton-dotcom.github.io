@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+<script src="/mode.js"></script>
 <style>
   /* Brand Standards v0.4, web: Slate + Sky + Parchment/Ink, one accent (Sky, on Slate only). */
   :root { --slate:#3A4F6E; --sky:#9CCDEE; --parchment:#EFE6D3; --ink:#2B2A27; --paper:#F7F2E7; --rule:#D6CBB4; --card:#FBF8F1; }
@@ -79,6 +80,46 @@
     .tmpl, .ladder li { break-inside:avoid; background:#fff; padding:.5rem .8rem; margin:.5rem 0; }
     .mine { background:#fff; border:1px solid var(--rule); }
   }
+
+  /* Dark mode (set by /mode.js): night slate page, Slate bands, Parchment text, Sky links. */
+  html[data-mode="dark"] { color-scheme:dark; --night:#1F2B3D; --card-d:#2A3A52; --rule-d:#4A5D7C; --muted-d:#BDB6A8; }
+  @media screen {
+    html[data-mode="dark"] body { background:var(--night); color:var(--parchment); }
+    html[data-mode="dark"] h1, html[data-mode="dark"] h2, html[data-mode="dark"] h3, html[data-mode="dark"] legend.ind { color:var(--parchment); }
+    html[data-mode="dark"] h2 { border-bottom-color:var(--rule-d); }
+    html[data-mode="dark"] a { color:var(--sky); }
+    html[data-mode="dark"] a:focus-visible, html[data-mode="dark"] button:focus-visible, html[data-mode="dark"] input:focus-visible,
+    html[data-mode="dark"] textarea:focus-visible, html[data-mode="dark"] select:focus-visible { outline-color:var(--sky); }
+    html[data-mode="dark"] .site-header { border-bottom:1px solid var(--rule-d); }
+    html[data-mode="dark"] .nav a, html[data-mode="dark"] .brand { color:var(--parchment); }
+    html[data-mode="dark"] .short, html[data-mode="dark"] .mine, html[data-mode="dark"] .split > div,
+    html[data-mode="dark"] .entry, html[data-mode="dark"] .indicator, html[data-mode="dark"] .tmpl,
+    html[data-mode="dark"] .ladder li { background:var(--card-d); border-color:var(--rule-d); color:var(--parchment); }
+    html[data-mode="dark"] .short, html[data-mode="dark"] .indicator, html[data-mode="dark"] .tmpl { border-left-color:var(--sky); }
+    html[data-mode="dark"] .entry { border-top-color:var(--sky); }
+    html[data-mode="dark"] thead th { background:var(--card-d); color:var(--parchment); border-bottom-color:var(--sky); }
+    html[data-mode="dark"] th, html[data-mode="dark"] td, html[data-mode="dark"] .sources { border-color:var(--rule-d); }
+    html[data-mode="dark"] .entry dt, html[data-mode="dark"] .signs .lab, html[data-mode="dark"] .ladder .rung,
+    html[data-mode="dark"] .copied, html[data-mode="dark"] .tmpl__bar h3 { color:var(--sky); }
+    html[data-mode="dark"] .status { color:var(--sky); border-color:var(--sky); }
+    html[data-mode="dark"] .feature { background:var(--card-d); border:1px solid var(--rule-d); }
+    html[data-mode="dark"] .feature:focus-visible { outline-color:var(--sky); }
+    html[data-mode="dark"] .btn { background:var(--sky); border-color:var(--sky); color:var(--night); }
+    html[data-mode="dark"] .btn.secondary { background:transparent; color:var(--sky); }
+    html[data-mode="dark"] .rate label { background:var(--night); border-color:var(--sky); color:var(--parchment); }
+    html[data-mode="dark"] .rate input { accent-color:var(--sky); }
+    html[data-mode="dark"] .rate label:has(input:checked) { background:var(--sky); color:var(--night); }
+    html[data-mode="dark"] select, html[data-mode="dark"] textarea, html[data-mode="dark"] input[type=text] { background:var(--night); color:var(--parchment); border-color:var(--sky); }
+    html[data-mode="dark"] .site-footer { background:var(--card-d); border-top-color:var(--sky); color:var(--parchment); }
+    html[data-mode="dark"] .skip:focus { color:var(--ink); }
+  }
+  /* Light/dark button in the header (added by /mode.js) */
+  .mode-toggle { appearance:none; display:inline-grid; place-items:center; width:2.25rem; height:2.25rem; padding:0; border:1px solid rgba(239,230,211,.45); border-radius:999px; background:transparent; color:var(--parchment); cursor:pointer; flex:none; }
+  .mode-toggle:hover { border-color:var(--sky); color:#fff; }
+  .mode-toggle:focus-visible { outline:3px solid var(--sky); outline-offset:2px; }
+  .site-header__inner .nav { margin-left:auto; }
+  @media (max-width:40rem) { .site-header__inner .mode-toggle { margin-left:auto; } .site-header__inner .nav { order:3; width:100%; margin-left:0; } }
+  @media print { .mode-toggle { display:none; } }
 </style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

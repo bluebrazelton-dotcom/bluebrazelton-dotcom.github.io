@@ -11,6 +11,7 @@
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script src="/mode.js"></script>
 <style>
 /* Layout: one column, 760px measure; the hero is a two-up "specimen card" split by a draggable seam. Stat grid below, then three game-show sections, then a plain disclosure footer. */
 :root{
@@ -32,18 +33,18 @@
   --mono:Consolas,"Courier New",monospace;
 }
 /* Dark mode: night slate page, Slate surfaces, Parchment text, Sky leads. */
-@media (prefers-color-scheme:dark){
+@media screen and (prefers-color-scheme:dark){
   :root:not([data-mode="light"]){
     --bg:#1F2B3D;--fg:#EFE6D3;--muted:#BDB6A8;--surface:#2A3A52;--line:#4A5D7C;
     --real:#9CCDEE;--real-soft:#2E3D57;--ai:#E0997A;--ai-soft:#3D3238;--ink:#EFE6D3;--redpen:#E0997A;
     color-scheme:dark;
   }
 }
-:root[data-mode="dark"]{
+@media screen{:root[data-mode="dark"]{
   --bg:#1F2B3D;--fg:#EFE6D3;--muted:#BDB6A8;--surface:#2A3A52;--line:#4A5D7C;
   --real:#9CCDEE;--real-soft:#2E3D57;--ai:#E0997A;--ai-soft:#3D3238;--ink:#EFE6D3;--redpen:#E0997A;
   color-scheme:dark;
-}
+}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;padding-block:0 64px}
 h1,h2,h3{font-family:var(--display);line-height:1.05;text-wrap:balance;margin:0}
@@ -64,6 +65,10 @@ a{color:var(--real)}
 .site-nav a{color:var(--parchment);text-decoration:none;font-size:.95rem}
 .site-nav a:hover,.site-nav a:focus-visible{text-decoration:underline;color:#fff}
 .site-header :focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.mode-toggle{appearance:none;display:inline-grid;place-items:center;width:2.25rem;height:2.25rem;padding:0;border:1px solid rgba(239,230,211,.45);border-radius:999px;background:transparent;color:var(--parchment);cursor:pointer;flex:none}
+.mode-toggle:hover{border-color:var(--sky);color:#fff}
+.site-header__inner .site-nav{margin-left:auto}
+@media (max-width:640px){.site-header__inner .mode-toggle{margin-left:auto}.site-header__inner .site-nav{order:3;width:100%;margin-left:0}}
 .measure{max-width:62ch}
 .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 section{padding-block:56px;border-top:1px solid var(--line)}
