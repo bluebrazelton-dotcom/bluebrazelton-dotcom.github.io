@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#26332c"><title>The Living Record · The Historian</title>
+ <link rel="icon" href="../favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css?v=20261013h6"><link rel="stylesheet" href="workspaces.css?v=20261013h6">
+</head>
+<body>
+ <a class="skip" href="#action-heading">Skip to current action</a>
+ <div class="shell">
+  <nav class="rail" aria-label="Career navigation"><a class="brand" href="../" aria-label="Social-science career">✦</a><button id="back" disabled>←<br>Back</button><button id="restart">↺<br>New career</button><span class="rail-label">THE<br>LIVING<br>RECORD</span><a href="../">Social science</a></nav>
+  <div class="app">
+   <header><div><p class="eyebrow">The Living Record · The Historian</p><h1 id="chapter-title">The Historian</h1></div><div class="header-meta"><span id="saved" role="status">A separate career save</span><span id="chapter-number" class="pill">Chapter 1 of 12</span></div></header>
+   <main id="main">
+    <div id="storage-warning" class="warning" role="alert" hidden></div>
+    <div class="top-grid">
+     <section class="scene" aria-label="Chapter scene"><div class="frame"><img id="scene-image" src="../assets/high-school.webp" alt="The protagonist prepares a school history project."><p id="place"></p></div><div class="scene-note"><p class="eyebrow" id="era"></p><p id="scene-note"></p></div></section>
+     <div class="workspace" id="workspace">
+      <section class="actions" aria-labelledby="action-heading"><p id="action-heading" class="eyebrow" tabindex="-1">Your next move</p><div id="choices"></div></section>
+      <section class="work" id="work" tabindex="-1" aria-labelledby="work-title"><div class="workspace-heading"><p id="workspace-label" class="eyebrow"></p><span id="workspace-tools" class="workspace-tools"></span></div><div class="panel-head"><span aria-hidden="true">●</span><span id="phase-label">Current work</span><span id="sections"></span></div><h2 id="work-title" tabindex="-1"></h2><p id="description"></p><div id="work-materials"></div><div id="artifact" class="artifact"></div><div id="feedback" class="review-note" hidden></div></section>
+     </div>
+    </div>
+    <div class="bottom-grid">
+     <section class="resources card" aria-label="Energy, Progress and work quality"><div><div class="metric-heading"><h3>Energy</h3><strong id="energy"></strong></div><progress id="energy-meter" aria-label="Energy"></progress><p id="energy-detail"></p></div><div><div class="metric-heading"><h3>Progress</h3><strong id="progress"></strong></div><p>Finished work funds lasting skills.</p><div id="skills"></div></div><div class="quality"><div class="metric-heading"><h3>Work quality</h3><strong id="quality"></strong></div><progress id="quality-meter" max="100" value="100" aria-label="Current or submitted work quality"></progress><p id="quality-detail"></p></div></section>
+     <section class="card record"><div class="record-heading"><h2>Career record</h2><span id="record-count"></span></div><ol id="record" tabindex="0" aria-label="Career record, newest first"></ol></section>
+    </div>
+    <details class="career-details"><summary>Career map, skills, and save tools</summary><p>The Historian has its own save. Choices are final; Back undoes ordinary work. Rest at chapter breaks restores Energy and preserves submitted quality.</p><ol id="chapter-map"></ol><div id="upgrade-list"></div><div class="save-tools"><button id="export-save">Download save</button><label class="file-button">Import historian save<input id="import-save" type="file" accept=".json,application/json"></label><button id="export-record">Download career record</button></div><p class="small">A fictional U.S. career. People, institutions, awards, and historical events are invented for this campaign.</p></details>
+    <p class="small">Another separately saved career: <a href="../environment/">Play The Environmental Scientist →</a></p>
+    <footer>The Historian · 12 chapters · Saved in this browser <a href="../">Return to the social-science career →</a><a href="../law/">The Legal Scholar →</a></footer>
+   </main>
+  </div>
+ </div>
+ <dialog id="story" aria-labelledby="story-title" aria-describedby="story-body"><p id="story-kicker" class="eyebrow"></p><h2 id="story-title"></h2><img id="story-image" alt="" hidden><p id="story-body"></p><div id="story-notes"></div><button id="story-next" class="primary">Continue</button></dialog>
+ <dialog id="confirm" aria-labelledby="confirm-title"><h2 id="confirm-title"></h2><p id="confirm-body"></p><div class="dialog-actions"><button id="cancel">Keep current career</button><button id="confirm-action">Confirm</button></div></dialog>
+ <dialog id="recovery" aria-labelledby="recovery-title"><h2 id="recovery-title">Your saved career needs attention</h2><p id="recovery-body"></p><p>The stored file has been preserved. Download it before starting The Historian again.</p><div class="dialog-actions"><button id="download-damaged">Download stored save</button><button id="recovery-new">Start a new historian career</button><a href="../">Return to social science</a></div></dialog>
+ <div id="announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+ <script type="module" src="app.js?v=20261013h6"></script>
+</body>
+</html>

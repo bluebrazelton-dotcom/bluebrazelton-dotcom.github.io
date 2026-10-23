@@ -1,0 +1,45 @@
+// Submitted work is assessed against its own goal, including when finished tired.
+// Each row is [clear result, exhausted weakness, why the completed work still meets its goal].
+const feedback={
+ methods:['The map connects the claim, evidence and fallback.','The explanation of the method assumptions needs a clearer order.','The committee can still inspect the method choice and its fallback.'],
+ roles:['The working example retains the source change and its credit.','The instructions for adapting the example are hurried.','The version history, credited contribution and stopping rule remain usable.'],
+ proposal:['The proposal makes the first stage and future extension distinct.','The transition between the first stage and extension is hurried.','The question, evidence needs and committee responsibilities remain visible for review.'],
+ coherent:['The revised rationale explains exactly why the extra line is deferred.','The explanation of the deferral needs a clearer order.','The first-stage question and defensible method are complete enough for candidacy.'],
+ staged:['The plan separates the first stage, later extension and credited roles.','The stage-to-stage explanation is hurried.','Each present responsibility and stop condition remains explicit; candidacy does not depend on the extension.'],
+ evidence:['The evidence file separates planned analysis, exclusions and uncertainty.','The explanation beside the category audit needs a clearer order.','The source checks and analysis trail still support interpretation of the actual result.'],
+ bounded:['The final claim stays within the evidence and labels future work.','The limitations paragraph is hurried.','The retained analysis and explicit withdrawn inference still make a defensible contribution.'],
+ construct:['The revised construct distinguishes the source roles and contributor interpretations.','The explanation of the category changes needs a clearer order.','The v2 definitions, current source terms, credit and retained disagreement remain inspectable.'],
+ defense:['The defense explains the changed claim and each contributor’s role.','The closing explanation is hurried.','The committee can still check the completed contribution, correction and independent authorship.'],
+ dossier:['The dossier distinguishes reusable work from the institution-specific case.','The transition from contribution to teaching example is hurried.','The actual result, role map and references still form a truthful portable case.'],
+ retarget:['The new fit paragraph matches Harbor’s disclosed appointment.','The local-fit paragraph is hurried.','The reusable dossier and stated workload remain clear enough to accept the prepared platform.'],
+ negotiate:['The clarification states the claim and the institution’s written answer separately.','The account of the requested condition is hurried.','The supported claim and accepted baseline remain explicit, including any refused concession.'],
+ portability:['The new-setting test separates a local result from a transfer assumption.','The comparison between settings needs a clearer order.','The current evidence checks and observed boundary remain usable for the required response.'],
+ carry:['The portable artifact makes its boundary and safe procedure clear.','The account of what travels is hurried.','The documented limit and usable public-source practice still complete the independent contribution.'],
+ compare:['The returned comparison preserves source authority and Amina’s interpretation.','The cross-setting explanation needs a clearer order.','The conditional result, separate credit and current return obligations are complete.'],
+ program:['The program map connects a research question to a completed faculty responsibility.','The explanation of the program’s throughline is hurried.','The research direction, ordinary responsibility and written appointment criteria remain visible.'],
+ portfolio:['The portfolio connects a contribution, responsibility and real non-pursuit.','The account connecting the portfolio pieces needs a clearer order.','The completed work, named credit and sustainable scope remain available to appraisal.'],
+ operate:['The maintenance test identifies the version change and its decision owner.','The explanation of the maintenance bottleneck is hurried.','The current version, dispute boundary and need for an accountable owner remain clear.'],
+ appraisal:['The packet maps actual completed work to the written criteria.','The narrative between research, teaching and service needs a clearer order.','The canonical artifacts and role attribution still support the committee’s written appraisal.'],
+ repair:['The finite repair answers the committee’s stated coherence concern.','The throughline explanation is hurried.','The unsupported breadth is removed and the completed contribution and credit map remain checkable.'],
+ conditions:['The conditions response records the institutional answer and viable next review.','The explanation of the appointment change needs a clearer order.','The written terms and finite readiness plan still support the current or comparable security route.'],
+ tenure:['The final case cross-references the completed repair and contribution.','The case narrative is hurried.','The reviewing body can verify the disclosed work, criteria, attribution and remaining documentation.'],
+ anchor:['The first act produces a current contribution and an actor-owned correction.','The account of the correction needs a clearer order.','The actual pilot, test or allocated responsibility is complete under its current terms.'],
+ safeguard:['The procedure records the staff’s actual decision and bounded operating remit.','The explanation of the access procedure is hurried.','The staff-held answer, credit and maintenance boundary remain recorded; refusal remains refusal.'],
+ lineage:['The disposition names what continues, transfers, rests or closes.','The handoff explanation needs a clearer order.','The selected owner, permitted materials and safe stopping conditions remain explicit.'],
+ promotion:['The promotion account separates scholarly contribution from office or title.','The promotion narrative is hurried.','The completed work and attributed responsibilities still meet the disclosed full-professor review.'],
+ national:['The draft distinguishes the bounded comparison from wider interpretation.','The framing for a wider audience needs a clearer order.','Its permitted components and stated claim are still ready for the independent critic.'],
+ correction:['The correction identifies the unsupported extension and credits the critic.','The revised paragraph is hurried.','The actual comparison, rival interpretation and credited correction form a usable national baseline.'],
+ sustained:['The second act records what the independent people actually completed.','The account of the continuation needs a clearer order.','The distinct test, return or independently directed next steps are complete with their current rights intact.'],
+ safeguard2:['The successor procedure specifies correction, appeal and independent authority.','The explanation of the succession procedure is hurried.','The distinct safeguard is enacted with funded responsibility and retained dissent.'],
+ nationalBound:['The returned correction states the finding, limit and actual contributors.','The public-facing explanation is hurried.','The current audience receives the corrected meaning without any enlargement of local rights.'],
+ nationalShared:['The shared note makes interpretation, credit and dissent visible.','The shared explanation needs a clearer order.','The permitted artifact and its return, correction, maintenance and exit arrangements are enacted.'],
+ nomination:['The clarification separates the contribution, ownership and formal package.','The nomination summary is hurried.','The completed corrected contribution and its actual ownership remain clear enough for recognition.'],
+ legacyPreparation:['The prepared carrier retains current limits, credit and independent roles.','The explanation of the prepared handoff needs a clearer order.','The named actors, means and minimum continuation are ready for their final response.'],
+ legacyNarrow:['The operating document gives the minimum handoff a usable form.','The handoff explanation is hurried.','The prepared authority, finite resources and binding obligation still support the final transfer.'],
+ legacyShared:['The arrangement preserves each participant’s independent role.','The shared handoff explanation needs a clearer order.','The current agreements, separate rights and finite operating responsibilities are complete for transfer.']
+};
+export function submittedCareerFeedback(task,band,tired){
+ const [clear,weak,usable]=feedback[task];
+ return band==='Careful'?`${clear}${tired?' Careful work, finished tired.':''}`:`${band==='Rushed'?'Rushed finish.':'Uneven finish.'} ${weak} ${usable}`;
+}
+export const CAREER_FEEDBACK_TASKS=Object.freeze(Object.keys(feedback));

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blue Brazelton">
+  <meta property="og:title" content="Build 3 scope document — Citation Needed">
+  <meta property="og:description" content="The scope document for Build 3 of Citation Needed (Citation Needed).">
+  <meta property="og:url" content="https://www.bluebrazelton.com/citation-needed/scope/build-3.html">
+  <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
+  <meta property="og:image:alt" content="Blue Brazelton owl logo and name, www.bluebrazelton.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Build 3 scope document — Citation Needed — Blue Brazelton</title>
+  <meta name="description" content="The scope document for Build 3 of Citation Needed (Citation Needed).">
+  <link rel="canonical" href="https://www.bluebrazelton.com/citation-needed/scope/build-3.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=11">
+  <script src="/mode.js"></script>
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    .cn-section-head { font-family: var(--sans); font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--accent); margin: 3rem 0 0.8rem; display: block; }
+    .back-link { display: inline-block; font-family: var(--sans); font-size: 0.8125rem; margin-bottom: 2rem;
+      color: var(--ink-muted); text-decoration: none; }
+    .back-link:hover { color: var(--accent); }
+    .cn-facts { font-family: var(--sans); font-size: 0.9rem; display: grid; grid-template-columns: max-content 1fr;
+      gap: 0.5rem 1.25rem; margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: var(--bg-soft);
+      border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-facts dt { font-weight: 700; color: var(--ink); }
+    .cn-facts dd { margin: 0; color: var(--ink-soft); }
+    @media (max-width: 560px) { .cn-facts { grid-template-columns: 1fr; gap: 0.15rem; }
+      .cn-facts dd { margin-bottom: 0.6rem; } }
+    .cn-shot { margin: 1.5rem 0; }
+    .cn-shot img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-shot figcaption { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin-top: 0.5rem; }
+    .cn-play { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0.5rem; }
+    .cn-note { font-family: var(--sans); font-size: 0.85rem; color: var(--ink-muted); }
+    .cn-builds { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+    .cn-build { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--bg); }
+    .cn-build img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; display: block;
+      border-bottom: 1px solid var(--rule); }
+    .cn-build__body { padding: 1rem 1.25rem 1.25rem; }
+    .cn-build__body h2 { font-size: 1.2rem; margin: 0.2rem 0 0.4rem; }
+    .cn-build__meta { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin: 0 0 0.6rem; }
+    .cn-build__body p { font-family: var(--sans); font-size: 0.92rem; color: var(--ink-soft); }
+    .cn-timeline { font-family: var(--sans); font-size: 0.9rem; list-style: none; padding: 0; margin: 1rem 0;
+      border-left: 2px solid var(--rule); }
+    .cn-timeline li { padding: 0 0 0.8rem 1rem; position: relative; color: var(--ink-soft); }
+    .cn-timeline li::before { content: ""; position: absolute; left: -6px; top: 0.45em; width: 10px; height: 10px;
+      border-radius: 50%; background: var(--accent); }
+    .cn-timeline strong { color: var(--ink); }
+    .cn-doc-note { font-family: var(--sans); font-size: 0.875rem; padding: 0.9rem 1.1rem; background: var(--bg-soft);
+      border-left: 4px solid var(--accent); border-radius: 4px; margin: 1.25rem 0 2rem; color: var(--ink-soft); }
+    .cn-doc h2 { font-size: 1.25rem; margin-top: 2.2rem; }
+    .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+    .cn-doc li { margin-bottom: 0.35rem; }
+    .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
+    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
+    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
+      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
+    .cn-draft strong { color: #C0392B; }
+    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
+    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+  </style>
+</head>
+<body data-theme="warm" data-accent="warmblue" data-type="editorial">
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html"><img class="brand__owl" src="/favicon.svg" alt="" width="34" height="34">Blue Brazelton</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html" aria-current="page">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('.nav').classList.toggle('is-open');">☰</button>
+  </div>
+</header>
+<main>
+  <div class="shell shell--narrow">
+
+    <a href="/citation-needed/build-3.html" class="back-link">&larr; Back to Build 3: Citation Needed</a>
+
+    <header class="page-head">
+      <span class="eyebrow">Citation Needed &middot; Build 3 scope document</span>
+      <h1>Pre-build scoping, as summarized by Gemini</h1>
+    </header>
+
+    <p class="cn-doc-note">Gemini wrote this summary of the scoping step in its development report after the build. It is published as written, except for one correction: the original sentence described the other two builds as “single-shot builds,” which was not accurate.</p>
+
+    <div class="cn-doc">
+<h2>1. Project Genesis &amp; Pre-Build Scoping</h2>
+<p>The objective of this project was to evaluate how an AI coding collaborator (Gemini Argon) handles building a complete, playable browser-based incremental and active-management game from scratch—and to compare the workflow and output against two earlier builds of the same game: a six-week build in ChatGPT (Astra) and Codex, and a two-day build in Claude Code (Fable).</p>
+<p>Rather than jumping blindly into code generation, the build began with a three-question scoping phase to lock in the game design, mechanics, and aesthetic constraints:</p>
+<ol>
+<li><strong>Tone &amp; Satirical Philosophy:</strong> Rather than cynical or punishing satire, the game was designed as an affectionate, humorous insider simulation of academic life—capturing the realities of graduate school, peer review, grant writing, and the tenure track for players both inside and outside higher education. Failure states (such as harsh peer reviews or rejected grant applications) were intentionally built as surmountable rites of passage rather than game-ending roadblocks.</li>
+<li><strong>Active Gameplay Over Idle Waiting:</strong> To avoid "second-tab syndrome" (where players abandon an idle clicker while waiting for energy bars to refill), the core loop was engineered around continuous active engagement: a precision sweet-spot timing bar, clickable room anomalies, and interactive <em>Revise &amp; Resubmit</em> gatekeeper battles, paced for a complete playthrough from Undergrad to Endowed Chair in roughly <strong>30–35 minutes</strong>.</li>
+<li><strong>Visual &amp; Technical Direction:</strong> A vibrant, modern pixel-art aesthetic rendered entirely through procedural HTML5 <code>&lt;canvas&gt;</code> drawing routines—requiring zero external image spritesheets—featuring an autonomous scholar sprite that physically runs between workstations and upgrades academic regalia with each promotion.</li>
+</ol>
+<hr />
+    </div>
+
+    <hr class="rule">
+    <p class="cn-note"><a href="/citation-needed/build-3.html">&larr; Back to Build 3</a> &middot; <a href="/citation-needed/">Citation Needed</a></p>
+
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <div>
+      <span>Blue Brazelton</span>
+      <span class="muted"> &middot; Northern Arizona University</span>
+    </div>
+    <div>
+      <a href="/contact.html">Contact</a>
+      <span class="muted"> &middot; </span>
+      <a href="/cv.html">CV</a>
+      <span class="muted"> &middot; </span>
+      <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a>
+      <span class="muted"> &middot; Last updated October 2026 </span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

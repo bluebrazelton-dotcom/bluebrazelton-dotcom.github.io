@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Blue Brazelton">
+  <meta property="og:title" content="Build 1: The Living Record — Citation Needed">
+  <meta property="og:description" content="Build 1 of Citation Needed, an academic-career incremental game built three times with AI. Six weeks of research, scoping and review documents before and during the code. The most complete build, and the most process.">
+  <meta property="og:url" content="https://www.bluebrazelton.com/citation-needed/build-1.html">
+  <meta property="og:image" content="https://www.bluebrazelton.com/og/og-default.png">
+  <meta property="og:image:alt" content="Blue Brazelton owl logo and name, www.bluebrazelton.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Build 1: The Living Record — Citation Needed — Blue Brazelton</title>
+  <meta name="description" content="Build 1 of Citation Needed, an academic-career incremental game built three times with AI. Six weeks of research, scoping and review documents before and during the code. The most complete build, and the most process.">
+  <link rel="canonical" href="https://www.bluebrazelton.com/citation-needed/build-1.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=11">
+  <script src="/mode.js"></script>
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    .cn-section-head { font-family: var(--sans); font-size: 0.6875rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--accent); margin: 3rem 0 0.8rem; display: block; }
+    .back-link { display: inline-block; font-family: var(--sans); font-size: 0.8125rem; margin-bottom: 2rem;
+      color: var(--ink-muted); text-decoration: none; }
+    .back-link:hover { color: var(--accent); }
+    .cn-facts { font-family: var(--sans); font-size: 0.9rem; display: grid; grid-template-columns: max-content 1fr;
+      gap: 0.5rem 1.25rem; margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: var(--bg-soft);
+      border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-facts dt { font-weight: 700; color: var(--ink); }
+    .cn-facts dd { margin: 0; color: var(--ink-soft); }
+    @media (max-width: 560px) { .cn-facts { grid-template-columns: 1fr; gap: 0.15rem; }
+      .cn-facts dd { margin-bottom: 0.6rem; } }
+    .cn-shot { margin: 1.5rem 0; }
+    .cn-shot img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); border-radius: 6px; }
+    .cn-shot figcaption { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin-top: 0.5rem; }
+    .cn-play { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0.5rem; }
+    .cn-note { font-family: var(--sans); font-size: 0.85rem; color: var(--ink-muted); }
+    .cn-builds { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+    .cn-build { border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: var(--bg); }
+    .cn-build img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; display: block;
+      border-bottom: 1px solid var(--rule); }
+    .cn-build__body { padding: 1rem 1.25rem 1.25rem; }
+    .cn-build__body h2 { font-size: 1.2rem; margin: 0.2rem 0 0.4rem; }
+    .cn-build__meta { font-family: var(--sans); font-size: 0.8125rem; color: var(--ink-muted); margin: 0 0 0.6rem; }
+    .cn-build__body p { font-family: var(--sans); font-size: 0.92rem; color: var(--ink-soft); }
+    .cn-timeline { font-family: var(--sans); font-size: 0.9rem; list-style: none; padding: 0; margin: 1rem 0;
+      border-left: 2px solid var(--rule); }
+    .cn-timeline li { padding: 0 0 0.8rem 1rem; position: relative; color: var(--ink-soft); }
+    .cn-timeline li::before { content: ""; position: absolute; left: -6px; top: 0.45em; width: 10px; height: 10px;
+      border-radius: 50%; background: var(--accent); }
+    .cn-timeline strong { color: var(--ink); }
+    .cn-doc-note { font-family: var(--sans); font-size: 0.875rem; padding: 0.9rem 1.1rem; background: var(--bg-soft);
+      border-left: 4px solid var(--accent); border-radius: 4px; margin: 1.25rem 0 2rem; color: var(--ink-soft); }
+    .cn-doc h2 { font-size: 1.25rem; margin-top: 2.2rem; }
+    .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
+    .cn-doc li { margin-bottom: 0.35rem; }
+    .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
+    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
+    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
+      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
+    .cn-draft strong { color: #C0392B; }
+    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
+    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+  </style>
+</head>
+<body data-theme="warm" data-accent="warmblue" data-type="editorial">
+<header class="site-header">
+  <div class="shell site-header__inner">
+    <a class="brand" href="/index.html"><img class="brand__owl" src="/favicon.svg" alt="" width="34" height="34">Blue Brazelton</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/research.html">Research</a>
+      <a href="/writing.html">Writing</a>
+      <a href="/aegis.html">Aegis / MAPS</a>
+      <a href="/workshop.html" aria-current="page">Workshop</a>
+      <a href="/cv.html">CV</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('.nav').classList.toggle('is-open');">☰</button>
+  </div>
+</header>
+<main>
+  <div class="shell shell--narrow">
+
+    <a href="/citation-needed/" class="back-link">&larr; Back to Citation Needed</a>
+
+    <header class="page-head">
+      <span class="eyebrow">Citation Needed &middot; Build 1</span>
+      <h1>The Living Record</h1>
+      <p class="lead">Six weeks of research, scoping and review documents before and during the code. The most complete build, and the most process.</p>
+    </header>
+
+    <dl class="cn-facts">
+      <dt>Tools</dt><dd>ChatGPT (Astra model) for design and research; Codex for the code</dd>
+      <dt>When</dt><dd>About six weeks, ending October 13, 2026</dd>
+      <dt>How</dt><dd>Long, document-driven collaboration: written scope, research and design phases first, then code</dd>
+      <dt>What you can play</dt><dd>Four complete career paths (social scientist, historian, environmental scientist, legal scholar), 12 chapters each, 13 endings</dd>
+      <dt>Project size</dt><dd>More than 21,000 files, including 145 planning and review documents at the top level</dd>
+    </dl>
+
+    <figure class="cn-shot">
+      <img src="/citation-needed/img/build-1.jpg" alt="The Living Record, chapter 1: an illustrated high-school scene beside a panel asking which college paths are open, with Progress and Energy meters and two choice buttons.">
+      <figcaption>Build 1 in its first minutes of play.</figcaption>
+    </figure>
+
+    <span class="cn-section-head">Play it</span>
+    <div class="cn-play">
+      <a class="button button--accent" href="/citation-needed/play/build-1/">Play the social scientist</a>
+      <a class="button" href="/citation-needed/play/build-1/history/">The Historian</a>
+      <a class="button" href="/citation-needed/play/build-1/environment/">The Environmental Scientist</a>
+      <a class="button" href="/citation-needed/play/build-1/law/">The Legal Scholar</a>
+    </div>
+    <p class="cn-note">Each career saves separately in your browser. For the web, the scene illustrations were converted from PNG to smaller WebP images; nothing else in the game was changed.</p>
+
+    <span class="cn-section-head">How it was built</span>
+    <p>The approved scope is dated September 11. About three weeks of design and research documents came before the first playable code on September 30. The first full build was accepted on October 12, and the project was closed on October 13.</p>
+
+    <div class="cn-draft"><strong>Draft slot, how it was built.</strong> Your account of the process for this build: what you asked for, how the sessions went, and what you had to spell out. Remove this box before merging.</div>
+
+    <span class="cn-section-head">The scope document</span>
+    <p>The scope document approved on September 11, 2026, at the start of Build 1, published as written. It describes one social-science campaign and lists separate legal and other campaigns as outside the base game. <a href="/citation-needed/scope/build-1.html">Read the scope document</a>.</p>
+
+    <span class="cn-section-head">What worked</span>
+
+    <div class="cn-draft"><strong>Draft slot, what worked.</strong> What came out well in this build. Remove this box before merging.</div>
+
+    <span class="cn-section-head">Where the slop crept in</span>
+
+    <div class="cn-draft"><strong>Draft slot, where the slop crept in.</strong> Specific problems, ideally with a screenshot or a quoted line from the game, and what it took to fix them (or why you left them). Remove this box before merging.</div>
+
+    <hr class="rule">
+    <p class="cn-note">The other builds: <a href="/citation-needed/build-2.html">Build 2: The Patience Game</a> &middot; <a href="/citation-needed/build-3.html">Build 3: Citation Needed</a></p>
+
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <div>
+      <span>Blue Brazelton</span>
+      <span class="muted"> &middot; Northern Arizona University</span>
+    </div>
+    <div>
+      <a href="/contact.html">Contact</a>
+      <span class="muted"> &middot; </span>
+      <a href="/cv.html">CV</a>
+      <span class="muted"> &middot; </span>
+      <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a>
+      <span class="muted"> &middot; Last updated October 2026 </span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
