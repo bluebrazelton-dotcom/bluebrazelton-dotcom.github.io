@@ -109,11 +109,18 @@
   .section--xanga a:hover { color: #FF7AAE; }
   .section--xanga .xanga-mood { margin: .6rem 0 0; font: italic .75rem Georgia, serif; color: #8F8399; }
 
-  /* Profile song */
-  .song { display: grid; grid-template-columns: auto 1fr; gap: .4rem .75rem; align-items: center; background: #F0F0F0; border: 1px solid #ccc; padding: .55rem .65rem; margin: 0 0 1rem; font-size: .78rem; }
-  .song__art { width: 46px; height: 46px; border-radius: 4px; display: grid; place-items: center; background: linear-gradient(135deg, #003399, #6698CB); color: #fff; font-size: 1.4rem; grid-row: span 2; }
+  /* Profile songs: one <div class="track"> per song; the script pauses the others when one plays */
+  .song { background: #F0F0F0; border: 1px solid #ccc; padding: .55rem .65rem; margin: 0 0 1rem; font-size: .78rem; }
+  .song__title { margin: 0 0 .45rem; font: 700 .85rem Verdana, sans-serif; color: #333; }
+  .track { display: grid; grid-template-columns: auto 1fr; gap: .25rem .7rem; align-items: center; padding: .45rem 0; border-top: 1px dotted #bbb; }
+  .track:first-of-type { border-top: 0; padding-top: 0; }
+  .song__art { width: 46px; height: 46px; border-radius: 4px; display: grid; place-items: center; color: #fff; font-size: 1.4rem; grid-row: span 2; }
+  .song__art--1 { background: linear-gradient(135deg, #24402E, #6B5A3A); }
+  .song__art--2 { background: linear-gradient(135deg, #2A1530, #8E3B63); }
+  .track__name b { display: block; }
+  .track__name span { color: #555; }
   .song audio { width: 100%; height: 32px; }
-  .song__note { grid-column: 1 / -1; margin: 0; color: #666; font-size: .72rem; font-style: italic; }
+  .song__note { margin: .4rem 0 0; color: #666; font-size: .72rem; font-style: italic; }
 
   /* Top 8 */
   .friends-count { margin: 0 0 .7rem; font-size: .85rem; }
@@ -224,7 +231,7 @@
           <h2 class="box__head" id="interests-h">Blue's Interests</h2>
           <table class="info">
             <tr><th scope="row">General</th><td>AI in higher education, organizational theory, how institutions actually change, faculty work that leaves room for a life, building games with AI just to see what happens.</td></tr>
-            <tr><th scope="row">Music</th><td>My <a href="#profile-song">profile song</a> is my own jingle. Respect it.</td></tr>
+            <tr><th scope="row">Music</th><td>Bubo and the Gorgons; Elder Millennials. Both are <a href="#profile-song">on my profile</a>. Neither band exists, which has never stopped a MySpace band before.</td></tr>
             <tr><th scope="row">Movies</th><td>Ask me in the coffee line in Atlanta.</td></tr>
             <tr><th scope="row">Television</th><td>Also a coffee-line question.</td></tr>
             <tr><th scope="row">Books</th><td><a href="/beyond-the-campus.html"><cite>Beyond the Campus</cite></a> (I helped write it, so it counts); the <cite>Dungeon Crawler Carl</cite> series (enough to <a href="/dcc/dcc_index.html">make a tabletop game</a> about it).</td></tr>
@@ -256,10 +263,18 @@
       <div class="col">
         <p class="network">Blue is in your extended network</p>
 
-        <div class="song" id="profile-song">
-          <span class="song__art" aria-hidden="true">♫</span>
-          <span><b>Blue Brazelton</b> &ndash; &ldquo;The Blue Jingle&rdquo;</span>
-          <audio controls preload="none" src="/blue-jingle.mp3" aria-label="Profile song: The Blue Jingle"></audio>
+        <div class="song" id="profile-song" role="region" aria-label="Blue's music">
+          <p class="song__title">Blue's Music</p>
+          <div class="track">
+            <span class="song__art song__art--1" aria-hidden="true">⚔</span>
+            <span class="track__name"><b>&ldquo;Always on a Side Quest&rdquo;</b><span>Bubo and the Gorgons &middot; 2:27</span></span>
+            <audio controls preload="none" src="/bluespace/always-on-a-side-quest.mp3" aria-label="Always on a Side Quest, by Bubo and the Gorgons"></audio>
+          </div>
+          <div class="track">
+            <span class="song__art song__art--2" aria-hidden="true">🤖</span>
+            <span class="track__name"><b>&ldquo;AI Taking Over&rdquo;</b><span>Elder Millennials &middot; 1:05</span></span>
+            <audio controls preload="none" src="/bluespace/ai-taking-over.mp3" aria-label="AI Taking Over, by Elder Millennials"></audio>
+          </div>
           <p class="song__note">Autoplay is off. We&rsquo;ve all grown since 2005.</p>
         </div>
 
@@ -367,6 +382,13 @@
     // "Last Login" is always today.
     var d = new Date(), el = document.getElementById('last-login');
     if (el) el.textContent = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    // Only one song plays at a time.
+    var players = document.querySelectorAll('.song audio');
+    Array.prototype.forEach.call(players, function (a) {
+      a.addEventListener('play', function () {
+        Array.prototype.forEach.call(players, function (o) { if (o !== a) o.pause(); });
+      });
+    });
     // Forward to Friend: share sheet where available, otherwise copy the link.
     var btn = document.getElementById('forward'), status = document.getElementById('forward-status');
     var url = 'https://www.bluebrazelton.com/myspace.html';
