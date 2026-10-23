@@ -10,6 +10,56 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css?v=10" />
 <script src="/mode.js"></script>
+<style>
+  /* AAC&U 2026 conference badge: TEMPORARY. Hides itself after Oct 30, 2026 (script at the end of
+     this page). To remove for good: delete this <style> block, the .aacu-badge markup, and its script. */
+  .home-shell { position: relative; }
+  .aacu-badge {
+    --strap: calc(clamp(2.5rem, 6vw, 5rem) + 1.1rem);   /* main's top padding + a little */
+    position: absolute; z-index: 5;
+    top: calc(-1 * clamp(2.5rem, 6vw, 5rem));
+    right: calc(var(--gutter) - 0.75rem);
+    width: 11.75rem;
+    transform-origin: 50% 0;
+    transform: rotate(-4deg);
+    transition: transform .35s ease;
+  }
+  .aacu-badge:hover, .aacu-badge:focus-within { transform: rotate(1.5deg); }
+  .aacu-badge__lanyard { display: block; width: 7.5rem; height: var(--strap); margin: 0 auto; overflow: visible; }
+  .aacu-badge__clip { display: block; width: 1.6rem; height: 1.05rem; margin: -0.15rem auto 0; border-radius: .25rem .25rem .45rem .45rem;
+    background: linear-gradient(#c9ced6, #8e98a6); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); position: relative; }
+  .aacu-badge__clip::after { content: ""; position: absolute; left: 50%; bottom: -0.5rem; width: .7rem; height: .7rem; margin-left: -.35rem;
+    border: 2px solid #8e98a6; border-radius: 50%; }
+  .aacu-badge__card {
+    display: block; margin-top: .3rem; position: relative;
+    background: #FBF8F1; color: #2B2A27; text-decoration: none; text-align: center;
+    border: 1px solid #D6CBB4; border-radius: .7rem; overflow: hidden;
+    box-shadow: 0 10px 22px rgba(31, 43, 61, .28), 0 2px 4px rgba(31, 43, 61, .18);
+    font-family: var(--sans); line-height: 1.25;
+  }
+  .aacu-badge__card:focus-visible { outline: 3px solid #9CCDEE; outline-offset: 3px; }
+  .aacu-badge__slot { position: absolute; top: .45rem; left: 50%; width: 2.2rem; height: .42rem; margin-left: -1.1rem;
+    border-radius: 1rem; background: #1F2B3D; opacity: .55; }
+  .aacu-badge__band { display: block; background: #3A4F6E; color: #EFE6D3; padding: 1.15rem .5rem .55rem;
+    font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+  .aacu-badge__band b { color: #9CCDEE; font-weight: 700; }
+  .aacu-badge__hello { display: block; margin: .7rem 0 .1rem; font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; color: #5C574E; }
+  .aacu-badge__name { display: block; font-family: var(--serif); font-weight: 600; font-size: 1.35rem; line-height: 1.1; color: #3A4F6E; padding: 0 .5rem; }
+  .aacu-badge__org { display: block; margin: .3rem .5rem 0; font-size: .74rem; color: #4A4740; }
+  .aacu-badge__when { display: block; margin: .55rem .5rem .7rem; font-size: .8rem; font-weight: 700; color: #2B2A27; }
+  .aacu-badge__date { white-space: nowrap; }
+  .aacu-badge__ribbon { display: block; background: #9CCDEE; color: #1F2B3D; padding: .4rem .5rem; font-size: .74rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; }
+  .aacu-badge__card:hover .aacu-badge__ribbon { text-decoration: underline; text-underline-offset: 2px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  @media (max-width: 720px) {
+    .aacu-badge { position: static; width: auto; max-width: 17rem; margin: 2rem auto 0; transform: rotate(-2deg); }
+    .aacu-badge__lanyard, .aacu-badge__clip { display: none; }
+    .aacu-badge__card { margin-top: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .aacu-badge { transition: none; } }
+  @media print { .aacu-badge { display: none; } }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -32,7 +82,7 @@
   </div>
 </header>
 <main>
-  <div class="shell">
+  <div class="shell home-shell">
     <section class="two-col home-hero">
       <div>
         <span class="eyebrow">Associate Professor &middot; Northern Arizona University</span>
@@ -49,6 +99,25 @@
         <img src="/portrait.jpg" alt="Blue Brazelton holding a copy of Beyond the Campus" width="1400" height="1050" loading="eager" decoding="async" fetchpriority="high" style="display:block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--rule);" />
       </figure>
     </section>
+    <div class="aacu-badge" id="aacu-badge">
+      <svg class="aacu-badge__lanyard" viewBox="0 0 120 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <polygon points="8,0 24,0 66,100 54,100" fill="#9CCDEE"/>
+        <polygon points="96,0 112,0 66,100 54,100" fill="#86BBE0"/>
+        <line x1="11" y1="0" x2="56" y2="100" stroke="#3A4F6E" stroke-width="1" stroke-dasharray="3 3" opacity=".45" vector-effect="non-scaling-stroke"/>
+        <line x1="109" y1="0" x2="64" y2="100" stroke="#3A4F6E" stroke-width="1" stroke-dasharray="3 3" opacity=".45" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <span class="aacu-badge__clip" aria-hidden="true"></span>
+      <a class="aacu-badge__card" href="/contact.html">
+        <span class="aacu-badge__slot" aria-hidden="true"></span>
+        <span class="aacu-badge__band">AAC&amp;U &middot; <b>AI + Higher Ed</b></span>
+        <span class="aacu-badge__hello">Hello, my name is</span>
+        <span class="aacu-badge__name">Blue Brazelton</span>
+        <span class="aacu-badge__org">Northern Arizona University</span>
+        <span class="aacu-badge__when">In person in Atlanta<br><span class="aacu-badge__date">Oct 28&ndash;30</span></span>
+        <span class="aacu-badge__ribbon">Speaker &middot; Say hi &rarr;</span>
+        <span class="sr-only"> (contact me)</span>
+      </a>
+    </div>
     <hr class="rule" />
     <section class="two-col">
       <div class="aside-label">Currently</div>
@@ -83,6 +152,7 @@
             <span class="entry-meta">Oct&nbsp;2026</span>
             <div class="entry-body">
               <p class="entry-body__title">Two sessions accepted at the AAC&amp;U Conference on AI and Higher Education (Oct 28&ndash;30, Atlanta and online).</p>
+              <p class="entry-body__note" style="margin: .35rem 0;">I&rsquo;ll be there in person. <a href="/contact.html">Let&rsquo;s connect in Atlanta</a>.</p>
               <span class="entry-body__cite"><em>Reclaim your time, reclaim your agency: AI as productivity infrastructure for the professoriate</em> (Innovation session); and <em>Beyond compliance: Reading AI governance as a signal of institutional digital maturity</em> (Theory to Practice session, Policy/Governance/Ethics track).</span>
             </div>
           </li>
@@ -142,5 +212,10 @@
     </div>
   </div>
 </footer>
+<script>
+  /* Hide the AAC&U badge once the conference is over (after Oct 30, 2026, Atlanta time). */
+  (function () { var b = document.getElementById('aacu-badge');
+    if (b && Date.now() > Date.parse('2026-10-31T00:00:00-04:00')) b.hidden = true; })();
+</script>
 </body>
 </html>
