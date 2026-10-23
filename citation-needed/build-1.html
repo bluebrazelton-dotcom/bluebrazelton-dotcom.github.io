@@ -60,12 +60,9 @@
     .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
     .cn-doc li { margin-bottom: 0.35rem; }
     .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
-    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
-    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
-      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
-    .cn-draft strong { color: #C0392B; }
-    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
-    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+    .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
+    .cn-essay { margin: 0.5rem 0 1rem; }
+    .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
   </style>
 </head>
 <body data-theme="warm" data-accent="warmblue" data-type="editorial">
@@ -119,20 +116,16 @@
     <p class="cn-note">Each career saves separately in your browser. For the web, the scene illustrations were converted from PNG to smaller WebP images; nothing else in the game was changed.</p>
 
     <span class="cn-section-head">How it was built</span>
-    <p>The approved scope is dated September 11. About three weeks of design and research documents came before the first playable code on September 30. The first full build was accepted on October 12, and the project was closed on October 13.</p>
-
-    <div class="cn-draft"><strong>Draft slot, how it was built.</strong> Your account of the process for this build: what you asked for, how the sessions went, and what you had to spell out. Remove this box before merging.</div>
+    <p>Build 1 was the long road. I worked in ChatGPT with the Astra model for design and research, and in Codex for the code, across many sessions over about six weeks, and the first three of those weeks produced no game at all. They produced documents: a definition of what “the top of academia” means, a twelve-chapter career arc grounded in research on student success, an economy model, a decision log, and a risk register, with every session ending in a handoff note for the next one (and, eventually, records of the records). The economy is where I would do things differently. We spent a lot of time talking about the game economy (how much each task should cost and how quickly the scholar’s Energy should come back) when we should have taken a step back and looked for more resources and advice, because balancing an incremental game is a solved problem and plenty of designers have already written down how to do it. The first playable code arrived on September 30, the first full build was accepted on October 12, and near the end, when I could not face another playtest, I had Claude play one full career and write an audit, and then had Codex check Claude’s audit.</p>
 
     <span class="cn-section-head">The scope document</span>
     <p>The scope document approved on September 11, 2026, at the start of Build 1, published as written. It describes one social-science campaign and lists separate legal and other campaigns as outside the base game. <a href="/citation-needed/scope/build-1.html">Read the scope document</a>.</p>
 
     <span class="cn-section-head">What worked</span>
-
-    <div class="cn-draft"><strong>Draft slot, what worked.</strong> What came out well in this build. Remove this box before merging.</div>
+    <p>This is the most complete game of the three by a wide margin (four careers, 48 chapters, 13 endings, and saves that hold up), but my favorite part is smaller than any of that. Every illustrated scene has a tired version that appears when your scholar runs low on Energy, and anyone who has been through grad school will recognize that scholar immediately. Tying Energy in as a currency, something you spend on every task and run out of whether or not the work is finished (the game’s own rule is that work still counts at zero; it just loses polish), is the most honest mechanic in any of the three builds. The career content also took the research seriously, so setbacks become new routes instead of dead ends, which is closer to how academic careers actually work than anything the other two builds attempted.</p>
 
     <span class="cn-section-head">Where the slop crept in</span>
-
-    <div class="cn-draft"><strong>Draft slot, where the slop crept in.</strong> Specific problems, ideally with a screenshot or a quoted line from the game, and what it took to fix them (or why you left them). Remove this box before merging.</div>
+    <p>The slop in Build 1 is invisible to a player, because it lives in the folder. The approved scope promised one social-science career and said the base game “does not contain four fully separate versions of the preceding career,” and it shipped four anyway, with nobody, including me, stepping in to stop it. The process generated about 555,000 words of planning and review, written in a style I eventually stopped reading; when I playtested, I wrote that “whenever the writing got really technical/in the weeds about the details, i stopped paying attention.” The build was checked with 34,690 automated save tests, while the same records concede that “unfamiliar-player comprehension” remained unmeasured. Work can be thorough and accurate and still be slop if nobody can stand to read it.</p>
 
     <hr class="rule">
     <p class="cn-note">The other builds: <a href="/citation-needed/build-2.html">Build 2: The Patience Game</a> &middot; <a href="/citation-needed/build-3.html">Build 3: Citation Needed</a></p>

@@ -60,12 +60,9 @@
     .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
     .cn-doc li { margin-bottom: 0.35rem; }
     .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
-    /* DRAFT SLOTS: placeholders for Blue's writing. Remove every .cn-draft block before merging. */
-    .cn-draft { border: 2px dashed #C0392B; border-radius: 6px; padding: 1rem 1.2rem; margin: 1.5rem 0;
-      font-family: var(--sans); font-size: 0.9rem; color: var(--ink-soft); background: rgba(192, 57, 43, 0.05); }
-    .cn-draft strong { color: #C0392B; }
-    html[data-mode="dark"] .cn-draft { border-color: #F1948A; }
-    html[data-mode="dark"] .cn-draft strong { color: #F1948A; }
+    .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
+    .cn-essay { margin: 0.5rem 0 1rem; }
+    .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
   </style>
 </head>
 <body data-theme="warm" data-accent="warmblue" data-type="editorial">
@@ -116,20 +113,16 @@
     <p class="cn-note">Each discipline saves separately in your browser. The original repository is on <a href="https://github.com/bluebrazelton-dotcom/citation-needed">GitHub</a>.</p>
 
     <span class="cn-section-head">How it was built</span>
-    <p>The repository was created at 3:19 pm on October 14, and Gemini's development report was added at 4:29 pm the same afternoon.</p>
-
-    <div class="cn-draft"><strong>Draft slot, how it was built.</strong> Your account of the process for this build: what you asked for, how the sessions went, and what you had to spell out. Remove this box before merging.</div>
+    <p>By October 14 I knew what I wanted and had very little patience left for getting it, so I opened the Gemini app with the Argon model, handed over what I had learned from the first two builds, and asked for a one-shot. Gemini asked three scoping questions (tone, how active the play should be, and the visual style) and then built the game in a single pass. By the time I sat down to test, all four disciplines were playable, and I spent maybe 30 minutes moving between them to see how they differed, while Gemini worked in the background on the issues I flagged, which made it the most efficient testing time of the whole project. The repository was created at 3:19 that afternoon, and Gemini’s development report was added at 4:29.</p>
 
     <span class="cn-section-head">The scope document</span>
     <p>Gemini wrote this summary of the scoping step in its development report after the build. It is published as written, except for one correction: the original sentence described the other two builds as “single-shot builds,” which was not accurate. <a href="/citation-needed/scope/build-3.html">Read the scope document</a>.</p>
 
     <span class="cn-section-head">What worked</span>
-
-    <div class="cn-draft"><strong>Draft slot, what worked.</strong> What came out well in this build. Remove this box before merging.</div>
+    <p>My favorite moment in this build was not in the game at all. It was realizing that the name was perfect, that I should have thought of it weeks earlier, and that Gemini had beaten me to the punch, which is why the whole project is called Citation Needed now. The game earns the name in its first five minutes, too: pixel-art rooms drawn entirely in code, a little scholar who runs between stations, a timing bar, and a pop-up Reviewer #2, with each discipline getting its own room, equipment, and gatekeeper. You can also switch paths without losing progress.</p>
 
     <span class="cn-section-head">Where the slop crept in</span>
-
-    <div class="cn-draft"><strong>Draft slot, where the slop crept in.</strong> Specific problems, ideally with a screenshot or a quoted line from the game, and what it took to fix them (or why you left them). Remove this box before merging.</div>
+    <p>This is the slop you can see. Some perk descriptions are real academic words assembled into nonsense (“Mixed-Methods Triangulation awards bonus Foundation Grant funding on every sweet-spot combo”), and at least one label is cut off mid-word (“+35% Cit”). Instead of being playtested by a person, the game was tested by a bot that Gemini built into it to play at up to 50x speed (press Shift+Q to see it). The report states a 30- to 35-minute playthrough that nobody timed. Then there is the report itself, which praised its own careful scoping “rather than jumping blindly into code generation” and described my six-week build as a “single-shot” build. I have since corrected that sentence. Of the three builds, this is the one where the slop is easiest to spot, because it arrived quickly, read beautifully, and got the facts wrong.</p>
 
     <hr class="rule">
     <p class="cn-note">The other builds: <a href="/citation-needed/build-1.html">Build 1: The Living Record</a> &middot; <a href="/citation-needed/build-2.html">Build 2: The Patience Game</a></p>
