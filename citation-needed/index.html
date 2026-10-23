@@ -60,6 +60,16 @@
     .cn-doc h3 { font-size: 1.05rem; margin-top: 1.6rem; }
     .cn-doc li { margin-bottom: 0.35rem; }
     .cn-doc blockquote { border-left: 3px solid var(--rule); margin-left: 0; padding-left: 1rem; color: var(--ink-soft); }
+    .cn-wide { max-width: 72rem; }
+    .cn-hub { display: grid; grid-template-columns: minmax(0, 44rem) minmax(16rem, 1fr); gap: 3.5rem; align-items: start; row-gap: 0; }
+    .cn-hub .page-head { grid-column: 1 / -1; }
+    .cn-aside .cn-section-head:first-child { margin-top: 2rem; }
+    .cn-aside .cn-builds { gap: 1rem; margin-top: 0.5rem; }
+    .cn-aside .cn-build__body { padding: 0.85rem 1rem 1rem; }
+    .cn-aside .cn-build__body h2 { font-size: 1.05rem; }
+    .cn-aside .cn-build__body p { font-size: 0.85rem; }
+    .cn-aside .cn-play .button { padding: 0.45rem 0.8rem; font-size: 0.85rem; }
+    @media (max-width: 960px) { .cn-hub { grid-template-columns: 1fr; } }
     .cn-cite { font-family: var(--sans); font-size: 0.72em; font-style: italic; color: var(--accent); white-space: nowrap; }
     .cn-essay { margin: 0.5rem 0 1rem; }
     .cn-essay h2 { font-size: 1.45rem; margin: 2rem 0 1rem; }
@@ -83,14 +93,15 @@
   </div>
 </header>
 <main>
-  <div class="shell shell--narrow">
+  <div class="shell cn-wide">
 
+  <div class="cn-hub">
     <header class="page-head">
       <span class="eyebrow">Workshop</span>
       <h1>Citation Needed</h1>
       <p class="lead">One idea, an incremental game about an academic career, built three times with three different AI tools and three very different ways of working. All three builds are playable here, with notes on how each one was made.</p>
     </header>
-
+    <div class="cn-main">
     <article class="cn-essay">
       <h2>I tried to build a video game and accidentally made three</h2>
       <p>Over the last year, I’ve tried to learn as much about generative AI as I can, and it has been an incredible journey of theory-to-practice, and from early September until mid-October that meant vibe coding an academic-career-themed incremental upgrade game. I built it first with ChatGPT and Codex over many sessions across a few weeks, then with Claude Code across just a few sessions, and then I asked Gemini for a one-shot. I vibe coded them in that order, losing more and more patience toward the end (hence the one-shot attempt, built on the info from the other two builds).</p>
@@ -109,6 +120,8 @@
       <p>So here they are: three builds, three scope documents, and my notes on where each one went sideways. Play them, poke at them, and then go build something of your own, because that is the only way I know to learn the difference. And if something in here sounds right but has nothing underneath it, you know what to call it.</p>
     </article>
 
+    </div>
+    <aside class="cn-aside" aria-label="The three builds">
     <span class="cn-section-head">The three builds</span>
     <div class="cn-builds">
       <article class="cn-build">
@@ -163,6 +176,8 @@
     </ul>
 
     <p class="cn-note">Each game saves progress only in your own browser. Nothing is sent anywhere.</p>
+    </aside>
+  </div>
 
   </div>
 </main>
