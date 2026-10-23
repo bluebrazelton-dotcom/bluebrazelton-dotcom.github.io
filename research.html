@@ -9,6 +9,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Roboto+Slab:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/styles.css?v=10" />
 <script src="/mode.js"></script>
+<style>
+  /* Research: expandable sections (native <details>; closed by default, opened for printing). */
+  .fold { margin-top: 2.5rem; border-top: 1px solid var(--rule); }
+  .fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    list-style: none; cursor: pointer; padding: 0.9rem 0; }
+  .fold > summary::-webkit-details-marker { display: none; }
+  .fold > summary:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
+  .fold__title { margin: 0; font-size: 1.0625rem; }
+  .fold__count { font-family: var(--sans); font-weight: 400; font-size: 0.9rem; color: var(--ink-muted); }
+  .fold__hint { flex: none; font-family: var(--sans); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+  .fold__hint::before { content: "Show all"; }
+  .fold__hint::after { content: ""; display: inline-block; width: 0.45rem; height: 0.45rem; margin-left: 0.5rem;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-0.15rem) rotate(45deg);
+    transition: transform .2s ease; }
+  .fold[open] .fold__hint::before { content: "Hide"; }
+  .fold[open] .fold__hint::after { transform: translateY(0.1rem) rotate(-135deg); }
+  .fold > summary:hover .fold__hint { color: var(--slate); }
+  html[data-mode="dark"] .fold > summary:hover .fold__hint { color: var(--sky); }
+  html[data-mode="dark"] .fold > summary:focus-visible { outline-color: var(--sky); }
+  .fold > .entry-list { margin-top: 0; }
+  .two-col > div > .fold:first-child { margin-top: 0; }
+  @media (prefers-reduced-motion: reduce) { .fold__hint::after { transition: none; } }
+</style>
 <link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -110,7 +134,8 @@
             </div>
           </li>
         </ul>
-        <h3 style="margin-top: 2.5rem;">Peer-reviewed &amp; chapters</h3>
+        <details class="fold" id="peer-reviewed">
+          <summary><h3 class="fold__title">Peer-reviewed &amp; chapters <span class="fold__count">(8)</span></h3><span class="fold__hint" aria-hidden="true"></span></summary>
         <ul class="entry-list">
           <li>
             <span class="entry-meta">2026</span>
@@ -169,6 +194,7 @@
             </div>
           </li>
         </ul>
+        </details>
       </div>
     </section>
     <hr class="rule" />
@@ -176,7 +202,9 @@
     <section class="two-col">
       <div class="aside-label">Recent talks</div>
       <div>
-        <ul class="entry-list" style="border-top: 1px solid var(--rule-soft);">
+        <details class="fold" id="talks">
+          <summary><h2 class="fold__title">Talks &amp; presentations <span class="fold__count">(10)</span></h2><span class="fold__hint" aria-hidden="true"></span></summary>
+        <ul class="entry-list">
           <li>
             <span class="entry-meta">Jan&nbsp;2027</span>
             <div class="entry-body">
@@ -248,6 +276,7 @@
             </div>
           </li>
         </ul>
+        </details>
       </div>
     </section>
   </div>
@@ -268,5 +297,11 @@
     </div>
   </div>
 </footer>
+<script>
+  /* Open the expandable sections when printing, so nothing is left out. */
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('details.fold').forEach(function (d) { d.open = true; });
+  });
+</script>
 </body>
 </html>
