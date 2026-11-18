@@ -56,3 +56,19 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addButton);
   else addButton();
 })();
+
+/* "Last updated" in page footers: shows the month the site was last published.
+   Any <span data-last-updated> gets the server's Last-Modified month (GitHub Pages
+   sets it at each deploy). The text written in the HTML is the fallback. */
+(function () {
+  function fill() {
+    var els = document.querySelectorAll('[data-last-updated]');
+    if (!els.length || !document.lastModified) return;
+    var d = new Date(document.lastModified);
+    if (isNaN(d)) return;
+    var label = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    Array.prototype.forEach.call(els, function (el) { el.textContent = label; });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill);
+  else fill();
+})();
