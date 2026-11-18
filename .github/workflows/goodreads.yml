@@ -1,0 +1,25 @@
+name: Update currently reading
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # every 6 hours
+  workflow_dispatch:          # adds a "Run workflow" button for testing
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/update-reading.mjs
+      - name: Commit if changed
+        run: |
+          [ -f reading.json ] || { echo "No reading.json yet"; exit 0; }
+          git add reading.json
+          if git diff --cached --quiet; then echo "No change"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update currently reading"
+          git push
