@@ -399,7 +399,7 @@
 
   <footer class="footer">
     <a href="/about.html">About</a> | <a href="/contact.html">Contact</a> | <a href="/cv.html">CV</a> | <a href="https://www.linkedin.com/in/bluebrazelton/">LinkedIn</a>
-    <p style="margin:.5rem 0 0;">&copy; 2005-ish BlueSpace. Not affiliated with any social network, past or present. Last updated October 2026.</p>
+    <p style="margin:.5rem 0 0;">&copy; 2005-ish BlueSpace. Not affiliated with any social network, past or present. Last updated <span data-last-updated>November 2026</span>.</p>
     <p style="margin:.35rem 0 0;">Calliope: detail of <a href="https://www.clevelandart.org/art/2003.6.4"><cite>Calliope, Muse of Epic Poetry</cite></a>, Charles Meynier. Pegasus: <a href="https://www.clevelandart.org/art/1916.984.a"><cite>Stater: Pegasos</cite></a>, Corinth, c. 350&ndash;338 BCE. Both Cleveland Museum of Art (CC0).</p>
   </footer>
 
@@ -409,6 +409,9 @@
     // "Last Login" is always today.
     var d = new Date(), el = document.getElementById('last-login');
     if (el) el.textContent = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    // "Last updated" follows the site's last publish (Last-Modified header).
+    var lu = new Date(document.lastModified), luEl = document.querySelector('[data-last-updated]');
+    if (luEl && !isNaN(lu)) luEl.textContent = lu.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     // Only one song plays at a time.
     var players = document.querySelectorAll('.song audio');
     Array.prototype.forEach.call(players, function (a) {
