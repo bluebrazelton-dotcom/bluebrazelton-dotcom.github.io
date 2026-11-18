@@ -918,3 +918,42 @@ html[data-mode="dark"] { color-scheme: dark; }
 /* Body copy that reads best narrower than the shell stays left-aligned
    (so the page edge never shifts between pages). */
 .measure-wide { max-width: 46rem; }
+
+/* Goodreads "currently reading" widget (index.html) ------------- */
+/* Prefix selectors so the styles survive regenerating the widget (new ID). */
+
+[class^="gr_custom_header_"],
+[id^="gr_custom_widget_"] br { display: none; }
+[class^="gr_custom_container_"] { background: none; border: 0; padding: 0; width: auto; color: inherit; }
+[class^="gr_custom_each_container_"] {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  column-gap: 0.85rem;
+  align-items: start;
+  margin: 0 0 0.9rem;
+}
+[class^="gr_custom_each_container_"]:last-of-type { margin-bottom: 0.5rem; }
+[class^="gr_custom_book_container_"] { grid-row: span 2; }
+[class^="gr_custom_book_container_"] img {
+  display: block;
+  width: 2.5rem;
+  height: auto;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px oklch(0.2 0.01 60 / 0.18);
+}
+[class^="gr_custom_title_"] {
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+[class^="gr_custom_author_"] {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+[id^="gr_custom_widget_"] center { text-align: left; }
+[id^="gr_custom_widget_"] center img { height: 0.9rem; width: auto; opacity: 0.7; }
+/* Keep the "Reading" label level with the first book, not the middle of the list */
+.entry-list > li:has([id^="gr_custom_widget_"]) { align-items: start; }
+.entry-list > li:has([id^="gr_custom_widget_"]) .entry-meta { padding-top: 0.35rem; }
