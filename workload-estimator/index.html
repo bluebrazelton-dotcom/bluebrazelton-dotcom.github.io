@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script data-goatcounter="https://bluebrazelton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<title>Course Workload Estimator (NAU Prototype)</title>
+<style>
+  :root{
+    --blue:#003466; --blue-2:#0b4a85; --blue-tint:#e8eef6; --gold:#FFD200;
+    --ink:#1b1f24; --muted:#525a66; --line:#d5dbe3; --bg:#f6f8fb; --card:#fff;
+    --ok:#1d6b3a; --warn:#8a5a00; --over:#a3271f;
+    --c1:#003466; --c2:#3f7cc0; --c3:#8fb3db; --c4:#c9a400; --c5:#6b7a8f; --c6:#2d8a7a; --c7:#b35c2e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+  header{background:var(--blue);color:#fff;padding:22px 24px 18px;border-bottom:5px solid var(--gold)}
+  header h1{margin:0 0 4px;font-size:1.55rem;letter-spacing:.2px}
+  header p{margin:0;color:#dfe8f3;max-width:70ch}
+  .proto{display:inline-block;background:var(--gold);color:var(--blue);font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;max-width:1180px;margin:22px auto;padding:0 18px}
+  @media (max-width:900px){main{grid-template-columns:1fr}.results{position:static!important}}
+  fieldset{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:14px 16px 16px;margin:0 0 16px}
+  legend{font-weight:700;color:var(--blue);padding:0 6px;font-size:1.05rem}
+  .hint{color:var(--muted);font-size:.86rem;margin:2px 0 10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 14px}
+  label{display:block;font-size:.88rem;font-weight:600;margin-bottom:4px}
+  input[type=number],select{width:100%;padding:8px 9px;border:1px solid #9aa6b5;border-radius:5px;font-size:.95rem;background:#fff;color:var(--ink)}
+  input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue-2);outline-offset:2px}
+  .rate{margin-top:10px;font-size:.88rem;background:var(--blue-tint);border-left:4px solid var(--blue);padding:7px 10px;border-radius:0 4px 4px 0}
+  .assume{font-size:.82rem;color:var(--warn);margin-top:8px}
+  .assume::before{content:"Prototype assumption: ";font-weight:700}
+  .chk{display:flex;gap:8px;align-items:center;font-weight:600;font-size:.88rem;margin-top:10px}
+  .results{position:sticky;top:14px;align-self:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .panel h2{margin:0;background:var(--blue);color:#fff;font-size:1.05rem;padding:11px 16px}
+  .big{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+  .big div{padding:14px 16px}
+  .big div+div{border-left:1px solid var(--line)}
+  .big .n{font-size:2rem;font-weight:800;color:var(--blue);line-height:1}
+  .big .l{font-size:.8rem;color:var(--muted);margin-top:4px}
+  .bench{padding:14px 16px;border-bottom:1px solid var(--line)}
+  .status{font-weight:800;padding:6px 10px;border-radius:5px;display:inline-block;margin:6px 0}
+  .s-ok{background:#e3f3e8;color:var(--ok)} .s-under{background:#fff4d6;color:var(--warn)} .s-over{background:#fbe5e3;color:var(--over)}
+  .meter{position:relative;height:12px;background:#e9edf2;border-radius:6px;margin:10px 0 4px}
+  .meter .fill{position:absolute;left:0;top:0;bottom:0;background:var(--blue);border-radius:6px}
+  .meter .target{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--gold);box-shadow:0 0 0 1px var(--blue)}
+  .small{font-size:.8rem;color:var(--muted)}
+  .bar{display:flex;height:18px;margin:12px 16px 6px;border-radius:4px;overflow:hidden;background:#e9edf2}
+  .bar span{display:block;height:100%}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:6px 16px;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line)}
+  tbody tr+tr td{border-top:1px solid #eef1f5}
+  .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:7px;vertical-align:middle}
+  tfoot td{font-weight:800;border-top:2px solid var(--blue)}
+  .actions{padding:12px 16px 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  button{background:var(--blue);color:#fff;border:0;border-radius:5px;padding:9px 14px;font-weight:700;font-size:.9rem;cursor:pointer}
+  button.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+  #copyMsg{font-size:.85rem;color:var(--ok)}
+  details{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:0 0 16px}
+  summary{font-weight:700;color:var(--blue);cursor:pointer}
+  details h3{font-size:.95rem;margin:14px 0 4px;color:var(--blue)}
+  details p,details li{font-size:.88rem}
+  .rtable{overflow-x:auto} .rtable table{font-size:.82rem} .rtable th,.rtable td{padding:4px 8px;border:1px solid #e3e7ec}
+  footer{max-width:1180px;margin:0 auto 30px;padding:0 18px;font-size:.8rem;color:var(--muted)}
+  footer a{color:var(--blue)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="proto">Prototype, not an official NAU tool</div>
+  <h1>Course Workload Estimator</h1>
+  <p>Estimate how many hours students will spend on your course, and compare the total with the Arizona Board of Regents standard of 45 hours of work per unit of credit.</p>
+</header>
+
+<main>
+<form id="f" novalidate>
+
+<fieldset>
+  <legend>Course info</legend>
+  <div class="grid">
+    <div><label for="credits">Units of credit</label><input id="credits" type="number" min="0.5" step="0.5" value="3"></div>
+    <div><label for="term">Term length</label>
+      <select id="term">
+        <option value="16">16 weeks (semester incl. finals)</option>
+        <option value="15" selected>15 weeks (semester)</option>
+        <option value="8">8 weeks</option>
+        <option value="7.5">7.5 weeks</option>
+        <option value="custom">Custom…</option>
+      </select></div>
+    <div id="customWrap" hidden><label for="weeks">Weeks (custom)</label><input id="weeks" type="number" min="1" step="0.5" value="15"></div>
+  </div>
+  <p class="hint" style="margin-top:10px">Term presets are placeholders. Confirm them against NAU's academic calendar and NAU Online session lengths.</p>
+</fieldset>
+
+<fieldset>
+  <legend>Reading</legend>
+  <div class="grid">
+    <div><label for="rPages">Pages per week</label><input id="rPages" type="number" min="0" value="0"></div>
+    <div><label for="rDensity">Page density</label>
+      <select id="rDensity">
+        <option value="450">450 words (paperback, 6×9 journal)</option>
+        <option value="600">600 words (academic monograph)</option>
+        <option value="750">750 words (textbook, 2-column journal)</option>
+      </select></div>
+    <div><label for="rPurpose">Reading purpose</label>
+      <select id="rPurpose">
+        <option value="survey">Survey (main ideas)</option>
+        <option value="understand" selected>Understand (comprehension)</option>
+        <option value="engage">Engage (problems, arguments, analysis)</option>
+      </select></div>
+    <div><label for="rDiff">New concepts</label>
+      <select id="rDiff">
+        <option value="0">No new concepts</option>
+        <option value="1" selected>Some new concepts</option>
+        <option value="2">Many new concepts</option>
+      </select></div>
+    <div><label for="rOverride">Override: pages per hour</label><input id="rOverride" type="number" min="0" step="1" placeholder="leave blank"></div>
+  </div>
+  <div class="rate" id="rRate" aria-live="polite"></div>
+</fieldset>
+
+<fieldset>
+  <legend>Writing</legend>
+  <div class="grid">
+    <div><label for="wPages">Pages per term</label><input id="wPages" type="number" min="0" value="0"></div>
+    <div><label for="wSpace">Page format</label>
+      <select id="wSpace">
+        <option value="250">Double-spaced (250 words)</option>
+        <option value="500">Single-spaced (500 words)</option>
+      </select></div>
+    <div><label for="wGenre">Genre</label>
+      <select id="wGenre">
+        <option value="0">Reflection / narrative</option>
+        <option value="1" selected>Argument</option>
+        <option value="2">Research</option>
+      </select></div>
+    <div><label for="wDraft">Drafting</label>
+      <select id="wDraft">
+        <option value="0">No drafting</option>
+        <option value="1" selected>Minimal drafting</option>
+        <option value="2">Extensive drafting</option>
+      </select></div>
+    <div><label for="wOverride">Override: hours per page</label><input id="wOverride" type="number" min="0" step="0.25" placeholder="leave blank"></div>
+  </div>
+  <div class="rate" id="wRate" aria-live="polite"></div>
+</fieldset>
+
+<fieldset>
+  <legend>Videos and podcasts</legend>
+  <div class="grid">
+    <div><label for="vMin">Minutes per week</label><input id="vMin" type="number" min="0" value="0"></div>
+    <div><label for="vMult">How students use them</label>
+      <select id="vMult">
+        <option value="1">Watch / listen once</option>
+        <option value="1.5">Watch and take notes (×1.5)</option>
+        <option value="2">Study closely, rewatch (×2)</option>
+      </select></div>
+  </div>
+  <p class="assume">time = runtime × multiplier. The source research gives no rate for media.</p>
+</fieldset>
+
+<fieldset>
+  <legend>Discussion posts</legend>
+  <div class="grid">
+    <div><label for="dNum">Posts per week (incl. replies)</label><input id="dNum" type="number" min="0" value="0"></div>
+    <div><label for="dFmt">Format</label>
+      <select id="dFmt">
+        <option value="text">Text</option>
+        <option value="av">Audio / video</option>
+      </select></div>
+    <div id="dWordsWrap"><label for="dWords">Average words per post</label><input id="dWords" type="number" min="0" value="250"></div>
+    <div id="dMinWrap" hidden><label for="dMin">Average minutes per recording</label><input id="dMin" type="number" min="0" value="3"></div>
+  </div>
+  <p class="assume" id="dAssume">text posts are timed at the reflection / no-drafting writing rate (45 min per 250 words). Audio/video posts: 3× runtime for prep, recording and retakes.</p>
+</fieldset>
+
+<fieldset>
+  <legend>Exams</legend>
+  <div class="grid">
+    <div><label for="eNum">Exams per term</label><input id="eNum" type="number" min="0" value="0"></div>
+    <div><label for="eStudy">Study hours per exam</label><input id="eStudy" type="number" min="0" step="0.5" value="5"></div>
+    <div><label for="eTake">Hours per exam taken outside class time</label><input id="eTake" type="number" min="0" step="0.25" value="0"></div>
+  </div>
+  <p class="assume">5 study hours per exam is a starting point. Use 0 in the last box for exams given during scheduled class meetings.</p>
+</fieldset>
+
+<fieldset>
+  <legend>Other assignments</legend>
+  <p class="hint">Projects, problem sets, labs, presentations, quizzes: anything not covered above.</p>
+  <div class="grid">
+    <div><label for="oNum">Number per term</label><input id="oNum" type="number" min="0" value="0"></div>
+    <div><label for="oHrs">Hours each</label><input id="oHrs" type="number" min="0" step="0.25" value="1"></div>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>Class meetings</legend>
+  <p class="hint">Scheduled live sessions, in person or synchronous online. Leave at 0 for fully asynchronous courses.</p>
+  <div class="grid">
+    <div><label for="cNum">Meetings per week</label><input id="cNum" type="number" min="0" value="0"></div>
+    <div><label for="cMin">Minutes per meeting</label><input id="cMin" type="number" min="0" value="75"></div>
+  </div>
+  <p class="hint" style="margin-top:10px">Counted the way ABOR 2-224 counts it: each 50 minutes of class time = 1 hour of work.</p>
+</fieldset>
+
+<details>
+  <summary>How the estimates work</summary>
+  <h3>Reading</h3>
+  <p>Pages per hour = (words per minute × 60) ÷ words per page. Reading speeds by purpose and difficulty:</p>
+  <div class="rtable"><table>
+    <thead><tr><th>Purpose; new concepts</th><th>Words/min</th><th>450 w/p</th><th>600 w/p</th><th>750 w/p</th></tr></thead>
+    <tbody id="rTable"></tbody>
+  </table></div>
+  <h3>Writing (hours per page)</h3>
+  <div class="rtable"><table>
+    <thead><tr><th>Genre; drafting</th><th>250 words</th><th>500 words</th></tr></thead>
+    <tbody id="wTable"></tbody>
+  </table></div>
+  <p>Writing time is assumed to grow in a straight line with length. Reflection takes half as long as argument, and research takes twice as long. The original authors call the writing estimates far more speculative than the reading estimates.</p>
+  <h3>ABOR benchmark</h3>
+  <p>ABOR Policy 2-224 sets one unit of credit at 45 hours of work, where an hour is 50 minutes of class time or 60 minutes of independent work. The status shows "on target" within ±10% of 45 × credits.</p>
+  <h3>Assumptions added for this prototype</h3>
+  <ul>
+    <li>Media time multipliers (×1, ×1.5, ×2).</li>
+    <li>Discussion posts: text at 333 words per hour; audio/video at 3× runtime.</li>
+    <li>Exams: 5 study hours per exam by default.</li>
+    <li>Term-length presets.</li>
+  </ul>
+  <p>These are starting values, not research findings. Change them to fit your course.</p>
+</details>
+
+</form>
+
+<aside class="results" aria-labelledby="resH">
+  <div class="panel">
+    <h2 id="resH">Estimated workload</h2>
+    <div class="big">
+      <div><div class="n" id="perWeek">0.0</div><div class="l">hours per week</div></div>
+      <div><div class="n" id="perTerm">0</div><div class="l">hours per term</div></div>
+    </div>
+    <div class="bench">
+      <div class="small">ABOR benchmark: <strong id="target">135</strong> hours (<span id="targetWk">9.0</span> per week)</div>
+      <div class="status s-under" id="status" role="status" aria-live="polite">Under target</div>
+      <div class="meter" aria-hidden="true"><div class="fill" id="fill"></div><div class="target" id="tmark"></div></div>
+      <div class="small" id="pct">0% of benchmark</div>
+    </div>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <table>
+      <thead><tr><th>Category</th><th>Per week</th><th>Per term</th></tr></thead>
+      <tbody id="rows"></tbody>
+      <tfoot><tr><td>Total</td><td id="tWk">0.0</td><td id="tTerm">0</td></tr></tfoot>
+    </table>
+    <div class="actions">
+      <button type="button" id="copyBtn">Copy summary</button>
+      <button type="button" class="secondary" id="resetBtn">Reset</button>
+      <span id="copyMsg" role="status" aria-live="polite"></span>
+    </div>
+  </div>
+</aside>
+</main>
+
+<footer>
+  <p>Based on the Course Workload Estimator by Betsy Barre, Allen Brown, and Justin Esarey (Rice University; Workload Estimator 2.0, Wake Forest University Center for the Advancement of Teaching), licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>. Rates come from their <a href="https://cat.wfu.edu/resources/workload/estimationdetails/">Estimation Details</a>. This adaptation is shared under the same license. It produces estimates only: actual time varies with reading speed, prior knowledge, and course design.</p>
+</footer>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const WPM = { survey:[500,350,250], understand:[250,180,130], engage:[130,90,65] };
+  const PLABEL = {survey:"Survey", understand:"Understand", engage:"Engage"};
+  const DLABEL = ["No new concepts","Some new concepts","Many new concepts"];
+  // hours per 250-word page; single-spaced = ×2
+  const WHRS = [[0.75,1,1.25],[1.5,2,2.5],[3,4,5]];
+  const GLABEL = ["Reflection/narrative","Argument","Research"];
+  const DRLABEL = ["No drafting","Minimal drafting","Extensive drafting"];
+  const CATS = [
+    {k:"read",  n:"Reading",          c:"var(--c1)"},
+    {k:"write", n:"Writing",          c:"var(--c2)"},
+    {k:"media", n:"Videos / podcasts",c:"var(--c3)"},
+    {k:"disc",  n:"Discussion posts", c:"var(--c4)"},
+    {k:"exam",  n:"Exams",            c:"var(--c5)"},
+    {k:"other", n:"Other assignments",c:"var(--c6)"},
+    {k:"class", n:"Class meetings",   c:"var(--c7)"}
+  ];
+  const num = id => { const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
+  const f1 = x => (Math.round(x*10)/10).toFixed(1);
+  const f0 = x => Math.round(x).toLocaleString();
+
+  // static method tables
+  let rt = "";
+  for (const p of ["survey","understand","engage"]) WPM[p].forEach((w,i)=>{
+    rt += `<tr><td>${PLABEL[p]}; ${DLABEL[i].toLowerCase()}</td><td>${w}</td>` +
+      [450,600,750].map(d=>`<td>${Math.round(w*60/d)}</td>`).join("") + "</tr>";
+  });
+  $("rTable").innerHTML = rt;
+  let wt = "";
+  WHRS.forEach((row,g)=>row.forEach((h,d)=>{ wt += `<tr><td>${GLABEL[g]}; ${DRLABEL[d].toLowerCase()}</td><td>${h}</td><td>${h*2}</td></tr>`; }));
+  $("wTable").innerHTML = wt;
+
+  function weeks(){
+    const t = $("term").value;
+    $("customWrap").hidden = t !== "custom";
+    return t === "custom" ? (num("weeks") || 1) : parseFloat(t);
+  }
+
+  let last = null;
+  function calc(){
+    const W = weeks(), credits = num("credits");
+    // reading
+    const wpm = WPM[$("rPurpose").value][+$("rDiff").value];
+    const dens = +$("rDensity").value;
+    const ovr = num("rOverride");
+    const pph = ovr || (wpm*60/dens);
+    $("rRate").textContent = ovr ? `Using your override: ${f1(pph)} pages per hour.`
+      : `Estimated rate: ${Math.round(pph)} pages per hour (${wpm} words per minute).`;
+    const read = num("rPages") / pph;           // weekly
+    // writing
+    const baseH = WHRS[+$("wGenre").value][+$("wDraft").value] * (+$("wSpace").value/250);
+    const wo = num("wOverride");
+    const hpp = wo || baseH;
+    $("wRate").textContent = wo ? `Using your override: ${hpp} hours per page.`
+      : `Estimated rate: ${hpp} hours per page.`;
+    const writeT = num("wPages") * hpp;           // term
+    // media
+    const media = num("vMin")/60 * +$("vMult").value;  // weekly
+    // discussion
+    const av = $("dFmt").value === "av";
+    $("dWordsWrap").hidden = av; $("dMinWrap").hidden = !av;
+    const perPost = av ? num("dMin")*3/60 : num("dWords") * 0.75/250;
+    const disc = num("dNum") * perPost;           // weekly
+    // exams, other (term)
+    const examT = num("eNum") * (num("eStudy") + num("eTake"));
+    const otherT = num("oNum") * num("oHrs");
+    // class (weekly), ABOR 50-min hour
+    const cls = num("cNum") * num("cMin") / 50;
+
+    const term = {
+      read: read*W, write: writeT, media: media*W, disc: disc*W,
+      exam: examT, other: otherT, class: cls*W
+    };
+    const total = Object.values(term).reduce((a,b)=>a+b,0);
+    const target = 45*credits;
+    const wk = total / W;
+
+    $("perWeek").textContent = f1(wk);
+    $("perTerm").textContent = f0(total);
+    $("target").textContent = f0(target);
+    $("targetWk").textContent = f1(target/W);
+
+    const ratio = target ? total/target : 0;
+    const st = $("status");
+    if (!target) { st.textContent = "Enter units of credit"; st.className = "status s-under"; }
+    else if (ratio < 0.9) { st.textContent = `Under target by ${f0(target-total)} hours`; st.className = "status s-under"; }
+    else if (ratio > 1.1) { st.textContent = `Over target by ${f0(total-target)} hours`; st.className = "status s-over"; }
+    else { st.textContent = "On target (within ±10%)"; st.className = "status s-ok"; }
+    $("pct").textContent = `${Math.round(ratio*100)}% of benchmark`;
+    const scale = Math.max(total, target*1.25) || 1;
+    $("fill").style.width = (total/scale*100) + "%";
+    $("tmark").style.left = `calc(${target/scale*100}% - 1px)`;
+
+    let rows = "", bar = "";
+    CATS.forEach(c=>{
+      const t = term[c.k];
+      rows += `<tr><td><span class="sw" style="background:${c.c}"></span>${c.n}</td><td>${f1(t/W)}</td><td>${f0(t)}</td></tr>`;
+      if (total > 0 && t > 0) bar += `<span style="width:${t/total*100}%;background:${c.c}" title="${c.n}"></span>`;
+    });
+    $("rows").innerHTML = rows; $("bar").innerHTML = bar;
+    $("tWk").textContent = f1(wk); $("tTerm").textContent = f0(total);
+
+    last = {W, credits, term, total, target, wk, ratio};
+  }
+
+  $("copyBtn").addEventListener("click", async ()=>{
+    if (!last) return;
+    const L = last;
+    const lines = [
+      "Course Workload Estimate",
+      `${L.credits} units of credit, ${L.W}-week term`,
+      `Estimated total: ${f0(L.total)} hours (${f1(L.wk)} per week)`,
+      `ABOR benchmark (45 hrs/credit): ${f0(L.target)} hours. ${$("status").textContent}`,
+      "",
+      ...CATS.map(c=>`${c.n}: ${f1(L.term[c.k]/L.W)} hrs/week, ${f0(L.term[c.k])} hrs/term`),
+      "",
+      "Estimates based on the Course Workload Estimator by Barre, Brown, and Esarey (CC BY-NC-SA 4.0)."
+    ];
+    try { await navigator.clipboard.writeText(lines.join("\n")); $("copyMsg").textContent = "Copied."; }
+    catch(e){ $("copyMsg").textContent = "Copy was blocked by the browser."; }
+    setTimeout(()=>$("copyMsg").textContent="", 3000);
+  });
+
+  $("resetBtn").addEventListener("click", ()=>{ $("f").reset(); $("copyMsg").textContent=""; calc(); });
+  $("f").addEventListener("input", calc);
+  $("f").addEventListener("change", calc);
+  $("f").addEventListener("submit", e=>e.preventDefault());
+  calc();
+})();
+</script>
+</body>
+</html>
