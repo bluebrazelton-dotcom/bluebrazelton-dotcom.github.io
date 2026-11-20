@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script data-goatcounter="https://bluebrazelton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<title>Nursing Exam Tools (NAU Prototype)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{--blue:#003466;--blue-2:#0b4a85;--tint:#e8eef6;--gold:#FFD200;--ink:#1b1f24;--muted:#525a66;--line:#d5dbe3;--bg:#f6f8fb;--ok:#1d6b3a;--warn:#8a5a00;--bad:#a3271f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+  header{background:var(--blue);color:#fff;padding:22px 24px 0;border-bottom:5px solid var(--gold)}
+  header h1{margin:0 0 4px;font-size:1.55rem}
+  header p{margin:0 0 14px;color:#dfe8f3;max-width:75ch}
+  .proto{display:inline-block;background:var(--gold);color:var(--blue);font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  nav[role=tablist]{display:flex;gap:4px;flex-wrap:wrap}
+  nav button{background:transparent;color:#dfe8f3;border:0;border-radius:6px 6px 0 0;padding:10px 16px;font-weight:700;font-size:.92rem;cursor:pointer}
+  nav button[aria-selected=true]{background:var(--bg);color:var(--blue)}
+  nav button:hover{color:#fff} nav button[aria-selected=true]:hover{color:var(--blue)}
+  main{max-width:1150px;margin:22px auto;padding:0 18px}
+  section.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+  h2{margin:0 0 4px;color:var(--blue);font-size:1.2rem}
+  h3{margin:14px 0 6px;color:var(--blue);font-size:1rem}
+  .hint{color:var(--muted);font-size:.88rem;margin:2px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 16px}
+  label{display:block;font-size:.88rem;font-weight:600;margin-bottom:4px}
+  input[type=number],input[type=text],textarea,select{width:100%;padding:8px 9px;border:1px solid #9aa6b5;border-radius:5px;font:inherit;font-size:.93rem;background:#fff;color:var(--ink)}
+  textarea{min-height:110px;font-family:ui-monospace,Consolas,monospace;font-size:.85rem}
+  textarea.prose{font-family:inherit;font-size:.93rem;min-height:70px}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--blue-2);outline-offset:2px}
+  button.btn{background:var(--blue);color:#fff;border:0;border-radius:5px;padding:9px 14px;font-weight:700;font-size:.9rem;cursor:pointer}
+  button.btn.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+  button.mini{background:#fff;color:var(--blue);border:1px solid var(--blue);border-radius:4px;padding:3px 8px;font-size:.8rem;cursor:pointer}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .msg{font-size:.88rem;color:var(--ok)}
+  .err{color:var(--bad);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:6px 8px;border-bottom:1px solid #e6eaef;text-align:left;vertical-align:top}
+  thead th{background:var(--tint);color:var(--blue);font-size:.76rem;text-transform:uppercase;letter-spacing:.3px}
+  td.num,th.num{text-align:right}
+  .flag{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 6px;border-radius:3px;margin:2px 4px 2px 0}
+  .f-warn{background:#fff4d6;color:var(--warn)} .f-bad{background:#fbe5e3;color:var(--bad)} .f-ok{background:#e3f3e8;color:var(--ok)}
+  .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:6px}
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
+  .stat{background:var(--tint);border-radius:6px;padding:10px 14px;min-width:120px}
+  .stat .n{font-size:1.6rem;font-weight:800;color:var(--blue);line-height:1}
+  .stat .l{font-size:.78rem;color:var(--muted)}
+  .bp input{width:58px;padding:4px 5px;text-align:right}
+  .bp td,.bp th{text-align:center;white-space:nowrap}
+  .bp td:first-child,.bp th:first-child{text-align:left;white-space:normal;min-width:270px}
+  .bp input[type=number]{width:52px}
+  .bp input.catname{width:100%;text-align:left}
+  .note{background:var(--tint);border-left:4px solid var(--blue);padding:8px 12px;font-size:.86rem;border-radius:0 4px 4px 0;margin-top:12px}
+  .assume{font-size:.82rem;color:var(--warn)}
+  .cj{border:1px solid var(--line);border-radius:6px;padding:12px;margin-top:10px;background:#fbfcfe}
+  .cj h4{margin:0 0 6px;color:var(--blue);font-size:.95rem}
+  .cj .grid{grid-template-columns:220px 1fr}
+  @media (max-width:700px){.cj .grid{grid-template-columns:1fr}}
+  pre.out{white-space:pre-wrap;background:#fbfcfe;border:1px solid var(--line);border-radius:6px;padding:12px;font-size:.85rem;max-height:420px;overflow:auto}
+  footer{max-width:1150px;margin:0 auto 30px;padding:0 18px;font-size:.8rem;color:var(--muted)}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="proto">Prototype, not an official NAU tool</div>
+  <h1>Nursing Exam Tools</h1>
+  <p>Four small tools for building and reviewing teacher-made exams. Everything runs in your browser, and nothing you paste or type is sent anywhere.</p>
+  <nav role="tablist" aria-label="Exam tools">
+    <button role="tab" id="t-item-analysis" aria-controls="item-analysis" aria-selected="true">Item analysis</button>
+    <button role="tab" id="t-blueprint" aria-controls="blueprint" aria-selected="false" tabindex="-1">Test blueprint</button>
+    <button role="tab" id="t-timing" aria-controls="timing" aria-selected="false" tabindex="-1">Exam timing</button>
+    <button role="tab" id="t-ngn-case" aria-controls="ngn-case" aria-selected="false" tabindex="-1">NGN case builder</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= ITEM ANALYSIS ================= -->
+<div role="tabpanel" id="item-analysis" aria-labelledby="t-item-analysis">
+<section class="card">
+  <h2>Item analysis helper</h2>
+  <p class="hint">Paste item statistics exported from ExamSoft, Canvas, or a spreadsheet. Columns are matched by name: <b>Item</b>, <b>Difficulty</b> (p-value), <b>Point biserial</b> (or discrimination), and optionally <b>Key</b> plus the share of students choosing each option (<b>A</b>, <b>B</b>, <b>C</b>…). Use item numbers only, never student names.</p>
+  <label for="iaData">Item statistics (CSV or tab-separated, with a header row)</label>
+  <textarea id="iaData" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="btn" type="button" id="iaRun">Analyze</button>
+    <button class="btn secondary" type="button" id="iaSample">Load sample data</button>
+    <span id="iaMsg" class="msg" role="status" aria-live="polite"></span>
+  </div>
+  <details style="margin-top:12px"><summary style="font-weight:700;color:var(--blue);cursor:pointer">Flag thresholds (common rules of thumb; adjust to your program's standards)</summary>
+    <div class="grid" style="margin-top:10px">
+      <div><label for="thEasy">Too easy: p above</label><input type="number" id="thEasy" step="0.01" value="0.90"></div>
+      <div><label for="thHard">Too hard: p below</label><input type="number" id="thHard" step="0.01" value="0.30"></div>
+      <div><label for="thRpb">Weak discrimination: below</label><input type="number" id="thRpb" step="0.01" value="0.20"></div>
+      <div><label for="thDis">Non-functioning distractor: under %</label><input type="number" id="thDis" step="1" value="5"></div>
+    </div>
+  </details>
+</section>
+<section class="card" id="iaOut" hidden>
+  <h2>Results</h2>
+  <div class="stats" id="iaStats"></div>
+  <div class="tablewrap"><table><thead><tr><th>Item</th><th class="num">p</th><th class="num">Point biserial</th><th>Flags</th><th>Suggested next step</th></tr></thead><tbody id="iaRows"></tbody></table></div>
+  <div class="row"><button class="btn secondary" type="button" id="iaCopy">Copy report</button><span class="msg" id="iaCopyMsg" role="status" aria-live="polite"></span></div>
+  <div class="note">Flags are prompts to look, not verdicts. A very easy item on essential safety content may be exactly right, and on small classes (under about 30 students) these statistics swing a lot.</div>
+</section>
+</div>
+
+<!-- ================= BLUEPRINT ================= -->
+<div role="tabpanel" id="blueprint" aria-labelledby="t-blueprint" hidden>
+<section class="card">
+  <h2>Test blueprint builder</h2>
+  <p class="hint">Enter how many items fall in each cell. Totals, percentages, and coverage flags update as you type. Start from the NCLEX-RN Client Needs categories, or switch to your own course objectives.</p>
+  <div class="row" style="margin-top:0">
+    <label for="bpPreset" style="margin:0">Rows:</label>
+    <select id="bpPreset" style="width:auto">
+      <option value="nclex">NCLEX-RN Client Needs (2026 test plan)</option>
+      <option value="custom">My course objectives</option>
+    </select>
+    <button class="btn secondary" type="button" id="bpAdd">Add row</button>
+    <button class="btn secondary" type="button" id="bpClear">Clear counts</button>
+  </div>
+  <div class="tablewrap" style="margin-top:12px"><table class="bp"><thead id="bpHead"></thead><tbody id="bpBody"></tbody><tfoot id="bpFoot"></tfoot></table></div>
+  <div class="stats" id="bpStats"></div>
+  <div class="row"><button class="btn secondary" type="button" id="bpCopy">Copy blueprint</button><span class="msg" id="bpMsg" role="status" aria-live="polite"></span></div>
+  <div class="note">NCLEX-RN target ranges are from NCSBN's 2026 RN Test Plan (effective April 2026), where the percentages are unchanged from 2023. A single course exam doesn't need to mirror the NCLEX; edit the targets to fit the course.</div>
+</section>
+</div>
+
+<!-- ================= TIMING ================= -->
+<div role="tabpanel" id="timing" aria-labelledby="t-timing" hidden>
+<section class="card">
+  <h2>Exam timing calculator</h2>
+  <p class="hint">Enter how many of each item type the exam has. Time per item is editable: the defaults are starting points, not a standard.</p>
+  <div class="tablewrap"><table><thead><tr><th>Item type</th><th class="num">Count</th><th class="num">Seconds each</th><th class="num">Minutes</th></tr></thead><tbody id="tmRows"></tbody></table></div>
+  <div class="grid" style="margin-top:14px">
+    <div><label for="tmBuffer">Start-up and review buffer (min)</label><input type="number" id="tmBuffer" min="0" value="5"></div>
+    <div><label for="tmPeriod">Room or proctor slot available (min)</label><input type="number" id="tmPeriod" min="0" value="120"></div>
+    <div><label for="tmLevel">Where students are in the program</label>
+      <select id="tmLevel"><option value="1.15">Early (first semesters)</option><option value="1" selected>Middle</option><option value="0.9">Final semester</option></select></div>
+  </div>
+  <div class="stats" id="tmStats" role="status" aria-live="polite"></div>
+  <div class="tablewrap"><table><thead><tr><th>Accommodation</th><th class="num">Time allowed</th><th>Fits the slot?</th></tr></thead><tbody id="tmAcc"></tbody></table></div>
+  <div class="row"><button class="btn secondary" type="button" id="tmCopy">Copy timing summary</button><span class="msg" id="tmMsg" role="status" aria-live="polite"></span></div>
+  <p class="assume">Prototype assumption: the per-item seconds and the program-level adjustment (+15% early, −10% final semester) are placeholders for faculty to set. Research on NGN items finds that complex item types take longer and that students need more time early in a curriculum, but it doesn't give one standard rate.</p>
+</section>
+</div>
+
+<!-- ================= NGN CASE ================= -->
+<div role="tabpanel" id="ngn-case" aria-labelledby="t-ngn-case" hidden>
+<section class="card">
+  <h2>NGN unfolding case builder</h2>
+  <p class="hint">A guided outline for writing a six-item unfolding case study, with one item for each step of the NCSBN Clinical Judgment Measurement Model. Fill in what you have; the draft builds below and can be copied or downloaded.</p>
+  <div class="grid">
+    <div><label for="ngTitle">Case title</label><input type="text" id="ngTitle" placeholder="e.g. Post-op day 1, increasing confusion"></div>
+    <div><label for="ngCourse">Course / topic</label><input type="text" id="ngCourse" placeholder="e.g. NUR 350 Med-Surg I"></div>
+    <div><label for="ngCN">Client Needs category</label><select id="ngCN"></select></div>
+    <div><label for="ngSetting">Setting</label><input type="text" id="ngSetting" placeholder="e.g. Medical-surgical unit"></div>
+  </div>
+  <div style="margin-top:12px"><label for="ngObj">Learning objective being measured</label><textarea class="prose" id="ngObj" placeholder="e.g. Recognize early signs of sepsis in a post-operative client"></textarea></div>
+  <h3>Client data (the chart the student sees)</h3>
+  <div class="grid">
+    <div><label for="ngHx">Client profile and history</label><textarea class="prose" id="ngHx"></textarea></div>
+    <div><label for="ngVS">Vital signs</label><textarea class="prose" id="ngVS" placeholder="Time / T / HR / RR / BP / SpO2"></textarea></div>
+    <div><label for="ngLab">Labs and diagnostics</label><textarea class="prose" id="ngLab"></textarea></div>
+    <div><label for="ngNotes">Nurses' notes</label><textarea class="prose" id="ngNotes"></textarea></div>
+  </div>
+  <h3>Items, one per clinical judgment step</h3>
+  <div id="ngSteps"></div>
+  <div class="row">
+    <button class="btn" type="button" id="ngCopy">Copy draft</button>
+    <button class="btn secondary" type="button" id="ngDl">Download as Word</button>
+    <button class="btn secondary" type="button" id="ngClear">Clear form</button>
+    <span class="msg" id="ngMsg" role="status" aria-live="polite"></span>
+  </div>
+</section>
+<section class="card">
+  <h2>Draft</h2>
+  <pre class="out" id="ngOut"></pre>
+  <div class="note">Free templates such as the University of Maryland's NGN "Item Writing Task Model Template" follow this same structure. If your college licenses a publisher's item-writing tool, items written there may be easier to deliver in ExamSoft.</div>
+</section>
+</div>
+</main>
+
+<footer><p>Prototype built for nursing faculty. Item thresholds, timing rates, and the program-level adjustment are editable defaults, not standards. The NCLEX-RN Client Needs categories and ranges come from NCSBN's 2026 NCLEX-RN Test Plan.</p></footer>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function copyText(text, msgEl){
+  try{ await navigator.clipboard.writeText(text); msgEl.textContent = "Copied."; }
+  catch(e){ msgEl.textContent = "Copy was blocked by the browser."; }
+  setTimeout(()=>msgEl.textContent="", 3000);
+}
+async function offerFile(filename, blob){
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      const dl = await window.claude.use("downloads");
+      if(dl){ await dl.save({filename, data: blob}); return "saved"; }
+    }
+  }catch(err){ if(err && err.code === "declined") return "declined"; }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+  return "saved";
+}
+
+// ---------- tabs ----------
+const tabs = Array.from(document.querySelectorAll('[role=tab]'));
+function showTab(id, focus){
+  tabs.forEach(t=>{
+    const on = t.getAttribute("aria-controls") === id;
+    t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
+    $(t.getAttribute("aria-controls")).hidden = !on;
+    if(on && focus) t.focus();
+  });
+}
+tabs.forEach((t,i)=>{
+  t.addEventListener("click", ()=>{ showTab(t.getAttribute("aria-controls")); try{ history.replaceState(null,"","#"+t.getAttribute("aria-controls")); }catch(e){ location.hash = t.getAttribute("aria-controls"); } });
+  t.addEventListener("keydown", e=>{
+    let j = null;
+    if(e.key==="ArrowRight") j=(i+1)%tabs.length; else if(e.key==="ArrowLeft") j=(i-1+tabs.length)%tabs.length;
+    if(j!==null){ e.preventDefault(); tabs[j].click(); tabs[j].focus(); }
+  });
+});
+function fromHash(){ const h = location.hash.slice(1); if(tabs.some(t=>t.getAttribute("aria-controls")===h)) showTab(h); }
+window.addEventListener("hashchange", fromHash); fromHash();
+
+// =============== ITEM ANALYSIS ===============
+const SAMPLE = `Item,Key,Difficulty,Point Biserial,A,B,C,D
+1,B,0.95,0.12,2,95,2,1
+2,C,0.72,0.38,10,12,72,6
+3,A,0.41,0.31,41,30,25,4
+4,D,0.22,-0.15,15,48,15,22
+5,B,0.64,0.08,20,64,14,2
+6,C,0.88,0.29,3,6,88,3
+7,A,0.27,0.24,27,26,25,22
+8,D,0.57,0.44,0,21,22,57`;
+$("iaSample").addEventListener("click", ()=>{ $("iaData").value = SAMPLE; $("iaRun").click(); });
+
+function parseTable(text){
+  const lines = text.trim().split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length < 2) throw new Error("Paste a header row plus at least one item.");
+  const delim = lines[0].includes("\t") ? "\t" : (lines[0].split(";").length > lines[0].split(",").length ? ";" : ",");
+  const split = l => l.split(delim).map(s=>s.trim().replace(/^"|"$/g,""));
+  return {head: split(lines[0]), rows: lines.slice(1).map(split)};
+}
+function findCol(head, re){ return head.findIndex(h=>re.test(h.trim())); }
+function num(v){ if(v==null) return NaN; const s=String(v).replace("%","").trim(); return s==="" ? NaN : parseFloat(s); }
+
+function analyze(){
+  const msg = $("iaMsg"); msg.className="msg"; msg.textContent="";
+  let t;
+  try{ t = parseTable($("iaData").value); }catch(e){ msg.className="err"; msg.textContent=e.message; return; }
+  const H = t.head;
+  const ci = findCol(H, /^(item|question|q|#|item ?#|item ?no\.?|question ?#)$/i);
+  const cp = findCol(H, /(difficulty|p[- ]?value|^p$|% ?correct|percent correct)/i);
+  const cr = findCol(H, /(biserial|pbs|rpb|discrim)/i);
+  const ck = findCol(H, /^(key|correct|answer|correct answer)$/i);
+  const opts = H.map((h,i)=>({h:h.trim(), i})).filter(o=>/^(option |choice )?[A-H]$/i.test(o.h)).map(o=>({letter:o.h.slice(-1).toUpperCase(), i:o.i}));
+  if(cp < 0 && cr < 0){ msg.className="err"; msg.textContent="Couldn't find a Difficulty or Point biserial column. Check the header row."; return; }
+  const th = {easy:+$("thEasy").value, hard:+$("thHard").value, rpb:+$("thRpb").value, dis:+$("thDis").value};
+  let counts = {ok:0, review:0, urgent:0};
+  const results = t.rows.map((r, idx)=>{
+    const item = ci>=0 ? r[ci] : String(idx+1);
+    let p = cp>=0 ? num(r[cp]) : NaN; if(p > 1) p = p/100;
+    const rpb = cr>=0 ? num(r[cr]) : NaN;
+    const key = ck>=0 ? (r[ck]||"").trim().toUpperCase() : "";
+    const flags = [], steps = [];
+    let pcts = opts.map(o=>({letter:o.letter, v:num(r[o.i])})).filter(o=>!isNaN(o.v));
+    if(pcts.length && pcts.every(o=>o.v<=1) && pcts.reduce((a,o)=>a+o.v,0) <= 1.01) pcts = pcts.map(o=>({letter:o.letter, v:o.v*100}));
+    const keyPct = pcts.find(o=>o.letter===key);
+    const topDis = pcts.filter(o=>o.letter!==key).sort((a,b)=>b.v-a.v)[0];
+    if(!isNaN(rpb) && rpb < 0){ flags.push(["bad","Negative discrimination"]); steps.push("Check the key first: stronger students are missing this item more than weaker ones. Then look for ambiguous wording or two defensible answers."); }
+    if(key && keyPct && topDis && topDis.v > keyPct.v){ flags.push(["bad",`Distractor ${topDis.letter} beat the key`]); steps.push(`More students chose ${topDis.letter} (${Math.round(topDis.v)}%) than the key ${key} (${Math.round(keyPct.v)}%). Confirm the key, then decide whether ${topDis.letter} is also defensible.`); }
+    if(!isNaN(p) && p > th.easy){ flags.push(["warn","Very easy"]); steps.push("Keep it if it checks essential (for example, safety) knowledge everyone should have; otherwise raise the cognitive level or strengthen the distractors."); }
+    if(!isNaN(p) && p < th.hard){ flags.push(["warn","Very hard"]); steps.push("Check whether the content was taught and assessed at the level taught, and look for confusing wording or a trick."); }
+    if(!isNaN(rpb) && rpb >= 0 && rpb < th.rpb){ flags.push(["warn","Weak discrimination"]); steps.push("The item doesn't separate stronger from weaker students well. Review the stem for clues and the distractors for plausibility."); }
+    const dead = key ? pcts.filter(o=>o.letter!==key && o.v < th.dis) : [];
+    if(dead.length){ flags.push(["warn",`Non-functioning: ${dead.map(d=>d.letter).join(", ")}`]); steps.push(`Option${dead.length>1?"s":""} ${dead.map(d=>d.letter).join(", ")} drew under ${th.dis}% of students. Replace ${dead.length>1?"them":"it"} with a plausible common error.`); }
+    const level = flags.some(f=>f[0]==="bad") ? "urgent" : flags.length ? "review" : "ok";
+    counts[level]++;
+    return {item, p, rpb, flags, steps, level};
+  });
+  const valid = results.filter(r=>!isNaN(r.p));
+  const meanP = valid.length ? valid.reduce((a,r)=>a+r.p,0)/valid.length : NaN;
+  $("iaStats").innerHTML = `
+    <div class="stat"><div class="n">${results.length}</div><div class="l">items</div></div>
+    <div class="stat"><div class="n">${isNaN(meanP)?"–":Math.round(meanP*100)+"%"}</div><div class="l">average difficulty (p)</div></div>
+    <div class="stat"><div class="n" style="color:var(--bad)">${counts.urgent}</div><div class="l">check first</div></div>
+    <div class="stat"><div class="n" style="color:var(--warn)">${counts.review}</div><div class="l">worth a look</div></div>
+    <div class="stat"><div class="n" style="color:var(--ok)">${counts.ok}</div><div class="l">no flags</div></div>`;
+  const order = {urgent:0, review:1, ok:2};
+  const sorted = results.slice().sort((a,b)=>order[a.level]-order[b.level]);
+  $("iaRows").innerHTML = sorted.map(r=>`<tr>
+    <td><b>${esc(r.item)}</b></td>
+    <td class="num">${isNaN(r.p)?"–":r.p.toFixed(2)}</td>
+    <td class="num">${isNaN(r.rpb)?"–":r.rpb.toFixed(2)}</td>
+    <td>${r.flags.length ? r.flags.map(f=>`<span class="flag ${f[0]==="bad"?"f-bad":"f-warn"}">${esc(f[1])}</span>`).join("") : '<span class="flag f-ok">OK</span>'}</td>
+    <td>${r.steps.map(s=>`<div>${esc(s)}</div>`).join("") || '<span style="color:var(--muted)">No action needed.</span>'}</td></tr>`).join("");
+  $("iaOut").hidden = false;
+  window.__ia = sorted;
+  msg.textContent = `Analyzed ${results.length} items.` + (opts.length ? "" : " Add option columns (A, B, C…) and a Key column to check distractors.");
+}
+$("iaRun").addEventListener("click", analyze);
+$("iaCopy").addEventListener("click", ()=>{
+  const lines = ["Item analysis report", ""].concat((window.__ia||[]).filter(r=>r.flags.length).map(r=>
+    `Item ${r.item} (p=${isNaN(r.p)?"–":r.p.toFixed(2)}, rpb=${isNaN(r.rpb)?"–":r.rpb.toFixed(2)}): ${r.flags.map(f=>f[1]).join("; ")}\n  → ${r.steps.join("\n  → ")}`));
+  copyText(lines.join("\n"), $("iaCopyMsg"));
+});
+
+// =============== BLUEPRINT ===============
+const NCLEX = [
+  ["Management of Care",15,21],["Safety and Infection Prevention and Control",10,16],["Health Promotion and Maintenance",6,12],
+  ["Psychosocial Integrity",6,12],["Basic Care and Comfort",6,12],["Pharmacological and Parenteral Therapies",13,19],
+  ["Reduction of Risk Potential",9,15],["Physiological Adaptation",11,17]
+];
+const LEVELS = ["Remember","Understand","Apply","Analyze","Evaluate / Create"];
+let bpRows = [];
+function bpReset(preset){
+  bpRows = preset === "nclex" ? NCLEX.map(([n,lo,hi])=>({name:n, lo, hi, c:LEVELS.map(()=>0)}))
+    : [1,2,3,4].map(i=>({name:`Course objective ${i}`, lo:20, hi:30, c:LEVELS.map(()=>0)}));
+  bpRender();
+}
+function bpRender(){
+  $("bpHead").innerHTML = `<tr><th scope="col">${$("bpPreset").value==="nclex"?"Client Needs category":"Objective"}</th>${LEVELS.map(l=>`<th scope="col">${l}</th>`).join("")}<th scope="col">Items</th><th scope="col">% of exam</th><th scope="col">Target %</th><th scope="col">Status</th><th scope="col"><span class="sr" style="position:absolute;left:-9999px">Remove</span></th></tr>`;
+  $("bpBody").innerHTML = bpRows.map((r,i)=>`<tr>
+    <td><input class="catname" data-r="${i}" data-k="name" value="${esc(r.name)}" aria-label="Row ${i+1} name"></td>
+    ${r.c.map((v,j)=>`<td><input type="number" min="0" data-r="${i}" data-c="${j}" value="${v||""}" placeholder="0" aria-label="${esc(r.name)}, ${LEVELS[j]}"></td>`).join("")}
+    <td class="num" id="bpTot${i}">0</td><td class="num" id="bpPct${i}">0%</td>
+    <td><input type="number" min="0" max="100" data-r="${i}" data-k="lo" value="${r.lo}" aria-label="${esc(r.name)} target low %">–<input type="number" min="0" max="100" data-r="${i}" data-k="hi" value="${r.hi}" aria-label="${esc(r.name)} target high %"></td>
+    <td id="bpSt${i}"></td>
+    <td><button class="mini" type="button" data-del="${i}" aria-label="Remove ${esc(r.name)}">×</button></td></tr>`).join("");
+  bpCalc();
+}
+function bpCalc(){
+  const total = bpRows.reduce((a,r)=>a+r.c.reduce((x,y)=>x+(+y||0),0),0);
+  const colT = LEVELS.map((_,j)=>bpRows.reduce((a,r)=>a+(+r.c[j]||0),0));
+  bpRows.forEach((r,i)=>{
+    const t = r.c.reduce((x,y)=>x+(+y||0),0), pct = total ? t/total*100 : 0;
+    $("bpTot"+i).textContent = t; $("bpPct"+i).textContent = Math.round(pct)+"%";
+    let st = "";
+    if(total){ st = pct < r.lo ? '<span class="flag f-warn">Under</span>' : pct > r.hi ? '<span class="flag f-warn">Over</span>' : '<span class="flag f-ok">In range</span>'; }
+    $("bpSt"+i).innerHTML = st;
+  });
+  $("bpFoot").innerHTML = `<tr><th scope="row">Total</th>${colT.map(v=>`<td><b>${v}</b><div style="font-size:.75rem;color:var(--muted)">${total?Math.round(v/total*100):0}%</div></td>`).join("")}<td class="num"><b>${total}</b></td><td></td><td></td><td></td><td></td></tr>`;
+  const higher = colT[2]+colT[3]+colT[4];
+  const lo = bpRows.reduce((a,r)=>a+(+r.lo||0),0), hi = bpRows.reduce((a,r)=>a+(+r.hi||0),0);
+  $("bpStats").innerHTML = `
+    <div class="stat"><div class="n">${total}</div><div class="l">items on the exam</div></div>
+    <div class="stat"><div class="n">${total?Math.round(higher/total*100):0}%</div><div class="l">at Apply or higher</div></div>
+    <div class="stat"><div class="n">${bpRows.filter((r,i)=>total && /Under|Over/.test($("bpSt"+i).textContent)).length}</div><div class="l">rows outside target</div></div>
+    ${(lo>100||hi<100)?`<div class="stat" style="background:#fff4d6"><div class="l" style="color:var(--warn);font-weight:700">Targets can't all be met:<br>low ends sum to ${lo}%, high ends to ${hi}%</div></div>`:""}`;
+}
+$("bpBody").addEventListener("input", e=>{
+  const el = e.target, r = +el.dataset.r;
+  if(isNaN(r)) return;
+  if(el.dataset.c !== undefined) bpRows[r].c[+el.dataset.c] = +el.value || 0;
+  else if(el.dataset.k === "name") bpRows[r].name = el.value;
+  else if(el.dataset.k) bpRows[r][el.dataset.k] = +el.value || 0;
+  bpCalc();
+});
+$("bpBody").addEventListener("click", e=>{ if(e.target.dataset.del !== undefined){ bpRows.splice(+e.target.dataset.del,1); bpRender(); } });
+$("bpAdd").addEventListener("click", ()=>{ bpRows.push({name:"New row", lo:0, hi:100, c:LEVELS.map(()=>0)}); bpRender(); });
+$("bpClear").addEventListener("click", ()=>{ bpRows.forEach(r=>r.c=LEVELS.map(()=>0)); bpRender(); });
+$("bpPreset").addEventListener("change", e=>bpReset(e.target.value));
+$("bpCopy").addEventListener("click", ()=>{
+  const total = bpRows.reduce((a,r)=>a+r.c.reduce((x,y)=>x+(+y||0),0),0);
+  const lines = [["Row",...LEVELS,"Items","%","Target"].join("\t")].concat(bpRows.map(r=>{
+    const t = r.c.reduce((x,y)=>x+(+y||0),0);
+    return [r.name,...r.c,t,(total?Math.round(t/total*100):0)+"%",`${r.lo}–${r.hi}%`].join("\t");
+  }));
+  copyText(lines.join("\n"), $("bpMsg"));
+});
+bpReset("nclex");
+
+// =============== TIMING ===============
+const TYPES = [
+  ["Standard multiple choice", 60],["Select all that apply (SATA)", 90],["Dosage calculation / fill-in", 120],
+  ["Other alternate format (hot spot, ordered response)", 90],["NGN standalone: bowtie", 180],["NGN standalone: trend", 180],
+  ["NGN unfolding case (6 items, counted per case)", 720]
+];
+$("tmRows").innerHTML = TYPES.map(([n,s],i)=>`<tr><td>${esc(n)}</td>
+  <td class="num"><input type="number" min="0" id="tmC${i}" value="${i===0?50:0}" style="width:80px" aria-label="${esc(n)} count"></td>
+  <td class="num"><input type="number" min="0" id="tmS${i}" value="${s}" style="width:90px" aria-label="${esc(n)} seconds each"></td>
+  <td class="num" id="tmM${i}">0</td></tr>`).join("");
+function fmtMin(m){ const h=Math.floor(m/60), r=Math.round(m%60); return h ? `${h} h ${r} min` : `${r} min`; }
+function tmCalc(){
+  let sec = 0, items = 0;
+  TYPES.forEach((_,i)=>{ const c=+$("tmC"+i).value||0, s=+$("tmS"+i).value||0; sec += c*s; items += i===6 ? c*6 : c; $("tmM"+i).textContent = (c*s/60).toFixed(1); });
+  const adj = +$("tmLevel").value;
+  const base = sec/60*adj + (+$("tmBuffer").value||0);
+  const slot = +$("tmPeriod").value||0;
+  $("tmStats").innerHTML = `<div class="stat"><div class="n">${items}</div><div class="l">scored items</div></div><div class="stat"><div class="n">${fmtMin(base)}</div><div class="l">suggested time limit</div></div>`;
+  $("tmAcc").innerHTML = [["Standard time",1],["Time and a half (1.5×)",1.5],["Double time (2×)",2]].map(([n,f])=>{
+    const m = base*f, fits = !slot || m <= slot;
+    return `<tr><td>${n}</td><td class="num">${fmtMin(m)}</td><td>${slot?(fits?'<span class="flag f-ok">Yes</span>':`<span class="flag f-bad">No, ${fmtMin(m-slot)} over</span>`):"–"}</td></tr>`;
+  }).join("");
+  window.__tm = {items, base};
+}
+document.getElementById("timing").addEventListener("input", tmCalc);
+document.getElementById("timing").addEventListener("change", tmCalc);
+tmCalc();
+$("tmCopy").addEventListener("click", ()=>{
+  const lines = ["Exam timing summary"];
+  TYPES.forEach(([n],i)=>{ const c=+$("tmC"+i).value||0; if(c) lines.push(`${n}: ${c} × ${$("tmS"+i).value}s`); });
+  lines.push(`Suggested time limit: ${fmtMin(window.__tm.base)}`, `1.5×: ${fmtMin(window.__tm.base*1.5)}`, `2×: ${fmtMin(window.__tm.base*2)}`);
+  copyText(lines.join("\n"), $("tmMsg"));
+});
+
+// =============== NGN CASE ===============
+$("ngCN").innerHTML = NCLEX.map(([n])=>`<option>${esc(n)}</option>`).join("");
+const CJ = [
+  ["Recognize cues","What matters most in the data? Students identify relevant vs. irrelevant findings.","Highlight (text or table)"],
+  ["Analyze cues","How do the cues connect to the client's condition? Students link findings to possible conditions.","Matrix multiple choice"],
+  ["Prioritize hypotheses","Which concern is most urgent and why? Students rank or select the priority problem.","Drop-down cloze"],
+  ["Generate solutions","What outcomes are wanted and what actions would get there? Students choose appropriate interventions.","Matrix multiple response"],
+  ["Take action","What does the nurse do first or next? Students select and order actions.","Multiple response: select all that apply"],
+  ["Evaluate outcomes","Did the actions work? Students compare new data with expected outcomes.","Matrix multiple choice"]
+];
+const ITYPES = ["Highlight (text or table)","Matrix multiple choice","Matrix multiple response","Multiple response: select all that apply","Multiple response: select N","Drop-down cloze","Drop-down rationale","Drop-down table","Drag-and-drop cloze","Drag-and-drop rationale"];
+$("ngSteps").innerHTML = CJ.map(([step, help, def], i)=>`<div class="cj">
+  <h4>Item ${i+1}: ${step}</h4><p class="hint" style="margin:0 0 8px">${help}</p>
+  <div class="grid">
+    <div><label for="ngT${i}">Item type</label><select id="ngT${i}">${ITYPES.map(t=>`<option${t===def?" selected":""}>${t}</option>`).join("")}</select>
+      <label for="ngNew${i}" style="margin-top:8px">New data revealed at this step</label><textarea class="prose" id="ngNew${i}" style="min-height:50px" placeholder="Optional: what's added to the chart"></textarea></div>
+    <div><label for="ngStem${i}">Stem</label><textarea class="prose" id="ngStem${i}"></textarea>
+      <label for="ngOpt${i}" style="margin-top:8px">Options, key, and rationale</label><textarea class="prose" id="ngOpt${i}" placeholder="List options; mark correct ones with *; add a one-line rationale"></textarea></div>
+  </div></div>`).join("");
+const NG_FIELDS = ["ngTitle","ngCourse","ngCN","ngSetting","ngObj","ngHx","ngVS","ngLab","ngNotes"].concat(...CJ.map((_,i)=>[`ngT${i}`,`ngNew${i}`,`ngStem${i}`,`ngOpt${i}`]));
+function ngBuild(){
+  const v = id => $(id).value.trim();
+  const L = [];
+  L.push(`NGN UNFOLDING CASE: ${v("ngTitle")||"(untitled)"}`);
+  if(v("ngCourse")) L.push(`Course/topic: ${v("ngCourse")}`);
+  L.push(`Client Needs: ${v("ngCN")}`);
+  if(v("ngSetting")) L.push(`Setting: ${v("ngSetting")}`);
+  if(v("ngObj")) L.push(`Objective: ${v("ngObj")}`);
+  L.push("", "CLIENT DATA");
+  [["Profile and history","ngHx"],["Vital signs","ngVS"],["Labs and diagnostics","ngLab"],["Nurses' notes","ngNotes"]].forEach(([n,id])=>{ if(v(id)) L.push(`${n}:`, v(id), ""); });
+  CJ.forEach(([step],i)=>{
+    L.push(`ITEM ${i+1}: ${step.toUpperCase()} (${v("ngT"+i)})`);
+    if(v("ngNew"+i)) L.push(`New data: ${v("ngNew"+i)}`);
+    L.push(`Stem: ${v("ngStem"+i)||"(to write)"}`);
+    if(v("ngOpt"+i)) L.push(`Options/key/rationale:`, v("ngOpt"+i));
+    L.push("");
+  });
+  const filled = CJ.filter((_,i)=>v("ngStem"+i)).length;
+  L.push(`Status: ${filled} of 6 stems written.`);
+  return L;
+}
+function ngRender(){ $("ngOut").textContent = ngBuild().join("\n"); }
+document.getElementById("ngn-case").addEventListener("input", ngRender);
+document.getElementById("ngn-case").addEventListener("change", ngRender);
+ngRender();
+$("ngCopy").addEventListener("click", ()=>copyText(ngBuild().join("\n"), $("ngMsg")));
+$("ngClear").addEventListener("click", ()=>{ NG_FIELDS.forEach(id=>{ const el=$(id); if(el.tagName==="SELECT") el.selectedIndex = id.startsWith("ngT") ? ITYPES.indexOf(CJ[+id.slice(3)][2]) : 0; else el.value=""; }); ngRender(); });
+$("ngDl").addEventListener("click", async ()=>{
+  const W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  const x = s => s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+  const zip = new JSZip();
+  zip.file("[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+  zip.file("_rels/.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+  const body = ngBuild().join("\n").split("\n").map(l=>{
+    const bold = /^(NGN UNFOLDING CASE|CLIENT DATA|ITEM \d)/.test(l);
+    return `<w:p><w:r>${bold?"<w:rPr><w:b/></w:rPr>":""}<w:t xml:space="preserve">${x(l)}</w:t></w:r></w:p>`;
+  }).join("");
+  zip.file("word/document.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="${W}"><w:body>${body}<w:sectPr/></w:body></w:document>`);
+  const blob = await zip.generateAsync({type:"blob", mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+  const r = await offerFile(($("ngTitle").value.trim()||"NGN case").replace(/[\\/:*?"<>|]/g,"") + ".docx", blob);
+  $("ngMsg").textContent = r==="declined" ? "Download cancelled." : "Downloaded.";
+});
+})();
+</script>
+</body>
+</html>

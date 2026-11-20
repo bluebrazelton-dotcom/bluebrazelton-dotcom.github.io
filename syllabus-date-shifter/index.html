@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script data-goatcounter="https://bluebrazelton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<title>Syllabus Date Shifter (NAU Prototype)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<style>
+  :root{--blue:#003466;--blue-2:#0b4a85;--tint:#e8eef6;--gold:#FFD200;--ink:#1b1f24;--muted:#525a66;--line:#d5dbe3;--bg:#f6f8fb;--ok:#1d6b3a;--warn:#8a5a00;--bad:#a3271f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+  header{background:var(--blue);color:#fff;padding:22px 24px 18px;border-bottom:5px solid var(--gold)}
+  header h1{margin:0 0 4px;font-size:1.55rem}
+  header p{margin:0;color:#dfe8f3;max-width:75ch}
+  .proto{display:inline-block;background:var(--gold);color:var(--blue);font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  main{max-width:1100px;margin:22px auto;padding:0 18px}
+  section{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+  h2{margin:0 0 4px;color:var(--blue);font-size:1.15rem}
+  .step{display:inline-block;background:var(--blue);color:#fff;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;font-size:.9rem;margin-right:8px}
+  .hint{color:var(--muted);font-size:.88rem;margin:2px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 16px}
+  label{display:block;font-size:.88rem;font-weight:600;margin-bottom:4px}
+  input[type=date],input[type=text],textarea,select{width:100%;padding:8px 9px;border:1px solid #9aa6b5;border-radius:5px;font:inherit;font-size:.95rem;background:#fff;color:var(--ink)}
+  textarea{min-height:70px}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,.drop:focus-visible{outline:3px solid var(--blue-2);outline-offset:2px}
+  .drop{border:2px dashed #8fa3bb;border-radius:8px;padding:26px;text-align:center;background:var(--tint);cursor:pointer}
+  .drop.over{background:#d6e3f2;border-color:var(--blue)}
+  .drop strong{color:var(--blue)}
+  button{background:var(--blue);color:#fff;border:0;border-radius:5px;padding:9px 14px;font-weight:700;font-size:.9rem;cursor:pointer}
+  button.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .status{font-size:.9rem;margin-top:10px}
+  .status.err{color:var(--bad);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:7px 8px;border-bottom:1px solid #e6eaef;text-align:left;vertical-align:top}
+  thead th{background:var(--tint);color:var(--blue);font-size:.78rem;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0}
+  td.ctx{color:var(--muted);max-width:340px}
+  td.ctx mark{background:#fff1a8;color:var(--ink);padding:0 2px}
+  td input[type=text]{padding:5px 6px;font-size:.88rem}
+  .flag{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 6px;border-radius:3px;margin:2px 4px 0 0}
+  .f-warn{background:#fff4d6;color:var(--warn)} .f-bad{background:#fbe5e3;color:var(--bad)} .f-ok{background:#e3f3e8;color:var(--ok)}
+  .tablewrap{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+  .summary{display:flex;gap:18px;flex-wrap:wrap;font-size:.9rem;margin:8px 0 12px}
+  .summary b{color:var(--blue)}
+  details{margin-top:12px} summary{font-weight:700;color:var(--blue);cursor:pointer}
+  .note{background:var(--tint);border-left:4px solid var(--blue);padding:8px 12px;font-size:.88rem;border-radius:0 4px 4px 0;margin-top:10px}
+  footer{max-width:1100px;margin:0 auto 30px;padding:0 18px;font-size:.8rem;color:var(--muted)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="proto">Prototype, not an official NAU tool</div>
+  <h1>Syllabus Date Shifter</h1>
+  <p>Roll a syllabus or course schedule forward to a new term. Dates move by course week and weekday, so "Week 3, Tuesday" stays Week 3, Tuesday. Your file is processed in this browser and is never uploaded.</p>
+</header>
+
+<main>
+<section aria-labelledby="s1">
+  <h2 id="s1"><span class="step">1</span>Choose your file</h2>
+  <p class="hint">A Word file (.docx) comes back with its formatting intact. A PDF can be read, but the result comes back as a new, plain Word file without the original layout.</p>
+  <div class="drop" id="drop" tabindex="0" role="button" aria-describedby="fileName">
+    <strong>Drop a .docx or .pdf here</strong>, or press Enter to choose a file
+    <input type="file" id="file" accept=".docx,.pdf" class="sr" aria-label="Choose a .docx or .pdf file">
+  </div>
+  <div class="status" id="fileName" aria-live="polite">No file chosen.</div>
+</section>
+
+<section aria-labelledby="s2">
+  <h2 id="s2"><span class="step">2</span>Set the old and new terms</h2>
+  <p class="hint">Use the first day of classes for each term. Any day in Week 1 works, because both terms are lined up by their Week 1 Monday.</p>
+  <div class="grid">
+    <div><label for="oldStart">Old term: first day of classes</label><input type="date" id="oldStart"></div>
+    <div><label for="newStart">New term: first day of classes</label><input type="date" id="newStart"></div>
+    <div><label for="newEnd">New term: last day (optional)</label><input type="date" id="newEnd"></div>
+  </div>
+  <details>
+    <summary>Break weeks and no-class days (recommended)</summary>
+    <div class="grid" style="margin-top:10px">
+      <div><label for="oldBreaks">Old term break weeks</label><input type="text" id="oldBreaks" placeholder="e.g. 10"><p class="hint">Week numbers, comma-separated. Spring break in Week 10 → "10".</p></div>
+      <div><label for="newBreaks">New term break weeks</label><input type="text" id="newBreaks" placeholder="e.g. 9"><p class="hint">Instructional weeks are matched around breaks: old Week 11 becomes the 10th class week of the new term.</p></div>
+      <div style="grid-column:1/-1"><label for="holidays">New term no-class days</label><textarea id="holidays" placeholder="One per line, e.g.&#10;2027-01-18&#10;3/15/2027"></textarea><p class="hint">Holidays, reading days, and so on. Any date that lands on one is flagged for you to fix by hand.</p></div>
+    </div>
+  </details>
+  <div class="row"><button type="button" id="scanBtn" disabled>Find dates</button><span class="status" id="scanMsg" aria-live="polite"></span></div>
+</section>
+
+<section aria-labelledby="s3" id="reviewSec" hidden>
+  <h2 id="s3"><span class="step">3</span>Review every change</h2>
+  <p class="hint">Uncheck anything that isn't a course date (a citation year, a policy effective date). Edit the new text directly if you need to.</p>
+  <div class="summary" id="summary"></div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th scope="col">Use</th><th scope="col">In context</th><th scope="col">Found</th><th scope="col">Becomes</th><th scope="col">Notes</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="row">
+    <button type="button" id="applyBtn">Download updated file</button>
+    <button type="button" class="secondary" id="copyBtn">Copy change list</button>
+    <span class="status" id="applyMsg" aria-live="polite"></span>
+  </div>
+  <div class="note">Always proofread the new file. Times stay as written. Term names ("Fall 2026") and wording like "the Tuesday after break" don't change, so update those yourself.</div>
+</section>
+</main>
+
+<footer>
+  <p>Prototype. Recognizes dates like "September 9, 2026", "Sept. 9", "Tue 9/9", and "9/9/26". Weekday names next to a date are updated to match. All processing happens in your browser; nothing is sent anywhere.</p>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+const $ = id => document.getElementById(id);
+const DAY = 86400000;
+
+// ---------- date patterns ----------
+const MONTHS = [
+  ["january","jan"],["february","feb"],["march","mar"],["april","apr"],["may","may"],["june","jun"],
+  ["july","jul"],["august","aug"],["september","sep","sept"],["october","oct"],["november","nov"],["december","dec"]
+];
+const MONTH_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MONTH_ABBR = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const WD_FULL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const WD_ABBR = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const WD_RE = "(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tues|Tue|Wed|Thurs|Thur|Thu|Fri|Sat|Sun)\\.?";
+const MON_RE = "(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec)";
+// group 1 weekday prefix (with separator), 2 month word, 3 period, 4 day, 5 ordinal, 6 ", YYYY" or " YYYY", 7 year
+const RE_TEXT = new RegExp("\\b(" + WD_RE + ",?\\s+)?(" + MON_RE + ")(\\.?)\\s+(\\d{1,2})(st|nd|rd|th)?\\b(,?\\s+(\\d{4}))?", "gi");
+// group 1 weekday prefix, 2 month, 3 day, 4 "/yy(yy)", 5 year
+const RE_NUM = new RegExp("\\b(" + WD_RE + ",?\\s+)?(\\d{1,2})/(\\d{1,2})(/(\\d{4}|\\d{2}))?\\b(?![/\\d])", "gi");
+
+function monthIndex(word){
+  const w = word.toLowerCase();
+  return MONTHS.findIndex(a => a.includes(w));
+}
+function utc(y,m,d){ return Date.UTC(y,m,d); }
+function parseInputDate(s){
+  if(!s) return null;
+  s = s.trim();
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(m) return utc(+m[1], +m[2]-1, +m[3]);
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if(m){ let y=+m[3]; if(y<100) y+=2000; return utc(y, +m[1]-1, +m[2]); }
+  return null;
+}
+function mondayOf(t){ const d = new Date(t).getUTCDay(); return t - ((d+6)%7)*DAY; }
+function fmtISO(t){ return new Date(t).toISOString().slice(0,10); }
+function fmtNice(t){ const d=new Date(t); return `${WD_ABBR[d.getUTCDay()]} ${MONTH_ABBR[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`; }
+function parseWeeks(s){ return (s||"").split(/[,\s]+/).map(x=>parseInt(x,10)).filter(n=>n>0); }
+
+function inferYear(month, day, oldStart){
+  // choose the year that puts the date closest to the old term (within roughly a year window)
+  const y0 = new Date(oldStart).getUTCFullYear();
+  let best = y0, bestDist = Infinity;
+  for(const y of [y0-1, y0, y0+1]){
+    const dist = Math.abs(utc(y,month,day) - (oldStart + 60*DAY));
+    if(dist < bestDist){ best = y; bestDist = dist; }
+  }
+  return best;
+}
+
+// ---------- shifting ----------
+function makeShifter(cfg){
+  const oldMon = mondayOf(cfg.oldStart), newMon = mondayOf(cfg.newStart);
+  const oldBreaks = new Set(cfg.oldBreaks), newBreaks = new Set(cfg.newBreaks);
+  return function(t){
+    const off = Math.round((t - oldMon)/DAY);
+    const wk = Math.floor(off/7) + 1;        // 1-based week; <=0 before term
+    const dow = ((off % 7) + 7) % 7;
+    const notes = [];
+    let newWk;
+    if(wk < 1){ newWk = wk; notes.push(["warn","Before the old term started"]); }
+    else {
+      if(oldBreaks.has(wk)) notes.push(["warn","Was in an old break week; placed in the same calendar week"]);
+      let instr = 0; for(let w=1; w<=wk; w++) if(!oldBreaks.has(w) || w===wk) instr++;
+      if(oldBreaks.has(wk)){ newWk = wk; }
+      else { let count=0, w=0; while(count<instr){ w++; if(!newBreaks.has(w)) count++; if(w>200) break; } newWk = w; }
+    }
+    const nt = newMon + ((newWk-1)*7 + dow)*DAY;
+    if(newBreaks.has(newWk) && !oldBreaks.has(wk)) notes.push(["bad","Lands in a new break week"]);
+    if(cfg.holidays.has(nt)) notes.push(["bad","Lands on a no-class day"]);
+    if(cfg.newEnd && nt > cfg.newEnd) notes.push(["bad","After the new term ends"]);
+    if(nt < cfg.newStart - 14*DAY && wk >= 1) notes.push(["warn","Before the new term starts"]);
+    return {t:nt, oldWeek:wk, newWeek:newWk, notes};
+  };
+}
+
+function formatLike(m, nt){
+  const d = new Date(nt);
+  const mo = d.getUTCMonth(), day = d.getUTCDate(), yr = d.getUTCFullYear(), wd = d.getUTCDay();
+  let wdText = "";
+  if(m.wdPrefix){
+    const raw = m.wdPrefix.match(/^[A-Za-z]+\.?/)[0];
+    const sep = m.wdPrefix.slice(raw.length);
+    const hasDot = raw.endsWith(".");
+    const word = raw.replace(".","");
+    const isFullWd = WD_FULL.some(f => f.toLowerCase() === word.toLowerCase());
+    let out = isFullWd ? WD_FULL[wd] : WD_ABBR[wd];
+    if(word.length > 1 && word === word.toUpperCase()) out = out.toUpperCase();
+    wdText = out + (hasDot ? "." : "") + sep;
+  }
+  if(m.kind === "text"){
+    const w = m.monthWord;
+    const isFull = MONTH_FULL.some(f => f.toLowerCase() === w.toLowerCase());
+    let mw = isFull ? MONTH_FULL[mo] : ((w.toLowerCase()==="sept" && mo===8) ? "Sept" : MONTH_ABBR[mo]);
+    if(w.length > 1 && w === w.toUpperCase()) mw = mw.toUpperCase();
+    const outIsFull = MONTH_FULL.some(f => f.toLowerCase() === mw.toLowerCase());
+    let dot = m.period && !outIsFull ? "." : "";
+    let ord = "";
+    if(m.ordinal){ const s=["th","st","nd","rd"], v=day%100; ord = (s[(v-20)%10]||s[v]||s[0]); }
+    let yearPart = m.yearSep !== null ? m.yearSep + yr : "";
+    return wdText + mw + dot + " " + day + ord + yearPart;
+  } else {
+    let s = wdText + (m.padM ? String(mo+1).padStart(2,"0") : (mo+1)) + "/" + (m.padD ? String(day).padStart(2,"0") : day);
+    if(m.yearDigits === 4) s += "/" + yr;
+    else if(m.yearDigits === 2) s += "/" + String(yr).slice(2);
+    return s;
+  }
+}
+
+function findDates(text, oldStart){
+  const out = [];
+  let m;
+  RE_TEXT.lastIndex = 0;
+  while((m = RE_TEXT.exec(text))){
+    const mi = monthIndex(m[2]), day = +m[4];
+    if(mi < 0 || day < 1 || day > 31) continue;
+    // "May" alone is risky as a verb: require a number right after (already) and capital M
+    if(m[2].toLowerCase()==="may" && m[2][0] !== "M") continue;
+    const year = m[7] ? +m[7] : inferYear(mi, day, oldStart);
+    const t = utc(year, mi, day);
+    if(new Date(t).getUTCDate() !== day) continue;
+    out.push({start:m.index, end:m.index+m[0].length, text:m[0], t, kind:"text",
+      wdPrefix:m[1]||"", monthWord:m[2], period:!!m[3], ordinal:!!m[5],
+      yearSep: m[6] ? m[6].slice(0, m[6].length - m[7].length) : null, hasYear:!!m[7]});
+  }
+  RE_NUM.lastIndex = 0;
+  while((m = RE_NUM.exec(text))){
+    const mo = +m[2], day = +m[3];
+    if(mo < 1 || mo > 12 || day < 1 || day > 31) continue;
+    const s = m.index, e = m.index + m[0].length;
+    if(out.some(o => s < o.end && e > o.start)) continue;
+    let year;
+    if(m[5]){ year = +m[5]; if(year < 100) year += 2000; } else year = inferYear(mo-1, day, oldStart);
+    const t = utc(year, mo-1, day);
+    if(new Date(t).getUTCDate() !== day) continue;
+    out.push({start:s, end:e, text:m[0], t, kind:"num", wdPrefix:m[1]||"",
+      padM: m[2].length===2 && m[2][0]==="0", padD: m[3].length===2 && m[3][0]==="0",
+      yearDigits: m[5] ? m[5].length : 0, hasYear:!!m[5], noYearSlash:!m[5]});
+  }
+  return out.sort((a,b)=>a.start-b.start);
+}
+
+// ---------- docx handling ----------
+let state = null; // {kind:'docx'|'pdf', name, zip, parts:[{path, doc}], paras:[...], matches:[...], pdfLines}
+
+function closestP(node){
+  let n = node.parentNode;
+  while(n && !(n.namespaceURI === W && n.localName === "p")) n = n.parentNode;
+  return n;
+}
+
+async function loadDocx(file){
+  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const paths = Object.keys(zip.files).filter(p => /^word\/(document|header\d*|footer\d*|footnotes|endnotes)\.xml$/.test(p));
+  if(!paths.includes("word/document.xml")) throw new Error("This doesn't look like a Word document.");
+  const parts = [];
+  for(const p of paths){
+    const xml = await zip.file(p).async("string");
+    const doc = new DOMParser().parseFromString(xml, "application/xml");
+    if(doc.getElementsByTagName("parsererror").length) throw new Error("Couldn't read " + p);
+    parts.push({path:p, doc});
+  }
+  return {kind:"docx", name:file.name, zip, parts};
+}
+
+function collectParas(st){
+  const paras = [];
+  for(const part of st.parts){
+    const ps = part.doc.getElementsByTagNameNS(W, "p");
+    for(const p of Array.from(ps)){
+      const ts = Array.from(p.getElementsByTagNameNS(W, "t")).filter(t => closestP(t) === p);
+      if(!ts.length) continue;
+      let text = "", segs = [];
+      for(const t of ts){ const v = t.textContent; segs.push({node:t, start:text.length, end:text.length+v.length}); text += v; }
+      paras.push({part:part.path, text, segs});
+    }
+  }
+  return paras;
+}
+
+function replaceInPara(para, start, end, newText){
+  // put newText in the first segment touched, delete the rest of the range from later segments
+  let first = true;
+  for(const seg of para.segs){
+    if(seg.end <= start || seg.start >= end) continue;
+    const v = seg.node.textContent;
+    const a = Math.max(start, seg.start) - seg.start, b = Math.min(end, seg.end) - seg.start;
+    const repl = first ? newText : "";
+    seg.node.textContent = v.slice(0,a) + repl + v.slice(b);
+    seg.node.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
+    first = false;
+  }
+}
+
+// ---------- pdf handling ----------
+async function loadPdf(file){
+  if(!window.pdfjsLib) throw new Error("The PDF reader didn't load. Try a .docx instead.");
+  const pdf = await pdfjsLib.getDocument({data: new Uint8Array(await file.arrayBuffer())}).promise;
+  const lines = [];
+  for(let i=1; i<=pdf.numPages; i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    let line = "";
+    for(const it of tc.items){
+      line += it.str;
+      if(it.hasEOL){ lines.push(line); line = ""; }
+    }
+    if(line) lines.push(line);
+    lines.push("");
+  }
+  if(!lines.some(l=>l.trim())) throw new Error("No text found. This PDF may be a scan; run it through OCR first.");
+  return {kind:"pdf", name:file.name, lines};
+}
+
+// ---------- UI ----------
+const drop = $("drop"), fileIn = $("file");
+drop.addEventListener("click", ()=>fileIn.click());
+drop.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fileIn.click(); } });
+drop.addEventListener("dragover", e=>{ e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", ()=>drop.classList.remove("over"));
+drop.addEventListener("drop", e=>{ e.preventDefault(); drop.classList.remove("over"); if(e.dataTransfer.files[0]) pick(e.dataTransfer.files[0]); });
+fileIn.addEventListener("change", ()=>{ if(fileIn.files[0]) pick(fileIn.files[0]); });
+
+let pickedFile = null;
+function pick(f){
+  const ok = /\.(docx|pdf)$/i.test(f.name);
+  $("fileName").textContent = ok ? `Ready: ${f.name}` : `${f.name} isn't a .docx or .pdf file.`;
+  $("fileName").className = "status" + (ok ? "" : " err");
+  pickedFile = ok ? f : null;
+  $("reviewSec").hidden = true;
+  updateScan();
+}
+["oldStart","newStart"].forEach(id=>$(id).addEventListener("input", updateScan));
+function updateScan(){ $("scanBtn").disabled = !(pickedFile && $("oldStart").value && $("newStart").value); }
+
+$("scanBtn").addEventListener("click", async ()=>{
+  const msg = $("scanMsg"); msg.className="status"; msg.textContent = "Reading file…";
+  try{
+    const cfg = {
+      oldStart: parseInputDate($("oldStart").value), newStart: parseInputDate($("newStart").value),
+      newEnd: parseInputDate($("newEnd").value), oldBreaks: parseWeeks($("oldBreaks").value), newBreaks: parseWeeks($("newBreaks").value),
+      holidays: new Set($("holidays").value.split(/\n/).map(parseInputDate).filter(Boolean))
+    };
+    const shift = makeShifter(cfg);
+    state = /\.pdf$/i.test(pickedFile.name) ? await loadPdf(pickedFile) : await loadDocx(pickedFile);
+    const units = state.kind === "docx" ? collectParas(state) : state.lines.map((text,i)=>({text, line:i}));
+    state.units = units;
+    state.matches = [];
+    units.forEach((u, ui)=>{
+      for(const m of findDates(u.text, cfg.oldStart)){
+        const r = shift(m.t);
+        const notes = r.notes.slice();
+        if(!m.hasYear) notes.push(["warn","No year written; assumed " + new Date(m.t).getUTCFullYear()]);
+        if(m.kind==="num" && !m.hasYear) notes.push(["warn","Could be a fraction or score. Check it."]);
+        if(m.wdPrefix){
+          const wd = m.wdPrefix.replace(/[^A-Za-z]/g,"").slice(0,3).toLowerCase();
+          if(WD_ABBR[new Date(m.t).getUTCDay()].toLowerCase() !== wd) notes.push(["warn","Weekday in the original didn't match its date"]);
+        }
+        let use = true;
+        if(m.kind==="num" && !m.hasYear && !m.wdPrefix && (r.oldWeek < 1 || r.oldWeek > 20)){
+          use = false; notes.unshift(["bad","Left unchecked: probably not a date"]);
+        }
+        state.matches.push({ui, start:m.start, end:m.end, found:m.text, newText:formatLike(m, r.t),
+          oldT:m.t, newT:r.t, oldWeek:r.oldWeek, newWeek:r.newWeek, notes, use,
+          ctx:u.text});
+      }
+    });
+    renderReview();
+    msg.textContent = state.matches.length ? `Found ${state.matches.length} dates.` : "No dates found.";
+  }catch(err){ msg.className="status err"; msg.textContent = err.message || String(err); }
+});
+
+function esc(s){ return s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function ctxHtml(m){
+  const a = Math.max(0, m.start-50), b = Math.min(m.ctx.length, m.end+50);
+  return (a>0?"…":"") + esc(m.ctx.slice(a,m.start)) + "<mark>" + esc(m.ctx.slice(m.start,m.end)) + "</mark>" + esc(m.ctx.slice(m.end,b)) + (b<m.ctx.length?"…":"");
+}
+function renderReview(){
+  $("reviewSec").hidden = false;
+  const flagged = state.matches.filter(m=>m.notes.some(n=>n[0]==="bad")).length;
+  const warned = state.matches.filter(m=>m.notes.some(n=>n[0]==="warn")).length;
+  $("summary").innerHTML = `<span><b>${state.matches.length}</b> dates found</span><span><b>${flagged}</b> need a fix</span><span><b>${warned}</b> worth a look</span>` +
+    (state.kind==="pdf" ? `<span>PDF input: the download is a plain Word file</span>` : "");
+  $("rows").innerHTML = state.matches.map((m,i)=>`
+    <tr>
+      <td><input type="checkbox" data-i="${i}" class="use" ${m.use?"checked":""} aria-label="Use change ${i+1}: ${esc(m.found)}"></td>
+      <td class="ctx">${ctxHtml(m)}</td>
+      <td>${esc(m.found)}<div class="hint" style="margin:0">${m.oldWeek>=1?"Week "+m.oldWeek:"pre-term"}</div></td>
+      <td><input type="text" data-i="${i}" class="nt" value="${esc(m.newText)}" aria-label="New text for ${esc(m.found)}"><div class="hint" style="margin:0">${fmtNice(m.newT)} · ${m.newWeek>=1?"Week "+m.newWeek:"pre-term"}</div></td>
+      <td>${m.notes.length ? m.notes.map(n=>`<span class="flag ${n[0]==="bad"?"f-bad":"f-warn"}">${esc(n[1])}</span>`).join("") : '<span class="flag f-ok">OK</span>'}</td>
+    </tr>`).join("");
+}
+$("rows").addEventListener("change", e=>{
+  const i = +e.target.dataset.i;
+  if(e.target.classList.contains("use")) state.matches[i].use = e.target.checked;
+});
+$("rows").addEventListener("input", e=>{
+  if(e.target.classList.contains("nt")) state.matches[+e.target.dataset.i].newText = e.target.value;
+});
+
+// ---------- output ----------
+async function offerFile(filename, blob){
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      const dl = await window.claude.use("downloads");
+      if(dl){ await dl.save({filename, data: blob}); return "saved"; }
+    }
+  }catch(err){
+    if(err && err.code === "declined") return "declined";
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+  return "saved";
+}
+
+function xmlEsc(s){ return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+async function buildPlainDocx(lines){
+  const zip = new JSZip();
+  zip.file("[Content_Types].xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+  zip.file("_rels/.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+  const body = lines.map(l=>`<w:p><w:r><w:t xml:space="preserve">${xmlEsc(l)}</w:t></w:r></w:p>`).join("");
+  zip.file("word/document.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="${W}"><w:body>${body}<w:sectPr/></w:body></w:document>`);
+  return zip.generateAsync({type:"blob", mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+}
+
+$("applyBtn").addEventListener("click", async ()=>{
+  const msg = $("applyMsg"); msg.className="status"; msg.textContent = "Building file…";
+  try{
+    const use = state.matches.filter(m=>m.use);
+    const byUnit = new Map();
+    use.forEach(m=>{ if(!byUnit.has(m.ui)) byUnit.set(m.ui, []); byUnit.get(m.ui).push(m); });
+    const base = state.name.replace(/\.(docx|pdf)$/i, "");
+    let blob;
+    if(state.kind === "docx"){
+      // rebuild from fresh parse so repeated downloads don't compound edits
+      const fresh = await loadDocx(pickedFile);
+      const paras = collectParas(fresh);
+      for(const [ui, ms] of byUnit){
+        ms.sort((a,b)=>b.start-a.start).forEach(m=>replaceInPara(paras[ui], m.start, m.end, m.newText));
+      }
+      const ser = new XMLSerializer();
+      for(const part of fresh.parts) fresh.zip.file(part.path, ser.serializeToString(part.doc));
+      blob = await fresh.zip.generateAsync({type:"blob", mimeType:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
+    } else {
+      const lines = state.lines.slice();
+      for(const [ui, ms] of byUnit){
+        let s = lines[ui];
+        ms.sort((a,b)=>b.start-a.start).forEach(m=>{ s = s.slice(0,m.start) + m.newText + s.slice(m.end); });
+        lines[ui] = s;
+      }
+      blob = await buildPlainDocx(lines);
+    }
+    const r = await offerFile(base + " (new dates).docx", blob);
+    msg.textContent = r === "declined" ? "Download cancelled." : `Done: ${use.length} dates changed.`;
+  }catch(err){ msg.className="status err"; msg.textContent = "Couldn't build the file: " + (err.message||err); }
+});
+
+$("copyBtn").addEventListener("click", async ()=>{
+  const lines = state.matches.filter(m=>m.use).map(m=>`${m.found}  →  ${m.newText}` + (m.notes.length ? `   [${m.notes.map(n=>n[1]).join("; ")}]` : ""));
+  try{ await navigator.clipboard.writeText(lines.join("\n")); $("applyMsg").textContent = "Change list copied."; }
+  catch(e){ $("applyMsg").textContent = "Copy was blocked by the browser."; }
+});
+
+// expose for testing
+window.__ds = {findDates, makeShifter, formatLike, parseInputDate, collectParas, replaceInPara, loadDocx};
+})();
+</script>
+</body>
+</html>

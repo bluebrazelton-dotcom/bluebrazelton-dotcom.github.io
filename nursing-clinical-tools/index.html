@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script data-goatcounter="https://bluebrazelton.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<title>Nursing Clinical Teaching Tools (NAU Prototype)</title>
+<style>
+  :root{--blue:#003466;--blue-2:#0b4a85;--tint:#e8eef6;--gold:#FFD200;--ink:#1b1f24;--muted:#525a66;--line:#d5dbe3;--bg:#f6f8fb;--ok:#1d6b3a;--warn:#8a5a00;--bad:#a3271f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.45}
+  header{background:var(--blue);color:#fff;padding:22px 24px 0;border-bottom:5px solid var(--gold)}
+  header h1{margin:0 0 4px;font-size:1.55rem}
+  header p{margin:0 0 14px;color:#dfe8f3;max-width:75ch}
+  .proto{display:inline-block;background:var(--gold);color:var(--blue);font-weight:700;font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+  nav[role=tablist]{display:flex;gap:4px;flex-wrap:wrap}
+  nav button{background:transparent;color:#dfe8f3;border:0;border-radius:6px 6px 0 0;padding:10px 16px;font-weight:700;font-size:.92rem;cursor:pointer}
+  nav button[aria-selected=true]{background:var(--bg);color:var(--blue)}
+  main{max-width:1150px;margin:22px auto;padding:0 18px}
+  section.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin-bottom:16px}
+  h2{margin:0 0 4px;color:var(--blue);font-size:1.2rem}
+  h3{margin:14px 0 6px;color:var(--blue);font-size:1rem}
+  .hint{color:var(--muted);font-size:.88rem;margin:2px 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 16px}
+  label{display:block;font-size:.88rem;font-weight:600;margin-bottom:4px}
+  .chk label{display:flex;gap:8px;align-items:center;font-weight:500}
+  input[type=number],input[type=text],input[type=date],textarea,select{width:100%;padding:8px 9px;border:1px solid #9aa6b5;border-radius:5px;font:inherit;font-size:.93rem;background:#fff;color:var(--ink)}
+  textarea{min-height:90px}
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--blue-2);outline-offset:2px}
+  button.btn{background:var(--blue);color:#fff;border:0;border-radius:5px;padding:9px 14px;font-weight:700;font-size:.9rem;cursor:pointer}
+  button.btn.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+  button.mini{background:#fff;color:var(--blue);border:1px solid var(--blue);border-radius:4px;padding:3px 8px;font-size:.8rem;cursor:pointer}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .msg{font-size:.88rem;color:var(--ok)}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{padding:6px 8px;border-bottom:1px solid #e6eaef;text-align:left;vertical-align:top}
+  thead th{background:var(--tint);color:var(--blue);font-size:.76rem;text-transform:uppercase;letter-spacing:.3px}
+  td.num,th.num{text-align:right}
+  .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:6px}
+  .flag{display:inline-block;font-size:.75rem;font-weight:700;padding:1px 6px;border-radius:3px}
+  .f-warn{background:#fff4d6;color:var(--warn)} .f-bad{background:#fbe5e3;color:var(--bad)} .f-ok{background:#e3f3e8;color:var(--ok)}
+  .note{background:var(--tint);border-left:4px solid var(--blue);padding:8px 12px;font-size:.86rem;border-radius:0 4px 4px 0;margin-top:12px}
+  .caution{background:#fff4d6;border-left:4px solid var(--warn);padding:8px 12px;font-size:.86rem;border-radius:0 4px 4px 0;margin-top:12px}
+  ol.probs li{margin-bottom:10px}
+  .key{color:var(--ok);font-size:.86rem;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:800px){.two{grid-template-columns:1fr}}
+  .ht input{width:80px;padding:4px 6px;text-align:right}
+  .ht input.id{width:110px;text-align:left}
+  .rot td,.rot th{text-align:center} .rot td:first-child,.rot th:first-child{text-align:left}
+  .site{display:inline-block;padding:2px 8px;border-radius:4px;font-weight:600;font-size:.85rem}
+  .bank{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:800px){.bank{grid-template-columns:1fr}}
+  .phr{display:block;width:100%;text-align:left;background:#fbfcfe;border:1px solid var(--line);border-radius:5px;padding:8px 10px;margin-bottom:6px;font:inherit;font-size:.9rem;cursor:pointer;color:var(--ink)}
+  .phr:hover{border-color:var(--blue);background:var(--tint)}
+  .lvl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .lvl button{background:#fff;color:var(--blue);border:1px solid var(--blue);border-radius:16px;padding:4px 12px;font-size:.85rem;cursor:pointer}
+  .lvl button[aria-pressed=true]{background:var(--blue);color:#fff}
+  footer{max-width:1150px;margin:0 auto 30px;padding:0 18px;font-size:.8rem;color:var(--muted)}
+  [hidden]{display:none!important}
+  @media print{header nav,.row,.no-print{display:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="proto">Prototype, not an official NAU tool</div>
+  <h1>Clinical Teaching Tools</h1>
+  <p>Four small tools for the clinical side of a nursing course. Everything runs in your browser and nothing is saved or sent anywhere, so copy or download what you want to keep.</p>
+  <nav role="tablist" aria-label="Clinical tools">
+    <button role="tab" id="t-dosage" aria-controls="dosage" aria-selected="true">Dosage problems</button>
+    <button role="tab" id="t-hours" aria-controls="hours" aria-selected="false" tabindex="-1">Clinical hours</button>
+    <button role="tab" id="t-rotation" aria-controls="rotation" aria-selected="false" tabindex="-1">Rotation grid</button>
+    <button role="tab" id="t-feedback" aria-controls="feedback" aria-selected="false" tabindex="-1">Feedback comments</button>
+  </nav>
+</header>
+
+<main>
+<!-- ================= DOSAGE ================= -->
+<div role="tabpanel" id="dosage" aria-labelledby="t-dosage">
+<section class="card">
+  <h2>Dosage-calculation problem generator</h2>
+  <p class="hint">Generates fresh practice or quiz problems with a worked answer key. The same version code always gives the same set, so Version A and Version B can be rebuilt any time.</p>
+  <fieldset style="border:0;padding:0;margin:0"><legend style="font-weight:600;font-size:.88rem;margin-bottom:6px">Problem types</legend>
+  <div class="grid chk" id="dTypes"></div></fieldset>
+  <div class="grid" style="margin-top:12px">
+    <div><label for="dCount">Number of problems</label><input type="number" id="dCount" min="1" max="50" value="10"></div>
+    <div><label for="dSeed">Version code</label><input type="text" id="dSeed" value="A"></div>
+    <div><label for="dWeight">Weights for weight-based problems</label><select id="dWeight"><option value="peds">Pediatric</option><option value="adult">Adult</option><option value="both" selected>Both</option></select></div>
+  </div>
+  <div class="row">
+    <button class="btn" type="button" id="dGen">Generate</button>
+    <button class="btn secondary" type="button" id="dCopyQ">Copy problems</button>
+    <button class="btn secondary" type="button" id="dCopyK">Copy answer key</button>
+    <label class="chk" style="display:flex;gap:6px;align-items:center;font-weight:500;margin:0"><input type="checkbox" id="dShowKey" checked> Show answers on screen</label>
+    <span class="msg" id="dMsg" role="status" aria-live="polite"></span>
+  </div>
+  <div class="caution"><b>Rounding used:</b> weight to the nearest tenth of a kg; tablets to the nearest half tablet; oral and IV volumes to the nearest tenth of a mL; pump rates to the nearest tenth of a mL/hr; drip rates to the nearest whole gtt/min. Change the wording if your program's rounding policy differs. Drug names are deliberately generic, so swap in course drugs and check that every dose is realistic before using a set.</div>
+</section>
+<section class="card"><h2>Problems</h2><ol class="probs" id="dOut"></ol></section>
+</div>
+
+<!-- ================= HOURS ================= -->
+<div role="tabpanel" id="hours" aria-labelledby="t-hours" hidden>
+<section class="card">
+  <h2>Clinical and simulation hours tracker</h2>
+  <p class="hint">Track each student's hours against the course requirement, including how much simulation counts toward it.</p>
+  <div class="grid">
+    <div><label for="hReq">Required clinical hours</label><input type="number" id="hReq" min="0" value="90"></div>
+    <div><label for="hRatio">Clinical hours credited per sim hour</label><input type="number" id="hRatio" min="0" step="0.5" value="1"></div>
+    <div><label for="hCap">Max share of requirement met by sim (%)</label><input type="number" id="hCap" min="0" max="100" value="50"></div>
+  </div>
+  <div class="caution">Use initials or student ID numbers, never names. Nothing is stored: when you close the page the data is gone, so download the CSV to keep it. The simulation ratio and cap are placeholders; set them from your program's policy and Board of Nursing rules.</div>
+  <div class="tablewrap" style="margin-top:12px"><table class="ht"><thead><tr><th>Student (ID or initials)</th><th class="num">Clinical hrs done</th><th class="num">Sim hrs done</th><th class="num">Missed hrs</th><th class="num">Make-up scheduled</th><th class="num">Hours credited</th><th class="num">Still needed</th><th>Status</th><th></th></tr></thead><tbody id="hRows"></tbody></table></div>
+  <div class="row">
+    <button class="btn secondary" type="button" id="hAdd">Add student</button>
+    <button class="btn secondary" type="button" id="hPaste">Paste from spreadsheet</button>
+    <button class="btn" type="button" id="hDl">Download CSV</button>
+    <button class="btn secondary" type="button" id="hCopy">Copy table</button>
+    <span class="msg" id="hMsg" role="status" aria-live="polite"></span>
+  </div>
+  <div id="hPasteBox" hidden style="margin-top:12px">
+    <label for="hPasteText">Paste rows: ID, clinical, sim, missed, make-up (tab- or comma-separated, no header)</label>
+    <textarea id="hPasteText"></textarea>
+    <div class="row"><button class="btn" type="button" id="hPasteGo">Add these rows</button></div>
+  </div>
+</section>
+</div>
+
+<!-- ================= ROTATION ================= -->
+<div role="tabpanel" id="rotation" aria-labelledby="t-rotation" hidden>
+<section class="card">
+  <h2>Clinical rotation grid builder</h2>
+  <p class="hint">Rotates clinical groups through sites in equal blocks, so every group gets every site once and no site gets two groups in the same block.</p>
+  <div class="two">
+    <div><label for="rGroups">Clinical groups (one per line)</label><textarea id="rGroups">Group 1
+Group 2
+Group 3
+Group 4</textarea></div>
+    <div><label for="rSites">Sites or units (one per line)</label><textarea id="rSites">Med-Surg, 4 West
+Pediatrics
+Labor and Delivery
+Behavioral Health</textarea></div>
+  </div>
+  <div class="grid" style="margin-top:12px">
+    <div><label for="rStart">First clinical week starts</label><input type="date" id="rStart"></div>
+    <div><label for="rLen">Weeks per site</label><input type="number" id="rLen" min="1" value="3"></div>
+    <div><label for="rSkip">Skip weeks (no clinical)</label><input type="text" id="rSkip" placeholder="e.g. 5, 9"></div>
+  </div>
+  <div class="tablewrap" style="margin-top:14px"><table class="rot" id="rTable"></table></div>
+  <div id="rNote"></div>
+  <div class="row">
+    <button class="btn" type="button" id="rDl">Download CSV</button>
+    <button class="btn secondary" type="button" id="rCopy">Copy grid</button>
+    <span class="msg" id="rMsg" role="status" aria-live="polite"></span>
+  </div>
+</section>
+</div>
+
+<!-- ================= FEEDBACK ================= -->
+<div role="tabpanel" id="feedback" aria-labelledby="t-feedback" hidden>
+<section class="card">
+  <h2>Clinical feedback comment bank</h2>
+  <p class="hint">Pick a competency and a performance level, then click a starter sentence to add it to your draft. Replace the bracketed parts with what you actually saw. Specific examples are what make feedback useful.</p>
+  <div class="bank">
+    <div>
+      <label for="fComp">Competency</label>
+      <select id="fComp"></select>
+      <div style="margin-top:10px" class="lvl" role="group" aria-label="Performance level" id="fLvl"></div>
+      <div id="fPhrases"></div>
+    </div>
+    <div>
+      <label for="fDraft">Your draft</label>
+      <textarea id="fDraft" style="min-height:260px"></textarea>
+      <div class="row"><button class="btn" type="button" id="fCopy">Copy draft</button><button class="btn secondary" type="button" id="fClear">Clear</button><span class="msg" id="fMsg" role="status" aria-live="polite"></span></div>
+      <p class="hint" id="fCheck"></p>
+    </div>
+  </div>
+  <div class="note">Competencies follow the QSEN framework plus professionalism. Replace these starters with your program's own clinical evaluation tool language before faculty use it.</div>
+</section>
+</div>
+</main>
+
+<footer><p>Prototype built for nursing faculty. Generated problems, ratios, and comment starters are drafts for faculty review, not validated instruments.</p></footer>
+
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function copyText(text, el){
+  try{ await navigator.clipboard.writeText(text); el.textContent="Copied."; }catch(e){ el.textContent="Copy was blocked by the browser."; }
+  setTimeout(()=>el.textContent="",3000);
+}
+async function offerFile(filename, data){
+  const blob = data instanceof Blob ? data : new Blob([data], {type:"text/csv"});
+  try{
+    if(window.claude && typeof window.claude.use === "function"){
+      const dl = await window.claude.use("downloads");
+      if(dl){ await dl.save({filename, data: blob}); return "saved"; }
+    }
+  }catch(err){ if(err && err.code === "declined") return "declined"; }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000);
+  return "saved";
+}
+const csvCell = v => /[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g,'""')}"` : String(v);
+
+// ---------- tabs ----------
+const tabs = Array.from(document.querySelectorAll('[role=tab]'));
+function showTab(id){ tabs.forEach(t=>{ const on=t.getAttribute("aria-controls")===id; t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1; $(t.getAttribute("aria-controls")).hidden=!on; }); }
+tabs.forEach((t,i)=>{
+  t.addEventListener("click", ()=>{ showTab(t.getAttribute("aria-controls")); try{ history.replaceState(null,"","#"+t.getAttribute("aria-controls")); }catch(e){} });
+  t.addEventListener("keydown", e=>{ let j=null; if(e.key==="ArrowRight") j=(i+1)%tabs.length; else if(e.key==="ArrowLeft") j=(i-1+tabs.length)%tabs.length; if(j!==null){ e.preventDefault(); tabs[j].click(); tabs[j].focus(); } });
+});
+function fromHash(){ const h=location.hash.slice(1); if(tabs.some(t=>t.getAttribute("aria-controls")===h)) showTab(h); }
+window.addEventListener("hashchange", fromHash); fromHash();
+
+// =============== DOSAGE ===============
+function hashStr(s){ let h=2166136261; for(const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619); } return h>>>0; }
+function rng(seed){ let a=seed; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const pick = (r, arr) => arr[Math.floor(r()*arr.length)];
+const r1 = x => Math.round(x*10)/10;
+const fmt = x => (Math.round(x*100)/100).toString();
+const halfRound = x => Math.round(x*2)/2;
+
+const GEN = {
+  tabs: {label:"Oral tablets", make(r){
+    const strength = pick(r,[5,10,12.5,20,25,50,100,250,500]);
+    const n = pick(r,[0.5,1,1.5,2,2,3]);
+    const order = strength*n;
+    return {q:`Order: Medication A ${fmt(order)} mg PO once daily. Available: ${fmt(strength)} mg tablets. How many tablets will you give?`,
+      a:`${fmt(halfRound(order/strength))} tablet(s)`, work:`${fmt(order)} mg ÷ ${fmt(strength)} mg/tab = ${fmt(order/strength)} tab`};
+  }},
+  liquid: {label:"Oral liquids", make(r){
+    const [mg, ml] = pick(r,[[125,5],[250,5],[100,5],[40,5],[200,5],[50,10],[160,5]]);
+    const order = pick(r,[0.5,0.75,1,1.25,1.5,2,2.5]) * mg;
+    const ans = order/mg*ml;
+    return {q:`Order: Medication B ${fmt(order)} mg PO every 8 hours. Available: ${mg} mg/${ml} mL suspension. How many mL per dose?`,
+      a:`${fmt(r1(ans))} mL`, work:`${fmt(order)} mg × (${ml} mL ÷ ${mg} mg) = ${fmt(ans)} mL`};
+  }},
+  weight: {label:"Weight-based (mg/kg)", make(r, opts){
+    const peds = opts.weight==="peds" || (opts.weight==="both" && r()<0.5);
+    const lb = peds ? Math.round(15 + r()*65) : Math.round(110 + r()*150);
+    const kg = r1(lb/2.2);
+    const perDay = r() < 0.5;
+    const mgkg = peds ? pick(r,[10,15,20,25,30,40,50]) : pick(r,[1,2,5,7.5,10,15]);
+    if(perDay){
+      const div = pick(r,[2,3,4]); const q = {2:"every 12 hours",3:"every 8 hours",4:"every 6 hours"}[div];
+      const daily = kg*mgkg, dose = daily/div;
+      return {q:`Order: Medication C ${mgkg} mg/kg/day PO, divided ${q}. The ${peds?"child":"client"} weighs ${lb} lb. How many mg per dose?`,
+        a:`${fmt(r1(dose))} mg per dose`, work:`${lb} lb ÷ 2.2 = ${kg} kg; ${kg} kg × ${mgkg} mg/kg/day = ${fmt(r1(daily))} mg/day; ÷ ${div} doses = ${fmt(r1(dose))} mg`};
+    }
+    const dose = kg*mgkg;
+    return {q:`Order: Medication C ${mgkg} mg/kg IV once. The ${peds?"child":"client"} weighs ${lb} lb. How many mg will you give?`,
+      a:`${fmt(r1(dose))} mg`, work:`${lb} lb ÷ 2.2 = ${kg} kg; ${kg} kg × ${mgkg} mg/kg = ${fmt(r1(dose))} mg`};
+  }},
+  pump: {label:"IV pump rate (mL/hr)", make(r){
+    const vol = pick(r,[50,100,250,500,1000]); const hrs = pick(r,vol<=100?[0.5,1]:vol<=250?[1,2,3]:[4,6,8,10,12]);
+    const rate = vol/hrs;
+    const t = hrs<1 ? `${hrs*60} minutes` : `${hrs} hour${hrs>1?"s":""}`;
+    return {q:`Order: Infuse ${vol} mL of IV fluid over ${t} on an infusion pump. What rate will you set in mL/hr?`,
+      a:`${fmt(r1(rate))} mL/hr`, work:`${vol} mL ÷ ${hrs} hr = ${fmt(rate)} mL/hr`};
+  }},
+  gravity: {label:"IV gravity drip (gtt/min)", make(r){
+    const vol = pick(r,[100,250,500,1000]); const hrs = pick(r,vol<=250?[1,2]:[4,6,8]); const df = pick(r,[10,15,20,60]);
+    const g = vol*df/(hrs*60);
+    return {q:`Order: Infuse ${vol} mL over ${hrs} hour${hrs>1?"s":""} by gravity. Drop factor: ${df} gtt/mL. How many gtt/min?`,
+      a:`${Math.round(g)} gtt/min`, work:`(${vol} mL × ${df} gtt/mL) ÷ (${hrs} hr × 60 min) = ${fmt(g)} gtt/min`};
+  }},
+  heparin: {label:"Heparin infusion (units/hr)", make(r){
+    const [u, ml] = pick(r,[[25000,250],[25000,500],[20000,500]]);
+    const rate = pick(r,[800,900,1000,1100,1200,1300,1400,1500,1600]);
+    const conc = u/ml, mlhr = rate/conc;
+    return {q:`Order: Heparin infusion at ${rate.toLocaleString()} units/hr. Available: heparin ${u.toLocaleString()} units in ${ml} mL. What rate will you set in mL/hr?`,
+      a:`${fmt(r1(mlhr))} mL/hr`, work:`${u.toLocaleString()} units ÷ ${ml} mL = ${conc} units/mL; ${rate} units/hr ÷ ${conc} units/mL = ${fmt(mlhr)} mL/hr`};
+  }}
+};
+$("dTypes").innerHTML = Object.entries(GEN).map(([k,g])=>`<label><input type="checkbox" value="${k}" checked> ${g.label}</label>`).join("");
+let dSet = [];
+function dGen(){
+  const types = Array.from($("dTypes").querySelectorAll("input:checked")).map(i=>i.value);
+  if(!types.length){ $("dMsg").textContent = "Pick at least one problem type."; return; }
+  const n = Math.min(50, Math.max(1, +$("dCount").value||10));
+  const seedText = ($("dSeed").value||"A") + "|" + types.join(",") + "|" + $("dWeight").value + "|" + n;
+  const r = rng(hashStr(seedText));
+  dSet = [];
+  for(let i=0;i<n;i++){ const k = types[i % types.length]; dSet.push(Object.assign({type:GEN[k].label}, GEN[k].make(r, {weight:$("dWeight").value}))); }
+  // shuffle order deterministically
+  for(let i=dSet.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [dSet[i],dSet[j]]=[dSet[j],dSet[i]]; }
+  dRender();
+}
+function dRender(){
+  const show = $("dShowKey").checked;
+  $("dOut").innerHTML = dSet.map(p=>`<li>${esc(p.q)}${show?`<div class="key"><b>Answer:</b> ${esc(p.a)} <span style="color:var(--muted)">(${esc(p.work)})</span></div>`:""}</li>`).join("");
+}
+$("dGen").addEventListener("click", dGen);
+$("dShowKey").addEventListener("change", dRender);
+$("dCopyQ").addEventListener("click", ()=>copyText(`Dosage calculation practice, version ${$("dSeed").value}\n\n` + dSet.map((p,i)=>`${i+1}. ${p.q}`).join("\n\n"), $("dMsg")));
+$("dCopyK").addEventListener("click", ()=>copyText(`Answer key, version ${$("dSeed").value}\n\n` + dSet.map((p,i)=>`${i+1}. ${p.a}\n   ${p.work}`).join("\n"), $("dMsg")));
+dGen();
+
+// =============== HOURS ===============
+let hRows = [
+  {id:"S001", cl:72, sim:12, missed:6, mk:6},
+  {id:"S002", cl:60, sim:30, missed:0, mk:0},
+  {id:"S003", cl:48, sim:8, missed:12, mk:0}
+];
+function hCalc(r){
+  const req = +$("hReq").value||0, ratio = +$("hRatio").value||0, cap = (+$("hCap").value||0)/100*req;
+  const simCred = Math.min((+r.sim||0)*ratio, cap);
+  const credited = (+r.cl||0) + simCred;
+  const projected = credited + (+r.mk||0);
+  const need = Math.max(0, req - credited);
+  let st;
+  if(need <= 0) st = ["ok","Complete"];
+  else if(projected >= req) st = ["warn","On track if make-up done"];
+  else st = ["bad",`Short ${fmt(r1(req-projected))} hrs`];
+  return {simCred, credited, need, st, capped:(+r.sim||0)*ratio > cap};
+}
+function hRender(){
+  $("hRows").innerHTML = hRows.map((r,i)=>{ const c = hCalc(r); return `<tr>
+    <td><input class="id" data-i="${i}" data-k="id" value="${esc(r.id)}" aria-label="Student ${i+1} ID"></td>
+    ${["cl","sim","missed","mk"].map(k=>`<td class="num"><input type="number" min="0" step="0.5" data-i="${i}" data-k="${k}" value="${r[k]}" aria-label="${esc(r.id)} ${k}"></td>`).join("")}
+    <td class="num" id="hC${i}">${fmt(r1(c.credited))}${c.capped?' <span class="flag f-warn" title="Sim credit capped">cap</span>':""}</td>
+    <td class="num" id="hN${i}">${fmt(r1(c.need))}</td>
+    <td id="hS${i}"><span class="flag f-${c.st[0]}">${c.st[1]}</span></td>
+    <td><button class="mini" type="button" data-del="${i}" aria-label="Remove ${esc(r.id)}">×</button></td></tr>`; }).join("");
+}
+function hUpdate(){ hRows.forEach((r,i)=>{ const c=hCalc(r); $("hC"+i).innerHTML = fmt(r1(c.credited)) + (c.capped?' <span class="flag f-warn" title="Sim credit capped">cap</span>':""); $("hN"+i).textContent=fmt(r1(c.need)); $("hS"+i).innerHTML=`<span class="flag f-${c.st[0]}">${c.st[1]}</span>`; }); }
+$("hRows").addEventListener("input", e=>{ const i=+e.target.dataset.i, k=e.target.dataset.k; if(isNaN(i)) return; hRows[i][k] = k==="id" ? e.target.value : e.target.value; hUpdate(); });
+$("hRows").addEventListener("click", e=>{ if(e.target.dataset.del!==undefined){ hRows.splice(+e.target.dataset.del,1); hRender(); } });
+["hReq","hRatio","hCap"].forEach(id=>$(id).addEventListener("input", hUpdate));
+$("hAdd").addEventListener("click", ()=>{ hRows.push({id:"", cl:0, sim:0, missed:0, mk:0}); hRender(); });
+$("hPaste").addEventListener("click", ()=>{ $("hPasteBox").hidden = !$("hPasteBox").hidden; });
+$("hPasteGo").addEventListener("click", ()=>{
+  const lines = $("hPasteText").value.trim().split(/\r?\n/).filter(Boolean);
+  lines.forEach(l=>{ const c = l.split(/\t|,/).map(s=>s.trim()); hRows.push({id:c[0]||"", cl:+c[1]||0, sim:+c[2]||0, missed:+c[3]||0, mk:+c[4]||0}); });
+  $("hPasteText").value=""; $("hPasteBox").hidden = true; hRender(); $("hMsg").textContent = `Added ${lines.length} rows.`;
+});
+function hTable(sep){
+  const head = ["Student","Clinical hrs","Sim hrs","Missed hrs","Make-up scheduled","Hours credited","Still needed","Status"];
+  return [head].concat(hRows.map(r=>{ const c=hCalc(r); return [r.id,r.cl,r.sim,r.missed,r.mk,fmt(r1(c.credited)),fmt(r1(c.need)),c.st[1]]; }))
+    .map(row=>row.map(v=>sep===","?csvCell(v):v).join(sep)).join("\n");
+}
+$("hDl").addEventListener("click", async ()=>{ const r = await offerFile("clinical-hours.csv", hTable(",")); $("hMsg").textContent = r==="declined"?"Download cancelled.":"Downloaded."; });
+$("hCopy").addEventListener("click", ()=>copyText(hTable("\t"), $("hMsg")));
+hRender();
+
+// =============== ROTATION ===============
+const COLORS = ["#dbe7f5","#fff1b8","#dcefe3","#f6e0d6","#e7def3","#d9eef0","#f3e3ea","#ece7d6"];
+(function(){ const d=new Date(); d.setDate(d.getDate() + ((8-d.getDay())%7||7)); $("rStart").value = d.toISOString().slice(0,10); })();
+let rGrid = null;
+function rBuild(){
+  const groups = $("rGroups").value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+  const sites = $("rSites").value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+  const len = Math.max(1, +$("rLen").value||1);
+  const skip = new Set(($("rSkip").value||"").split(/[,\s]+/).map(x=>parseInt(x,10)).filter(n=>n>0));
+  if(!groups.length || !sites.length){ $("rTable").innerHTML=""; return; }
+  const nBlocks = Math.max(sites.length, 1);
+  // map blocks to calendar weeks, skipping skip weeks
+  const blocks = []; let wk = 1;
+  for(let b=0;b<nBlocks;b++){ const weeks=[]; while(weeks.length<len){ if(!skip.has(wk)) weeks.push(wk); wk++; if(wk>400) break; } blocks.push(weeks); }
+  const start = $("rStart").value ? new Date($("rStart").value+"T00:00:00") : null;
+  const wkDate = w => { if(!start) return ""; const d=new Date(start); d.setDate(d.getDate()+(w-1)*7); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); };
+  const wkEnd = w => { if(!start) return ""; const d=new Date(start); d.setDate(d.getDate()+(w-1)*7+6); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"}); };
+  const wkList = ws => { const parts=[]; let s=ws[0], p=ws[0]; for(const w of ws.slice(1).concat([null])){ if(w===p+1){ p=w; continue; } parts.push(s===p?`${s}`:`${s}–${p}`); s=p=w; } return parts.join(", "); };
+  const label = b => `Block ${b+1}: wk ${wkList(blocks[b])}` + (start?` (${wkDate(blocks[b][0])} – ${wkEnd(blocks[b][blocks[b].length-1])})`:"");
+  const cell = (g,b) => sites[(g + b) % sites.length];
+  rGrid = {groups, sites, blocks, label, cell};
+  $("rTable").innerHTML = `<thead><tr><th scope="col">Group</th>${blocks.map((_,b)=>`<th scope="col">${esc(label(b))}</th>`).join("")}</tr></thead><tbody>` +
+    groups.map((g,gi)=>`<tr><th scope="row">${esc(g)}</th>${blocks.map((_,b)=>{ const s=cell(gi,b); return `<td><span class="site" style="background:${COLORS[sites.indexOf(s)%COLORS.length]}">${esc(s)}</span></td>`; }).join("")}</tr>`).join("") + "</tbody>";
+  let note = "";
+  if(groups.length > sites.length) note = `<div class="caution">There are more groups (${groups.length}) than sites (${sites.length}), so some sites host two groups in the same block. Check those sites' capacity, or add a site.</div>`;
+  else if(groups.length < sites.length) note = `<div class="note">Fewer groups than sites: some sites sit empty in some blocks, which is fine if that's expected.</div>`;
+  $("rNote").innerHTML = note;
+}
+document.getElementById("rotation").addEventListener("input", rBuild);
+rBuild();
+function rTable(sep){
+  if(!rGrid) return "";
+  const rows = [["Group", ...rGrid.blocks.map((_,b)=>rGrid.label(b))]].concat(rGrid.groups.map((g,gi)=>[g, ...rGrid.blocks.map((_,b)=>rGrid.cell(gi,b))]));
+  return rows.map(r=>r.map(v=>sep===","?csvCell(v):v).join(sep)).join("\n");
+}
+$("rDl").addEventListener("click", async ()=>{ const r = await offerFile("clinical-rotation.csv", rTable(",")); $("rMsg").textContent = r==="declined"?"Download cancelled.":"Downloaded."; });
+$("rCopy").addEventListener("click", ()=>copyText(rTable("\t"), $("rMsg")));
+
+// =============== FEEDBACK BANK ===============
+const LEVELS = ["Exceeds","Meets","Developing","Unsatisfactory"];
+const BANK = {
+  "Patient-centered care": {
+    Exceeds:["[Student] consistently included the client's preferences in care, for example [specific example].","[Student] advocated effectively for the client when [situation]."],
+    Meets:["[Student] gathered the client's preferences and values and used them in planning care.","[Student] communicated respectfully with the client and family during [activity]."],
+    Developing:["[Student] is beginning to include client preferences; next week, focus on asking the client [specific question] before planning care.","[Student] needed prompting to explain care to the client in plain language."],
+    Unsatisfactory:["[Student] did not involve the client in decisions about [care activity] despite prompting. This must improve to meet the course outcome.","Care was task-focused rather than client-focused, for example [specific example]."]
+  },
+  "Teamwork and collaboration": {
+    Exceeds:["[Student] gave a clear, organized SBAR report to [role] about [situation].","[Student] anticipated the team's needs and offered help without being asked."],
+    Meets:["[Student] communicated changes in the client's condition to the assigned nurse promptly.","[Student] worked cooperatively with staff and peers."],
+    Developing:["[Student] reported findings but needed help organizing the report; practice SBAR before calling.","[Student] should check in with the assigned nurse more often during the shift."],
+    Unsatisfactory:["[Student] did not report [abnormal finding] to the nurse or instructor in a timely way.","[Student] left the unit without handing off to the assigned nurse."]
+  },
+  "Evidence-based practice": {
+    Exceeds:["[Student] explained the evidence behind [intervention] clearly and accurately."],
+    Meets:["[Student] identified the rationale for interventions in the care plan.","[Student] used current references in clinical preparation."],
+    Developing:["[Student] could name interventions but not their rationale; add rationales to next week's prep."],
+    Unsatisfactory:["[Student] could not give a rationale for [intervention] after prompting and review."]
+  },
+  "Quality improvement": {
+    Exceeds:["[Student] noticed [process issue] on the unit and suggested a reasonable improvement."],
+    Meets:["[Student] described how [unit measure, e.g. falls or CLABSI rates] connects to their care."],
+    Developing:["[Student] is learning how unit quality measures relate to bedside care."],
+    Unsatisfactory:["[Student] did not follow the unit protocol for [process] after it was reviewed."]
+  },
+  "Safety": {
+    Exceeds:["[Student] performed all medication rights checks independently and caught [potential error]."],
+    Meets:["[Student] administered medications safely using the rights of medication administration.","[Student] maintained a safe environment (bed low, call light in reach, alarms on)."],
+    Developing:["[Student] needed a cue to [check ID / verify allergies / scan the medication] before administration. Make this a habit before next week.","[Student] needs to slow down and verify before acting, for example [specific example]."],
+    Unsatisfactory:["[Student] [unsafe action] which placed the client at risk. This is an unsafe clinical behavior and will be addressed in a learning contract.","[Student] did not perform hand hygiene before [activity] after reminders."]
+  },
+  "Informatics": {
+    Exceeds:["[Student]'s documentation was accurate, timely, and complete without corrections."],
+    Meets:["[Student] documented assessments and interventions accurately in the EHR.","[Student] used the EHR to find relevant labs and trends."],
+    Developing:["[Student]'s documentation needed corrections for [missing elements]; review the charting checklist."],
+    Unsatisfactory:["[Student] documented care that was not performed / documented late. This is a professional and legal concern."]
+  },
+  "Professionalism": {
+    Exceeds:["[Student] was well prepared, punctual, and sought out learning opportunities all shift."],
+    Meets:["[Student] arrived prepared and on time, in correct uniform.","[Student] accepted feedback well and applied it during the shift."],
+    Developing:["[Student]'s clinical prep was incomplete; come with [specific items] prepared next week."],
+    Unsatisfactory:["[Student] arrived [late / unprepared] without notifying the instructor, contrary to course policy.","[Student] shared client information in a way that does not protect privacy."]
+  }
+};
+$("fComp").innerHTML = Object.keys(BANK).map(c=>`<option>${esc(c)}</option>`).join("");
+let fLevel = "Meets";
+function fRender(){
+  $("fLvl").innerHTML = LEVELS.map(l=>`<button type="button" aria-pressed="${l===fLevel}" data-l="${l}">${l}</button>`).join("");
+  const list = BANK[$("fComp").value][fLevel] || [];
+  $("fPhrases").innerHTML = list.map((p,i)=>`<button type="button" class="phr" data-p="${i}">+ ${esc(p)}</button>`).join("");
+}
+$("fComp").addEventListener("change", fRender);
+$("fLvl").addEventListener("click", e=>{ if(e.target.dataset.l){ fLevel = e.target.dataset.l; fRender(); } });
+$("fPhrases").addEventListener("click", e=>{
+  const b = e.target.closest(".phr"); if(!b) return;
+  const p = BANK[$("fComp").value][fLevel][+b.dataset.p];
+  const d = $("fDraft"); d.value = (d.value.trim() ? d.value.trim() + " " : "") + p; d.dispatchEvent(new Event("input"));
+});
+$("fDraft").addEventListener("input", ()=>{
+  const left = ($("fDraft").value.match(/\[[^\]]+\]/g)||[]).length;
+  $("fCheck").innerHTML = left ? `<span class="flag f-warn">${left} bracketed placeholder${left>1?"s":""} still to replace</span>` : "";
+});
+$("fCopy").addEventListener("click", ()=>{
+  if(/\[[^\]]+\]/.test($("fDraft").value)) $("fMsg").textContent = "Copied. Placeholders are still in the draft.";
+  copyText($("fDraft").value, $("fMsg"));
+});
+$("fClear").addEventListener("click", ()=>{ $("fDraft").value=""; $("fDraft").dispatchEvent(new Event("input")); });
+fRender();
+window.__ct = {GEN, rng, hashStr};
+})();
+</script>
+</body>
+</html>
